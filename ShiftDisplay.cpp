@@ -42,14 +42,6 @@ int ShiftDisplay::power(int number, int power) {
 	return round(pow(number, power));
 }
 
-int ShiftDisplay::getDigit(int number, int pos) {
-	if (number < 0)
-		number = number * -1;
-	//if (pos == 0)
-		//return number % 10;
-	return number / power(10, pos) % 10;
-}
-
 void ShiftDisplay::clear() {
 	digitalWrite(_latchPin, LOW);
 	int nShiftRegisters = _nDigits/8 + 2;
@@ -59,10 +51,14 @@ void ShiftDisplay::clear() {
 }
 
 void ShiftDisplay::print(int number) {
+	bool negative = false;
+	if (number < 0) {
+		negative = true;
+		number = number * -1;
+	}
 	for (int pos = 0; pos < _nDigits; pos++) {
-
 		byte display = power(2, pos);
-		byte digit = digits[getDigit(number, pos)];
+		byte digit = digits[number%10]; // right digit of number
 		if (_commonCathode) {
 			display = ~display;
 			digit = ~digit;
@@ -72,9 +68,13 @@ void ShiftDisplay::print(int number) {
 		shiftOut(_dataPin, _clkPin, MSBFIRST, digit);
 		digitalWrite(_latchPin, HIGH);
 		delay(POV);
+
+		number = number / 10;
+		if (number == 0)
+			break;
 	}
-	if (number < 0) { // write minus to left
-		byte display = power(2, pos);
+	if (negative) { // write minus to left
+		byte display = power(2, pos+1); // TODO test if -1 or -999
 		byte symbol = symbols[0];
 		if (_commonCathode) {
 			display = ~display;

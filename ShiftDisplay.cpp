@@ -4,26 +4,32 @@
 const int POV = 5; // delay for persistence of vision
 
 const byte EMPTY[2] = {
-	B11111111, ~B11111111 // {}
+	~B00000000, B00000000 // {}
 };
 const byte MINUS[2] = {
-	B11110111, ~B11110111 // -
+	~B00001000, B00001000 // -
+};
+const byte DIGITSX[10][2] = {
+	{~B01110111, B01110111}, // 0
+	{~B01000100, B01000100}, // 1
+	{~B00111110, B00111110}, // 2
+	{~B01101110, B01101110}, // 3
+	{~B01001101, B01001101}, // 4
+	{~B01101011, B01101011}, // 5
+	{~B01111011, B01111011}, // 6
+	{~B01000110, B01000110}, // 7
+	{~B01111111, B01111111}, // 8
+	{~B01001111, B01001111} // 9
 };
 const byte DIGITS[10][2] = {
-	{B10001000, ~B10001000}, // 0
-	{B10111011, ~B10111011}, // 1
-	{B11000001, ~B11000001}, // 2
-	{B10010001, ~B10010001}, // 3
-	{B10110010, ~B10110010}, // 4
-	{B10010100, ~B10010100}, // 5
-	{B10000100, ~B10000100}, // 6
-	{B10111001, ~B10111001}, // 7
-	{B10000000, ~B10000000}, // 8
-	{B10110000, ~B10110000} // 9
+	{~B10000000,B10000000},
+	{~B00000000,B11111111},
+	{~B00000000,B00000000},
 };
-const byte DECIMAL_POINT = B100000000;
-const byte LETTERS[24][2] = {
-	{B10000000, ~B10000000}, //
+const byte DECIMAL_POINT = B10000000;
+const byte LETTERS[26][2] = {
+	{~B00000000, B00000000}, // space
+	{~B10000000, B10000000}, //
 };
 const byte DISPLAYS[8][2] = {
 	{B00000001, ~B00000001},
@@ -49,6 +55,7 @@ ShiftDisplay::ShiftDisplay(int latchPin, int clkPin, int dataPin, bool commonCat
 	_commonCathode = commonCathode;
 	_nCharacters = nDigits;
 	_nShiftRegisters = (nDigits-1)/8 + 2;
+	Serial.begin(9600); // TODO 
 }
 
 int ShiftDisplay::power(int number, int exponent) {
@@ -86,9 +93,9 @@ void ShiftDisplay::printx(int milliseconds, byte characters[]) {
 	clear();
 }
 
-// PUBLIC
-
+// PUBLIC print int
 bool ShiftDisplay::print(int number, int milliseconds) {
+	Serial.println("int");
 	bool sucess = true;
 	int newNumber = number;
 	byte characters[_nCharacters];
@@ -97,7 +104,9 @@ bool ShiftDisplay::print(int number, int milliseconds) {
 	// get digits from number
 	do {
 		characters[i++] = DIGITS[newNumber%10][_commonCathode];
+		Serial.println(newNumber%10); // bug if number negative, shit happens
 		newNumber = newNumber / 10;
+		Serial.println(newNumber);
 	} while (newNumber != 0 && i < _nCharacters); // at least one digit
 	if (newNumber != 0)
 		sucess = false;
@@ -119,7 +128,9 @@ bool ShiftDisplay::print(int number, int milliseconds) {
 	return sucess;
 }
 
-void ShiftDisplay::print(float number, int nDecimalPlaces, int milliseconds) {
+// PUBLIC print float
+bool ShiftDisplay::print(float number, int nDecimalPlaces, int milliseconds) {
+	Serial.println("float");
 	if (nDecimalPlaces == 0) {
 		int n = round(number);
 		return print(n, milliseconds);
@@ -134,7 +145,7 @@ void ShiftDisplay::print(float number, int nDecimalPlaces, int milliseconds) {
 	do {
 		characters[i++] = DIGITS[newNumber%10][_commonCathode];
 		newNumber = newNumber / 10;
-	} while (newNumber != 0 && i < _nCharacters);
+	} while (newNumber != 0 && i < _nCharacters); // bug: 123.456, 10 so imprime um zero
 	if (newNumber != 0)
 		sucess = false;
 
@@ -161,15 +172,27 @@ void ShiftDisplay::print(float number, int nDecimalPlaces, int milliseconds) {
 	return sucess;
 }
 
-void ShiftDisplay::print(String text, int milliseconds) {
+
+// PUBLIC print string
+bool ShiftDisplay::print(String text, int milliseconds) {
+	Serial.println("string");
 	bool sucess = true;
 	byte characters[_nCharacters];
 	int i = 0;
 
 	// get characters from text
-	while (i < strlen(text) && i < _nCharacters)
-		characters[i] = LETTERS[text[i++] - '0'][_commonCathode];
-	if (strlen(text) > _nCharacters)
+	while (i < text.length() && i < _nCharacters) {
+		int c = text[i++];
+		if (c >= 'A' && c <= 'Z')
+			c = c - 'A';
+		else if (c >= 'a' && c <= 'z')
+			c = c - 'a';
+		else
+			c = 26;
+		Serial.println(c);
+		characters[i] = LETTERS[c][_commonCathode];
+	}
+	if (text.length() > _nCharacters)
 		sucess = false;
 
 	// fill remaining characters with empty
@@ -181,18 +204,20 @@ void ShiftDisplay::print(String text, int milliseconds) {
 	return sucess;
 }
 
-void ShiftDisplay::printMenu(char title, int value, int milliseconds) {
+// PUBLIC print char and int
+bool ShiftDisplay::printMenu(char title, int value, int milliseconds) {
+	Serial.println("menu");
 	bool sucess = true;
-	int value = value;
+	int newValue = value;
 	byte characters[_nCharacters];
 	int i = 0;
 
 	// get digits from number
 	do {
-		characters[i++] = DIGITS[value%10][_commonCathode];
-		value = value / 10;
-	} while (value != 0 && i < _nCharacters - 1);
-	if (value != 0)
+		characters[i++] = DIGITS[newValue%10][_commonCathode];
+		newValue = newValue / 10;
+	} while (newValue != 0 && i < _nCharacters - 1);
+	if (newValue != 0)
 		sucess = false;
 
 	// place minus character at numbers left
@@ -208,7 +233,14 @@ void ShiftDisplay::printMenu(char title, int value, int milliseconds) {
 		characters[i++] = EMPTY[_commonCathode];
 
 	// place letter in front
-	characters[i] = LETTERS[title - '0'][_commonCathode];
+	int c = title;
+	if (c >= 'A' && c <= 'Z')
+		c = c - 'A';
+	else if (c >= 'a' && c <= 'z')
+		c = c - 'a';
+	else
+		c = 26;
+	characters[i] = LETTERS[c][_commonCathode];
 
 	printx(milliseconds, characters);
 

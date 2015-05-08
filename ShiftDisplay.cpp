@@ -154,7 +154,11 @@ bool ShiftDisplay::print(int number, int milliseconds) {
 	return sucess;
 }
 
-// PUBLIC display float number, right aligned
+/*
+PUBLIC
+display float number, right aligned
+returns true if displayed correctly
+*/
 bool ShiftDisplay::print(float number, int nDecimalPlaces, int milliseconds) {
 
 	// if no decimal places, print int
@@ -165,9 +169,15 @@ bool ShiftDisplay::print(float number, int nDecimalPlaces, int milliseconds) {
 
 	bool sucess = true;
 	bool negative = number < 0;
-	int newNumber = round(number * power(10, nDecimalPlaces));
 	byte characters[_nCharacters];
 	int i = 0;
+
+	// transform number in positive
+	if (negative)
+		number = number * -1;
+
+	// remove decimal point and convert in integer
+	int newNumber = round(number * power(10, nDecimalPlaces));
 
 	// store digits from number in array
 	do {

@@ -33,17 +33,17 @@ const byte LETTERS[26] = {
 	B00111000, // l
 	B00110111, // m
 	B01010100, // n
-	B00111111, // o
+	B01011100, // o
 	B01110011, // p
 	B01100111, // q
 	B00110001, // r
 	B01101101, // s
 	B01111000, // t
-	B00111110, // u
-	B00100110, // v
+	B00011100, // u
+	B00111110, // v
 	B01111110, // w
 	B00110110, // x
-	B01100110, // y
+	B01101110, // y
 	B01011011 // z
 };
 const byte MINUS = B01000000;
@@ -77,12 +77,18 @@ ShiftDisplay::ShiftDisplay(int latchPin, int clkPin, int dataPin, bool commonCat
 	_nShiftRegisters = (nDigits-1)/8 + 2;
 }
 
-// PRIVATE round power of number by exponent
+/*
+PRIVATE
+Calculate power of number by exponent
+*/
 int ShiftDisplay::power(int number, int exponent) {
 	return round(pow(number, exponent));
 }
 
-// PRIVATE clear display
+/*
+PRIVATE
+Clears display
+*/
 void ShiftDisplay::clear() {
 	digitalWrite(_latchPin, LOW);
 	for (int i = 0; i < _nShiftRegisters; i++)
@@ -90,7 +96,11 @@ void ShiftDisplay::clear() {
 	digitalWrite(_latchPin, HIGH);
 }
 
-// PRIVATE display byte array
+/*
+PRIVATE
+Displays byte array
+Pre: characters array size = display number of digits
+*/
 void ShiftDisplay::printx(int milliseconds, byte characters[]) {
 	unsigned long start = millis();
 	while (millis() - start < milliseconds) {
@@ -117,7 +127,11 @@ void ShiftDisplay::printx(int milliseconds, byte characters[]) {
 	clear();
 }
 
-// PUBLIC display integer number, right aligned
+/*
+PUBLIC
+Displays integer number, right aligned
+Returns true if displayed whole number
+*/
 bool ShiftDisplay::print(int number, int milliseconds) {
 	bool sucess = true;
 	int negative = number < 0;
@@ -156,8 +170,8 @@ bool ShiftDisplay::print(int number, int milliseconds) {
 
 /*
 PUBLIC
-display float number, right aligned
-returns true if displayed correctly
+Displays float number, right aligned, rounded to n decimal places
+Returns true if displayed whole number
 */
 bool ShiftDisplay::print(float number, int nDecimalPlaces, int milliseconds) {
 
@@ -211,8 +225,11 @@ bool ShiftDisplay::print(float number, int nDecimalPlaces, int milliseconds) {
 	return sucess;
 }
 
-
-// PUBLIC display text, left aligned
+/*
+PUBLIC
+Displays string, left aligned
+Returns true if displayed whole string
+*/
 bool ShiftDisplay::print(String text, int milliseconds) {
 	bool sucess = true;
 	byte characters[_nCharacters];

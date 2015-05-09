@@ -1,0 +1,3 @@
+ShiftDisplay	KEYWORD1
+print	KEYWORD2
+printMenu	KEYWORD2

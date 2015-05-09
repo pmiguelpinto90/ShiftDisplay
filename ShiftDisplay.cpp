@@ -228,6 +228,7 @@ bool ShiftDisplay::print(float number, int nDecimalPlaces, int milliseconds) {
 /*
 PUBLIC
 Displays string, left aligned
+A-Z a-z 0-9 dash space
 Returns true if displayed whole string
 */
 bool ShiftDisplay::print(String text, int milliseconds) {
@@ -239,6 +240,7 @@ bool ShiftDisplay::print(String text, int milliseconds) {
 	// get characters from text
 	while (j < text.length() && i >= 0) {
 		char c = text[j++];
+
 		byte out;
 		if (c >= 'A' && c <= 'Z')
 			out = LETTERS[c - 'A'];
@@ -264,8 +266,12 @@ bool ShiftDisplay::print(String text, int milliseconds) {
 	return sucess;
 }
 
-// PUBLIC display menu, character on left, value on right
-bool ShiftDisplay::printMenu(char title, int value, int milliseconds) {
+/*
+PUBLIC
+Displays menu, character on left, integer on right
+Returns true if displayed whole value
+*/
+bool ShiftDisplay::printMenu(char c, int value, int milliseconds) {
 	bool sucess = true;
 	int negative = value < 0;
 	byte characters[_nCharacters];
@@ -297,7 +303,6 @@ bool ShiftDisplay::printMenu(char title, int value, int milliseconds) {
 		characters[i++] = _commonCathode ? SPACE : ~SPACE;
 
 	// place letter in front, with dot
-	char c = title;
 	byte out;
 	if (c >= 'A' && c <= 'Z')
 		out = LETTERS[c - 'A'];

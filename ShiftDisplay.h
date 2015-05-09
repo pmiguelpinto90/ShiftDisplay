@@ -1,8 +1,8 @@
 /*
-	Pyntoo
-
-	Multiple digit 7-segment display using shift registers
-
+  ShiftDisplay.h
+  Library for driving multiple digit 7-segment displays using shift registers
+  Created by Pyntoo, May 9, 2015
+  Released into the public domain
 */
 
 #ifndef ShiftDisplay_h

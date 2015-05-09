@@ -1,3 +1,10 @@
+/*
+  ShiftDisplay.cpp
+  Library for driving multiple digit 7-segment displays using shift registers
+  Created by Pyntoo, May 9, 2015
+  Released into the public domain
+*/
+
 #include "Arduino.h"
 #include "ShiftDisplay.h"
 

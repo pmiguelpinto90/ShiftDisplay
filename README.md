@@ -11,14 +11,14 @@ Arduino library for driving multiple digit 7-segment displays using shift regist
 
 ## Wiring
 
-## Functions
+## API
 
 ```
- ShiftDisplay s(abcd)
+ ShiftDisplay(int pin, int pin, int pin, boolean commonCathode, int nDigits)
 ```
 
 ```
-print(value, time)
+boolean print(int value, int milliseconds)
 ```
 Shows a value in the display during the given time in milliseconds.
 The value can be an integer or a String

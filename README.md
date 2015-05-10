@@ -1,28 +1,37 @@
 # ShiftDisplay
 Arduino library for driving multiple digit 7-segment displays using shift registers
 
-Hardware
+## Hardware
 - Multiple-digit 7-segment LED display (common anode or common cathode)
 - 74HC595 Shift Register (other 8-bit shift registers should work)
 
-Install
+## Install
 - Download library
 - Extract to Arduino library folder
 
-Wiring
+## Wiring
 
-Functions
+## Functions
 
-- ShiftDisplay s(abcd)
+```
+ ShiftDisplay s(abcd)
+```
 
-- print(value, time)
+```
+print(value, time)
+```
 Shows a value in the display during the given time in milliseconds.
 The value can be an integer or a String
 Returns true if there was space to write
 
-- print(value, decimalCase, time)
 
-- printMenu(character, value, time)
+```
+print(value, decimalCase, time)
+bla bla
+```
 
+```
+printMenu(character, value, time)
+```
 
-Example
+## Example

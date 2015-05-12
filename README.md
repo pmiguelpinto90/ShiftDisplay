@@ -53,7 +53,41 @@ in display, for the given milliseconds.
 Returns true if displayed whole value.
 
 ## Example
-TODO
+```
+#include <ShiftDisplay.h>
+
+ShiftDisplay disp(9, 8, 7, true, 3);
+
+void setup() {
+}
+
+void loop() {
+  disp.printMenu('t', 9, 2000);
+  disp.printMenu('h', 64, 2000);
+
+  disp.print("  c", 500);
+  disp.print(" cl", 500);
+  disp.print("cle", 500);
+  disp.print("lea", 500);
+  disp.print("ear", 500);
+  disp.print("ar", 500);
+  disp.print("r", 500);
+}
+```
+```
+#include <ShiftDisplay.h>
+
+ShiftDisplay disp(9, 8, 7, true, 3);
+
+void setup() {
+  for (int i = 42; i > 0; i--)
+    disp.print(i, 400);
+}
+
+void loop() {
+  disp.print("hey", 1);
+}
+```
 
 ## TODO
 - Bug: overflow when rounding float

@@ -1,3 +1,0 @@
-- bug: float to int overflow
-- function: fade in out
-- function: scroll

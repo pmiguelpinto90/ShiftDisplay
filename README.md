@@ -20,6 +20,7 @@ More info here
 
 
 **ShiftDisplay(int latchPin, int clkPin, int dataPin, bool commonCathode, int nDigits)**
+
 Creates object display.
 latchPin, clkPin and dataPin are the shift register pins connected to the Arduino.
 commonCathode is a boolean for the led type.
@@ -30,6 +31,8 @@ nDigits are the number of digits of the led.
 
 Displays integer value, right aligned in display, for the given milliseconds.
 Returns true if displayed whole number.
+
+
 
 
 

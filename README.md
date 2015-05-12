@@ -4,8 +4,8 @@ Arduino library for driving multiple digit 7-segment displays using shift regist
 TODO
 
 ## Hardware
-- 1+x Multiple-digit 7-segment LED display (common anode or common cathode)
-- 2+x 74HC595 Shift Register (other 8-bit shift registers should work)
+- 1x(+) Multiple-digit 7-segment LED display (common anode or common cathode)
+- 2x(+) 74HC595 Shift Register (other 8-bit shift registers should work)
 
 ## Install
 - Download library https://github.com/Pyntoo/ShiftDisplay/archive/master.zip
@@ -14,7 +14,7 @@ TODO
 - Restart the Arduino IDE.
 
 ## Wiring
-
+TODO
 
 ## API
 
@@ -55,7 +55,7 @@ Returns true if displayed whole value.
 ## Example
 A 3 digit common cathode display, with latch, clock and data pins connected to
 9, 8 and 7 respectively.
-```
+```c
 #include <ShiftDisplay.h>
 
 ShiftDisplay disp(9, 8, 7, true, 3);

@@ -18,9 +18,9 @@ More info here
 
 ## API
 
-```
-*ShiftDisplay(int latchPin, int clkPin, int dataPin, bool commonCathode, int nDigits)*
-
+*```
+ShiftDisplay(int latchPin, int clkPin, int dataPin, bool commonCathode, int nDigits)*
+```*
 Creates object display.
 latchPin, clkPin and dataPin are the shift register pins connected to the Arduino.
 commonCathode is a boolean for the led type.

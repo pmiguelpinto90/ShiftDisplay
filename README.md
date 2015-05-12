@@ -76,7 +76,7 @@ void loop() {
   disp.print("r", 500);
 }
 ```
-```
+```arduino
 #include <ShiftDisplay.h>
 
 ShiftDisplay disp(9, 8, 7, true, 3);

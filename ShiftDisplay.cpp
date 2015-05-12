@@ -276,8 +276,9 @@ bool ShiftDisplay::print(String text, int milliseconds) {
 
 /*
 PUBLIC
-Displays menu, character on left, integer on right
-Returns true if displayed whole value
+Displays character c left aligned in display, and integer value right aligned
+in display, for the given milliseconds.
+Returns true if displayed whole value.
 */
 bool ShiftDisplay::printMenu(char c, int value, int milliseconds) {
 	bool sucess = true;

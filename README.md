@@ -16,16 +16,19 @@ TODO
 ## Wiring
 TODO
 
-shift register | display
--------------- | --------
-0              | A
-1              | B
-2              | C
-3              | D
-4              | E
-5              | F
-6              | G
-7              | DP
+Arduino | Shift Reg | Display
+------- | --------- | -------
+d out   | Latch     | -
+d out   | Clock     | -
+d out   | Data      | -
+-       | 0         | A
+-       | 1         | B
+-       | 2         | C
+-       | 3         | D
+-       | 4         | E
+-       | 5         | F
+-       | 6         | G
+-       | 7         | DP
 
 
 ## API

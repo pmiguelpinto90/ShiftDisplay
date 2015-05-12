@@ -53,6 +53,8 @@ in display, for the given milliseconds.
 Returns true if displayed whole value.
 
 ## Example
+A 3 digit common cathode display, with latch, clock and data pins connected to
+9, 8 and 7 respectively.
 ```
 #include <ShiftDisplay.h>
 

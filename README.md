@@ -15,6 +15,17 @@ TODO
 
 ## Wiring
 TODO
+shift register|display
+--------------|--------
+0|A
+1|B
+2|C
+3|D
+4|E
+5|F
+6|G
+7|DP
+
 
 ## API
 
@@ -76,7 +87,7 @@ void loop() {
   disp.print("r", 500);
 }
 ```
-```arduino
+```c
 #include <ShiftDisplay.h>
 
 ShiftDisplay disp(9, 8, 7, true, 3);

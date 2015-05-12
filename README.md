@@ -1,15 +1,20 @@
 # ShiftDisplay
 Arduino library for driving multiple digit 7-segment displays using shift registers
 
+More info here
+
 ## Hardware
-- Multiple-digit 7-segment LED display (common anode or common cathode)
-- 74HC595 Shift Register (other 8-bit shift registers should work)
+- 1+x Multiple-digit 7-segment LED display (common anode or common cathode)
+- 2+x 74HC595 Shift Register (other 8-bit shift registers should work)
 
 ## Install
-- Download library
-- Extract to Arduino library folder
+- Download library https://github.com/Pyntoo/ShiftDisplay/archive/master.zip
+- Extract to <arduinosketchfolder>/libraries/ folder.
+- Rename ShiftDisplay-master to ShiftDisplay.
+- Restart the Arduino IDE.
 
 ## Wiring
+
 
 ## API
 
@@ -48,6 +53,7 @@ bool print(String text, int milliseconds)
 
 ```
 bool printMenu(char c, int value, int milliseconds)
+```
 
 // Displays character c left aligned in display, and integer value right aligned
 // in display, for the given milliseconds.
@@ -55,6 +61,7 @@ bool printMenu(char c, int value, int milliseconds)
 ```
 
 ## Example
+
 
 ## TODO
 - Bug: overflow when rounding float

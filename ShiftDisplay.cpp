@@ -88,8 +88,8 @@ ShiftDisplay::ShiftDisplay(int latchPin, int clkPin, int dataPin, bool commonCat
 PRIVATE
 Calculate power of number by exponent
 */
-int ShiftDisplay::power(int number, int exponent) {
-	return round(pow(number, exponent));
+int ShiftDisplay::power(int value, int exponent) {
+	return round(pow(value, exponent));
 }
 
 /*
@@ -136,26 +136,26 @@ void ShiftDisplay::printx(int milliseconds, byte characters[]) {
 
 /*
 PUBLIC
-Displays integer number, right aligned
+Displays integer value, right aligned in the display, for the given milliseconds
 Returns true if displayed whole number
 */
-bool ShiftDisplay::print(int number, int milliseconds) {
+bool ShiftDisplay::print(int value, int milliseconds) {
 	bool sucess = true;
-	int negative = number < 0;
+	int negative = value < 0;
 	byte characters[_nCharacters];
 	int i = 0;
 
 	// tranform number into positive
 	if (negative)
-		number = number * -1;
+		value = value * -1;
 
 	// store digits from number in array
 	do { // if number is zero, prints single 0
-		int digit = number % 10;
+		int digit = value % 10;
 		characters[i++] = _commonCathode ? DIGITS[digit]: ~DIGITS[digit];
-		number = number / 10;
-	} while (number != 0 && i < _nCharacters);
-	if (number != 0)
+		value = value / 10;
+	} while (value != 0 && i < _nCharacters);
+	if (value != 0)
 		sucess = false;
 
 	// place minus character on left of number
@@ -177,28 +177,29 @@ bool ShiftDisplay::print(int number, int milliseconds) {
 
 /*
 PUBLIC
-Displays float number, right aligned, rounded to n decimal places
+Displays float value, right aligned in display, rounded to nDecimalPlaces,
+for the given milliseconds
 Returns true if displayed whole number
 */
-bool ShiftDisplay::print(float number, int nDecimalPlaces, int milliseconds) {
+bool ShiftDisplay::print(float value, int nDecimalPlaces, int milliseconds) {
 
 	// if no decimal places, print int
 	if (nDecimalPlaces == 0) {
-		int n = round(number);
+		int n = round(value);
 		return print(n, milliseconds);
 	}
 
 	bool sucess = true;
-	bool negative = number < 0;
+	bool negative = value < 0;
 	byte characters[_nCharacters];
 	int i = 0;
 
 	// transform number in positive
 	if (negative)
-		number = number * -1;
+		value = value * -1;
 
 	// remove decimal point and convert in integer
-	int newNumber = round(number * power(10, nDecimalPlaces));
+	int newNumber = round(value * power(10, nDecimalPlaces));
 
 	// store digits from number in array
 	do {
@@ -234,8 +235,8 @@ bool ShiftDisplay::print(float number, int nDecimalPlaces, int milliseconds) {
 
 /*
 PUBLIC
-Displays string, left aligned
-A-Z a-z 0-9 dash space
+Displays text, left aligned in display, for the given milliseconds.
+Accepted characters for string are A-Z, a-z, 0-9, -, space.
 Returns true if displayed whole string
 */
 bool ShiftDisplay::print(String text, int milliseconds) {

@@ -21,11 +21,11 @@ private:
 	void clear();
 	void printx(int milliseconds, byte characters[]);
 public:
-	ShiftDisplay(int latchPin, int clkPin, int dataPin, bool commonCathode, int _nDigits);
-	bool print(int number, int milliseconds);
-	bool print(float number, int nDecimalPlaces, int milliseconds);
+	ShiftDisplay(int latchPin, int clkPin, int dataPin, bool commonCathode, int nDigits);
+	bool print(int value, int milliseconds);
+	bool print(float value, int nDecimalPlaces, int milliseconds);
 	bool print(String text, int milliseconds);
-	bool printMenu(char title, int value, int milliseconds);
+	bool printMenu(char c, int value, int milliseconds);
 };
 
 #endif

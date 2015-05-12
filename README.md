@@ -31,6 +31,7 @@ nDigits are the number of digits of the led.
 
 Displays integer value, right aligned in display, for the given milliseconds.
 Returns true if displayed whole number.
+
 -
 **bool print(float value, int nDecimalPlaces, int milliseconds)**
 

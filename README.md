@@ -111,7 +111,7 @@ void loop() {
 ```
 
 ## TODO
-- Bug: overflow when rounding float
-- Function: scroll
-- Function fadeIn
-- Function fadeOut
+- [] Bug: overflow when rounding float
+- [] Function: scroll
+- [] Function fadeIn
+- [] Function fadeOut

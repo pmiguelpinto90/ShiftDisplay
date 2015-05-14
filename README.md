@@ -113,7 +113,8 @@ void loop() {
 ```
 
 ## TODO
+- [x] Function: printMenu
 - [] Bug: overflow when rounding float
 - [] Function: scroll
-- [] Function fadeIn
-- [] Function fadeOut
+- [] Function: fadeIn
+- [] Function: fadeOut

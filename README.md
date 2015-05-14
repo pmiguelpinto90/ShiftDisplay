@@ -1,8 +1,7 @@
-BUILDING README
-
 # ShiftDisplay
 Arduino library for driving multiple digit 7-segment displays using shift registers
 
+## Overview
 - Only 3 pins used on Arduino
 - Displays with any quantity of digits
 - Common cathode and common anode compatible

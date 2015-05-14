@@ -13,7 +13,7 @@ TODO
 
 ## Install
 - Download library https://github.com/Pyntoo/ShiftDisplay/archive/master.zip
-- Extract to <arduinosketchfolder>/libraries/ folder.
+- Extract to `<arduinosketchfolder>/libraries/` folder.
 - Rename ShiftDisplay-master to ShiftDisplay.
 - Restart the Arduino IDE.
 

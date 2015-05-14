@@ -1,3 +1,5 @@
+BUILDING README
+
 # ShiftDisplay
 Arduino library for driving multiple digit 7-segment displays using shift registers
 
@@ -16,19 +18,21 @@ TODO
 ## Wiring
 TODO
 
-Arduino | Shift Reg | Display
-------- | --------- | -------
-d out   | Latch     | -
-d out   | Clock     | -
-d out   | Data      | -
--       | 0         | A
--       | 1         | B
--       | 2         | C
--       | 3         | D
--       | 4         | E
--       | 5         | F
--       | 6         | G
--       | 7         | DP
+Arduino | Shift Reg 0 | Shift Reg 1 | Display 1 | Display n
+------- | ----------- | ----------- | --------  | 
+d out   | Latch       | Latch       | -         |
+d out   | Clock       | Clock       | -         |
+d out   | Data        | Data        | -         |
+-       | 0           |             | A         |
+-       | 1           |             | B         |
+-       | 2           |             | C         |
+-       | 3           |             | D         |
+-       | 4           |             | E         |
+-       | 5           |             | F         |
+-       | 6           |             | G         |
+-       | 7           |             | DP        |
+        | -           |             | common    |
+Shift reg 2
 
 
 ## API

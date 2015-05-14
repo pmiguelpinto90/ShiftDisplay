@@ -4,7 +4,7 @@ BUILDING README
 Arduino library for driving multiple digit 7-segment displays using shift registers
 
 
-![breadboard](https://drive.google.com/open?id=0Bwelfe1Xs4Twb2dpaVZFc25teG8&authuser=0)
+![breadboard](https://drive.google.com/file/d/0Bwelfe1Xs4Twb2dpaVZFc25teG8/view?usp=sharing)
 TODO
 
 ## Hardware

@@ -3,9 +3,13 @@ BUILDING README
 # ShiftDisplay
 Arduino library for driving multiple digit 7-segment displays using shift registers
 
-![breadboard](https://raw.githubusercontent.com/Pyntoo/ShiftDisplay/master/img/breadboard.jpg)
+- Only 3 pins used on Arduino
+- Displays with any quantity of digits
+- Common cathode and common anode compatible
+- Show numbers or text
+- Concatenate multiple displays as one
 
-TODO
+![breadboard](https://raw.githubusercontent.com/Pyntoo/ShiftDisplay/master/img/breadboard.jpg)
 
 ## Hardware
 - 1x(+) Multiple-digit 7-segment LED display (common anode or common cathode)

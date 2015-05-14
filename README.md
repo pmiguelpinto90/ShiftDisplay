@@ -3,8 +3,8 @@ BUILDING README
 # ShiftDisplay
 Arduino library for driving multiple digit 7-segment displays using shift registers
 
-
 ![breadboard](https://raw.githubusercontent.com/Pyntoo/ShiftDisplay/master/img/breadboard.jpg)
+
 TODO
 
 ## Hardware
@@ -21,7 +21,7 @@ TODO
 TODO
 
 Arduino | Shift Reg 0 | Shift Reg 1 | Display 1 | Display n
-------- | ----------- | ----------- | --------  | 
+------- | ----------- | ----------- | --------- | ---------
 d out   | Latch       | Latch       | -         |
 d out   | Clock       | Clock       | -         |
 d out   | Data        | Data        | -         |
@@ -34,8 +34,6 @@ d out   | Data        | Data        | -         |
 -       | 6           |             | G         |
 -       | 7           |             | DP        |
         | -           |             | common    |
-Shift reg 2
-
 
 ## API
 
@@ -76,6 +74,7 @@ Returns true if displayed whole value.
 ## Example
 A 3 digit common cathode display, with latch, clock and data pins connected to
 9, 8 and 7 respectively.
+
 ```c
 #include <ShiftDisplay.h>
 
@@ -97,6 +96,7 @@ void loop() {
   disp.print("r", 500);
 }
 ```
+
 ```c
 #include <ShiftDisplay.h>
 

@@ -60,12 +60,12 @@ Returns true if displayed whole value.
 
 ## Example
 A 3 digit common cathode display, with latch, clock and data pins connected to
-9, 8 and 7 respectively.
+6, 7 and 5 respectively.
 
 ```c
 #include <ShiftDisplay.h>
 
-ShiftDisplay disp(9, 8, 7, true, 3);
+ShiftDisplay disp(6, 7, 5, true, 3);
 
 void setup() {
 }
@@ -87,7 +87,7 @@ void loop() {
 ```c
 #include <ShiftDisplay.h>
 
-ShiftDisplay disp(9, 8, 7, true, 3);
+ShiftDisplay disp(6, 7, 5, true, 3);
 
 void setup() {
   for (int i = 42; i > 0; i--)

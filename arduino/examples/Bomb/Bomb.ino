@@ -1,6 +1,6 @@
 #include <ShiftDisplay.h>
 
-ShiftDisplay disp(9, 8, 7, true, 3);
+ShiftDisplay disp(6, 7, 5, true, 3);
 
 void setup() {
   for (int i = 128; i > 0; i--)

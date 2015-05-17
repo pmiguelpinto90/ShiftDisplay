@@ -1,6 +1,0 @@
-ShiftDisplay	KEYWORD1
-print	KEYWORD2
-printMenu	KEYWORD2
-scroll KEYWORD2
-fadeIn KEYWORD2
-fadeOut KEYWORD2

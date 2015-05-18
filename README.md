@@ -12,8 +12,9 @@ Arduino library for driving multiple digit 7-segment displays using shift regist
 ![breadboard](https://raw.githubusercontent.com/Pyntoo/ShiftDisplay/master/extra/photo.jpg)
 
 ## Hardware
-- 1x (or more) Multiple-digit 7-segment LED display (common anode or common cathode)
+- 1x (or more) Multiple-Digit 7-Segment LED Display (common anode or common cathode)
 - 2x (or more) 74HC595 Shift Register (other 8-bit shift registers should work)
+- 8x 220 Ohm Resistor
 
 ## Install
 1. Download library https://github.com/Pyntoo/ShiftDisplay/archive/master.zip
@@ -23,11 +24,12 @@ Arduino library for driving multiple digit 7-segment displays using shift regist
 
 ## Wiring
 ![wiring arduino voltage to shift register](https://raw.githubusercontent.com/Pyntoo/ShiftDisplay/master/extra/arduino1_to_shift.png)
+
 ![wiring arduino output to shift register](https://raw.githubusercontent.com/Pyntoo/ShiftDisplay/master/extra/arduino2_to_shift.png)
+
 ![wiring shift register to display](https://raw.githubusercontent.com/Pyntoo/ShiftDisplay/master/extra/shift_to_display.png)
 
 ## Reference
-
 **ShiftDisplay(int latchPin, int clkPin, int dataPin, bool commonCathode, int nDigits)**
 
 Creates object display.

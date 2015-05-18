@@ -18,6 +18,7 @@ Arduino library for driving multiple digit 7-segment displays using shift regist
 ## Install
 - Download library https://github.com/Pyntoo/ShiftDisplay/trunk/ShiftDisplay
 - Extract to `<arduinosketchfolder>/libraries/` folder.
+- Rename ShiftDisplay-master to ShiftDisplay.
 - Restart the Arduino IDE.
 
 ## Wiring

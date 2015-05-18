@@ -23,10 +23,8 @@ Arduino library for driving multiple digit 7-segment displays using shift regist
 ## Wiring
 1. Connect Arduino voltage to shift registers:
 ![wiring arduino voltage to shift register](https://raw.githubusercontent.com/Pyntoo/ShiftDisplay/master/extra/arduino1_to_shift.png)
-
 2. Connect Arduino outputs to shift registers:
 ![wiring arduino output to shift register](https://raw.githubusercontent.com/Pyntoo/ShiftDisplay/master/extra/arduino2_to_shift.png)
-
 3. Connect shift registers to display:
 ![wiring shift register to display](https://raw.githubusercontent.com/Pyntoo/ShiftDisplay/master/extra/shift_to_display.png)
 

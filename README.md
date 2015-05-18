@@ -16,17 +16,17 @@ Arduino library for driving multiple digit 7-segment displays using shift regist
 - 2x(+) 74HC595 Shift Register (other 8-bit shift registers should work)
 
 ## Install
-- Download library https://github.com/Pyntoo/ShiftDisplay/trunk/ShiftDisplay
-- Extract to `<arduinosketchfolder>/libraries/` folder.
-- Rename ShiftDisplay-master to ShiftDisplay.
-- Restart the Arduino IDE.
+1. Download library https://github.com/Pyntoo/ShiftDisplay/archive/master.zip
+2. Extract to `<arduino-sketch-folder>/libraries/` folder.
+3. Rename extracted folder `ShiftDisplay-master` to `ShiftDisplay`.
+4. Restart the Arduino IDE.
 
 ## Wiring
-![wiring shift register to arduino voltage](https://raw.githubusercontent.com/Pyntoo/ShiftDisplay/master/extra/arduino1_to_shift.png)
-![wiring shift register to arduino output](https://raw.githubusercontent.com/Pyntoo/ShiftDisplay/master/extra/arduino2_to_shift.png)
+![wiring arduino voltage to shift register](https://raw.githubusercontent.com/Pyntoo/ShiftDisplay/master/extra/arduino1_to_shift.png)
+![wiring arduino output to shift register](https://raw.githubusercontent.com/Pyntoo/ShiftDisplay/master/extra/arduino2_to_shift.png)
 ![wiring shift register to display](https://raw.githubusercontent.com/Pyntoo/ShiftDisplay/master/extra/shift_to_display.png)
 
-## API
+## Reference
 
 **ShiftDisplay(int latchPin, int clkPin, int dataPin, bool commonCathode, int nDigits)**
 
@@ -105,6 +105,7 @@ void loop() {
 
 ## TODO
 - [x] Function: printMenu
+- [ ] Improve: examples comments
 - [ ] Bug: overflow when rounding float
 - [ ] Function: scroll
 - [ ] Function: fadeIn

@@ -37,7 +37,7 @@ latchPin, clkPin and dataPin are the shift register pins connected to the Arduin
 commonCathode is a boolean for the led type.
 nDigits are the number of digits of the led.
 
--
+---
 **bool print(int value, int milliseconds)**
 
 Displays integer value, right aligned in display, for the given milliseconds.

@@ -198,23 +198,31 @@ bool ShiftDisplay::print(float value, int nDecimalPlaces, int milliseconds) {
 	if (negative)
 		value = value * -1;
 
-	// remove decimal point and convert in integer
-	int newNumber = round(value * power(10, nDecimalPlaces));
+	// get integer and fractional part from value
+	int integer = (int) value;
+	value = (value - integer) * power(10, nDecimalPlaces);
+	int fractional = round(value);
 
-	// store digits from number in array
+	// store digits from fractional part in array
 	do {
-		int digit = newNumber % 10;
+		int digit = fractional % 10;
 		characters[i++] = _commonCathode ? DIGITS[digit] : ~DIGITS[digit];
-		newNumber = newNumber / 10;
-	} while (newNumber != 0 && i < _nCharacters);
-	if (newNumber != 0)
+		fractional = fractional / 10;
+	} while (fractional != 0 && i < _nCharacters);
+	if (fractional != 0)
 		sucess = false;
-
-	// place decimal point
-	if (nDecimalPlaces < _nCharacters)
+	// if more space store digits from integer part in array
+	else {
+		do {
+			int digit = integer % 10;
+			characters[i++] = _commonCathode ? DIGITS[digit] : ~DIGITS[digit];
+			integer = integer / 10;
+		} while (integer != 0 && i < _nCharacters);
+		if (integer != 0)
+			sucess = false;
+		// place decimal point in first integer
 		characters[nDecimalPlaces] = characters[nDecimalPlaces] + DOT;
-	else
-		sucess = false;
+	}	
 
 	// place minus character on left of numbers
 	if (negative) {

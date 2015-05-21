@@ -109,7 +109,7 @@ void loop() {
 ## TODO
 - [x] Function: printMenu
 - [ ] Improve: examples comments
-- [ ] Bug: overflow when rounding float
+- [x] Bug: overflow when rounding float
 - [ ] Function: scroll
 - [ ] Function: fadeIn
 - [ ] Function: fadeOut

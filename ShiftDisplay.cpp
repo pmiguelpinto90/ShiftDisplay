@@ -176,6 +176,13 @@ void ShiftDisplay::print(int value, int time) {
 }
 
 // PUBLIC
+// Displays float value, right aligned in display, rounded to one decimal place,
+// for the given time in milliseconds
+void ShiftDisplay::print(float value, int time) {
+	print(value, 1, time);
+}
+
+// PUBLIC
 // Displays float value, right aligned in display, rounded to nDecimalPlaces,
 // for the given time in milliseconds
 void ShiftDisplay::print(float value, int nDecimalPlaces, int time) {

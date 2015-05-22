@@ -39,31 +39,33 @@ commonCathode is a boolean for the led type.
 nDigits are the number of digits of the led.
 
 -
-**bool print(int value, int milliseconds)**
+**void print(int value, int time)**
 
-Displays integer value, right aligned in display, for the given milliseconds.
-Returns true if displayed whole number.
+Displays integer value, right aligned in display, for the given time in milliseconds.
 
 -
-**bool print(float value, int nDecimalPlaces, int milliseconds)**
+**void ShiftDisplay::print(float value, int time)**
+
+Displays float value, right aligned in display, rounded to one decimal place,
+for the given time in milliseconds
+
+-
+**void print(float value, int nDecimalPlaces, int time)**
 
 Displays float value, right aligned in display, rounded to nDecimalPlaces,
-for the given milliseconds.
-Returns true if displayed whole number.
+for the given time in milliseconds.
 
 -
-**bool print(String text, int milliseconds)**
+**void print(String text, int time)**
 
-Displays text, left aligned in display, for the given milliseconds.
+Displays text, left aligned in display, for the given time in milliseconds.
 Accepted characters for string are A-Z, a-z, 0-9, -, space.
-Returns true if displayed whole string.
 
 -
-**bool printMenu(char c, int value, int milliseconds)**
+**void printMenu(char c, int value, int time)**
 
 Displays character c left aligned in display, and integer value right aligned
-in display, for the given milliseconds.
-Returns true if displayed whole value.
+in display, for the given time in milliseconds.
 
 ## Example
 A 3 digit common cathode display, with latch, clock and data pins connected to

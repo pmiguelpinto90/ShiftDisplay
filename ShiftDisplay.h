@@ -20,15 +20,16 @@ private:
 	int _nShiftRegisters;
 	int power(int number, int exponent);
 	void clear();
-	void printx(int milliseconds, byte characters[]);
+	void printx(int time, byte characters[]);
 public:
 	ShiftDisplay(int latchPin, int clockPin, int dataPin, bool commonCathode, int nDigits);
 	ShiftDisplay(int latchPin, int clockPin, int dataPin, int outputEnablePin, bool commonCathode, int nDigits);
-	void print(int value, int milliseconds);
-	void print(float value, int nDecimalPlaces, int milliseconds);
-	void print(String text, int milliseconds);
-	void printMenu(char c, int value, int milliseconds);
-	void fadeIn(int value, int fadeTime, int milliseconds);
+	void print(int value, int time);
+	void print(float value, int time);
+	void print(float value, int nDecimalPlaces, int time);
+	void print(String text, int time);
+	void printMenu(char c, int value, int time);
+	void fadeIn(int value, int fadeTime, int time);
 };
 
 #endif

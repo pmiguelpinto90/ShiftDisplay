@@ -12,8 +12,9 @@
 class ShiftDisplay {
 private:
 	int _latchPin;
-	int _clkPin;
+	int _clockPin;
 	int _dataPin;
+	int _outputEnablePin;
 	bool _commonCathode;
 	int _nCharacters;
 	int _nShiftRegisters;
@@ -21,11 +22,13 @@ private:
 	void clear();
 	void printx(int milliseconds, byte characters[]);
 public:
-	ShiftDisplay(int latchPin, int clkPin, int dataPin, bool commonCathode, int nDigits);
-	bool print(int value, int milliseconds);
-	bool print(float value, int nDecimalPlaces, int milliseconds);
-	bool print(String text, int milliseconds);
-	bool printMenu(char c, int value, int milliseconds);
+	ShiftDisplay(int latchPin, int clockPin, int dataPin, bool commonCathode, int nDigits);
+	ShiftDisplay(int latchPin, int clockPin, int dataPin, int outputEnablePin, bool commonCathode, int nDigits);
+	void print(int value, int milliseconds);
+	void print(float value, int nDecimalPlaces, int milliseconds);
+	void print(String text, int milliseconds);
+	void printMenu(char c, int value, int milliseconds);
+	void fadeIn(int value, int fadeTime, int milliseconds);
 };
 
 #endif

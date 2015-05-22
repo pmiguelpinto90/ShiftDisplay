@@ -72,45 +72,56 @@ const byte DISPLAYS_OFF = {
 	B00000000,
 };
 
-ShiftDisplay::ShiftDisplay(int latchPin, int clkPin, int dataPin, bool commonCathode, int nDigits) {
+// CONSTRUCTOR
+// without fade
+ShiftDisplay::ShiftDisplay(int latchPin, int clockPin, int dataPin, bool commonCathode, int nDigits) {
+	ShiftDisplay(latchPin, clockPin, dataPin, 0, commonCathode, nDigits);
+}
+
+// CONSTRUCTOR
+// with fade
+ShiftDisplay::ShiftDisplay(int latchPin, int clockPin, int dataPin, int outputEnablePin, bool commonCathode, int nDigits) {
 	pinMode(latchPin, OUTPUT);
-	pinMode(clkPin, OUTPUT);
+	pinMode(latchPin, OUTPUT);
+	pinMode(clockPin, OUTPUT);
 	pinMode(dataPin, OUTPUT);
+	pinMode(outputEnablePin, OUTPUT);
 	_latchPin = latchPin;
-	_clkPin = clkPin;
+	_clockPin = clockPin;
 	_dataPin = dataPin;
+	_outputEnablePin = outputEnablePin;
 	_commonCathode = commonCathode;
 	_nCharacters = nDigits;
 	_nShiftRegisters = (nDigits-1)/8 + 2;
 }
 
-/*
-PRIVATE
-Calculate power of number by exponent
-*/
+
+// PRIVATE
+// Calculate power of number by exponent
 int ShiftDisplay::power(int value, int exponent) {
 	return round(pow(value, exponent));
 }
 
-/*
-PRIVATE
-Clears display
-*/
+// PRIVATE
+byte[] getCharacters(int value) {
+
+}
+
+// PRIVATE
+// Clears display
 void ShiftDisplay::clear() {
 	digitalWrite(_latchPin, LOW);
 	for (int i = 0; i < _nShiftRegisters; i++)
-		shiftOut(_dataPin, _clkPin, MSBFIRST, 0); // both ends of led with same value
+		shiftOut(_dataPin, _clockPin, MSBFIRST, 0); // both ends of led with same value
 	digitalWrite(_latchPin, HIGH);
 }
 
-/*
-PRIVATE
-Displays byte array
-Pre: characters array size = display number of digits
-*/
-void ShiftDisplay::printx(int milliseconds, byte characters[]) {
+// PRIVATE
+// Displays byte array
+// Pre: characters array size = display number of digits
+void ShiftDisplay::printx(int time, byte characters[]) {
 	unsigned long start = millis();
-	while (millis() - start < milliseconds) {
+	while (millis() - start < time) {
 		for (int i = 0; i < _nCharacters; i++) {
 			digitalWrite(_latchPin, LOW);
 
@@ -121,11 +132,11 @@ void ShiftDisplay::printx(int milliseconds, byte characters[]) {
 					out = _commonCathode ? ~DISPLAYS[i] : DISPLAYS[i];
 				else
 					out = _commonCathode ? ~DISPLAYS_OFF : DISPLAYS_OFF;
-				shiftOut(_dataPin, _clkPin, MSBFIRST, out);
+				shiftOut(_dataPin, _clockPin, MSBFIRST, out);
 			}
 
 			// shift data for character register
-			shiftOut(_dataPin, _clkPin, MSBFIRST, characters[i]);
+			shiftOut(_dataPin, _clockPin, MSBFIRST, characters[i]);
 
 			digitalWrite(_latchPin, HIGH);
 			delay(POV);
@@ -134,13 +145,10 @@ void ShiftDisplay::printx(int milliseconds, byte characters[]) {
 	clear();
 }
 
-/*
-PUBLIC
-Displays integer value, right aligned in the display, for the given milliseconds
-Returns true if displayed whole number
-*/
-bool ShiftDisplay::print(int value, int milliseconds) {
-	bool sucess = true;
+// PUBLIC
+// Displays integer value, right aligned in the display, for the
+// given time in milliseconds
+void ShiftDisplay::print(int value, int time) {
 	int negative = value < 0;
 	byte characters[_nCharacters];
 	int i = 0;
@@ -153,43 +161,31 @@ bool ShiftDisplay::print(int value, int milliseconds) {
 	do { // if number is zero, prints single 0
 		int digit = value % 10;
 		characters[i++] = _commonCathode ? DIGITS[digit]: ~DIGITS[digit];
-		value = value / 10;
-	} while (value != 0 && i < _nCharacters);
-	if (value != 0)
-		sucess = false;
+		value /= 10;
+	} while (value && i < _nCharacters);
 
 	// place minus character on left of number
-	if (negative) {
-		if (i < _nCharacters)
-			characters[i++] = _commonCathode ? MINUS : ~MINUS;
-		else
-			sucess = false;
-	}
+	if (negative && i < _nCharacters)
+		characters[i++] = _commonCathode ? MINUS : ~MINUS;
 
 	// fill remaining array with empty
 	while (i < _nCharacters)
 		characters[i++] = _commonCathode ? SPACE : ~SPACE;
 
-	printx(milliseconds, characters);
-
-	return sucess;
+	printx(time, characters);
 }
 
-/*
-PUBLIC
-Displays float value, right aligned in display, rounded to nDecimalPlaces,
-for the given milliseconds
-Returns true if displayed whole number
-*/
-bool ShiftDisplay::print(float value, int nDecimalPlaces, int milliseconds) {
+// PUBLIC
+// Displays float value, right aligned in display, rounded to nDecimalPlaces,
+// for the given time in milliseconds
+void ShiftDisplay::print(float value, int nDecimalPlaces, int time) {
 
 	// if no decimal places, print int
 	if (nDecimalPlaces == 0) {
 		int n = round(value);
-		return print(n, milliseconds);
+		return print(n, time);
 	}
 
-	bool sucess = true;
 	bool negative = value < 0;
 	byte characters[_nCharacters];
 	int i = 0;
@@ -198,6 +194,7 @@ bool ShiftDisplay::print(float value, int nDecimalPlaces, int milliseconds) {
 	if (negative)
 		value = value * -1;
 
+	// todo em vez disto transformar em longint
 	// get integer and fractional part from value
 	int integer = (int) value;
 	value = (value - integer) * power(10, nDecimalPlaces);
@@ -207,48 +204,34 @@ bool ShiftDisplay::print(float value, int nDecimalPlaces, int milliseconds) {
 	do {
 		int digit = fractional % 10;
 		characters[i++] = _commonCathode ? DIGITS[digit] : ~DIGITS[digit];
-		fractional = fractional / 10;
-	} while (fractional != 0 && i < _nCharacters);
-	if (fractional != 0)
-		sucess = false;
-	// if more space store digits from integer part in array
-	else {
-		do {
-			int digit = integer % 10;
-			characters[i++] = _commonCathode ? DIGITS[digit] : ~DIGITS[digit];
-			integer = integer / 10;
-		} while (integer != 0 && i < _nCharacters);
-		if (integer != 0)
-			sucess = false;
-		// place decimal point in first integer
+		fractional /= 10;
+	} while (fractional && i < _nCharacters);
+	// store digits from integer part in array
+	do {
+		int digit = integer % 10;
+		characters[i++] = _commonCathode ? DIGITS[digit] : ~DIGITS[digit];
+		integer /= 10;
+	} while (integer && i < _nCharacters);
+
+	// place decimal point in first integer
+	if (i < nDecimalPlaces)
 		characters[nDecimalPlaces] = characters[nDecimalPlaces] + DOT;
-	}	
 
 	// place minus character on left of numbers
-	if (negative) {
-		if (i < _nCharacters)
-			characters[i++] = _commonCathode ? MINUS : ~MINUS;
-		else
-			sucess = false;
-	}
+	if (negative && i < _nCharacters)
+		characters[i++] = _commonCathode ? MINUS : ~MINUS;
 
 	// fill remaining characters with empty
 	while (i < _nCharacters)
 		characters[i++] = _commonCathode ? SPACE : ~SPACE;
 
-	printx(milliseconds, characters);
-
-	return sucess;
+	printx(time, characters);
 }
 
-/*
-PUBLIC
-Displays text, left aligned in display, for the given milliseconds.
-Accepted characters for string are A-Z, a-z, 0-9, -, space.
-Returns true if displayed whole string
-*/
-bool ShiftDisplay::print(String text, int milliseconds) {
-	bool sucess = true;
+// PUBLIC
+// Displays text, left aligned in display, for the given time in milliseconds.
+// Accepted characters for string are A-Z, a-z, 0-9, -, space.
+void ShiftDisplay::print(String text, int time) {
 	byte characters[_nCharacters];
 	int i = _nCharacters - 1; // for inverse array iteration
 	int j = 0; // for text iteration
@@ -270,26 +253,18 @@ bool ShiftDisplay::print(String text, int milliseconds) {
 			out = SPACE;
 		characters[i--] = _commonCathode ? out : ~out;
 	}
-	if (text.length() > _nCharacters)
-		sucess = false;
 
 	// fill remaining right characters with empty
 	while (i >= 0)
 		characters[i--] = _commonCathode ? SPACE : ~SPACE;
 
-	printx(milliseconds, characters);
-
-	return sucess;
+	printx(time, characters);
 }
 
-/*
-PUBLIC
-Displays character c left aligned in display, and integer value right aligned
-in display, for the given milliseconds.
-Returns true if displayed whole value.
-*/
-bool ShiftDisplay::printMenu(char c, int value, int milliseconds) {
-	bool sucess = true;
+// PUBLIC
+// Displays character c left aligned in display, and integer value right aligned
+// in display, for the given time in milliseconds.
+void ShiftDisplay::printMenu(char c, int value, int time) {
 	int negative = value < 0;
 	byte characters[_nCharacters];
 	int i = 0;
@@ -302,24 +277,18 @@ bool ShiftDisplay::printMenu(char c, int value, int milliseconds) {
 	do {
 		int digit = value % 10;
 		characters[i++] = _commonCathode ? DIGITS[digit] : ~DIGITS[digit];
-		value = value / 10;
-	} while (value != 0 && i < _nCharacters - 1);
-	if (value != 0)
-		sucess = false;
+		value /= 10;
+	} while (value && i < _nCharacters - 1);
 
 	// place minus character at numbers left
-	if (negative) {
-		if (i < _nCharacters - 1)
-			characters[i++] = _commonCathode ? MINUS : ~MINUS;
-		else
-			sucess = false;
-	}
+	if (negative && i < _nCharacters - 1)
+		characters[i++] = _commonCathode ? MINUS : ~MINUS;	
 
 	// fill remaining characters with empty, except last
 	while (i < _nCharacters - 1)
 		characters[i++] = _commonCathode ? SPACE : ~SPACE;
 
-	// place letter in front, with dot
+	// place letter in last, with dot
 	byte out;
 	if (c >= 'A' && c <= 'Z')
 		out = LETTERS[c - 'A'];
@@ -334,7 +303,15 @@ bool ShiftDisplay::printMenu(char c, int value, int milliseconds) {
 	out = out + DOT;
 	characters[i] = _commonCathode ? out : ~out;
 
-	printx(milliseconds, characters);
+	printx(time, characters);
+}
 
-	return sucess;
+// PUBLIC
+// todo
+void ShiftDisplay::fadeIn(int value, int fadeTime, int time) {
+	for(int i = 255; i >= 0; i--) {
+		analogWrite(_outputEnablePin, i);
+		print(value, 10);
+	}
+	return true;
 }

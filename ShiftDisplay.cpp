@@ -75,13 +75,21 @@ const byte DISPLAYS_OFF = {
 // CONSTRUCTOR
 // without fade
 ShiftDisplay::ShiftDisplay(int latchPin, int clockPin, int dataPin, bool commonCathode, int nDigits) {
-	ShiftDisplay(latchPin, clockPin, dataPin, 0, commonCathode, nDigits);
+	pinMode(latchPin, OUTPUT);
+	pinMode(clockPin, OUTPUT);
+	pinMode(dataPin, OUTPUT);
+	_latchPin = latchPin;
+	_clockPin = clockPin;
+	_dataPin = dataPin;
+	_outputEnablePin = 0;
+	_commonCathode = commonCathode;
+	_nCharacters = nDigits;
+	_nShiftRegisters = (nDigits-1)/8 + 2;
 }
 
 // CONSTRUCTOR
 // with fade
 ShiftDisplay::ShiftDisplay(int latchPin, int clockPin, int dataPin, int outputEnablePin, bool commonCathode, int nDigits) {
-	pinMode(latchPin, OUTPUT);
 	pinMode(latchPin, OUTPUT);
 	pinMode(clockPin, OUTPUT);
 	pinMode(dataPin, OUTPUT);
@@ -100,11 +108,6 @@ ShiftDisplay::ShiftDisplay(int latchPin, int clockPin, int dataPin, int outputEn
 // Calculate power of number by exponent
 int ShiftDisplay::power(int value, int exponent) {
 	return round(pow(value, exponent));
-}
-
-// PRIVATE
-byte[] getCharacters(int value) {
-
 }
 
 // PRIVATE
@@ -201,27 +204,18 @@ void ShiftDisplay::print(float value, int nDecimalPlaces, int time) {
 	if (negative)
 		value = value * -1;
 
-	// todo em vez disto transformar em longint
-	// get integer and fractional part from value
-	int integer = (int) value;
-	value = (value - integer) * power(10, nDecimalPlaces);
-	int fractional = round(value);
+	// get digits rounded without comma from value
+	long newValue = round(value * power(10, nDecimalPlaces));
 
-	// store digits from fractional part in array
+	// store digits in array
 	do {
-		int digit = fractional % 10;
+		int digit = newValue % 10;
 		characters[i++] = _commonCathode ? DIGITS[digit] : ~DIGITS[digit];
-		fractional /= 10;
-	} while (fractional && i < _nCharacters);
-	// store digits from integer part in array
-	do {
-		int digit = integer % 10;
-		characters[i++] = _commonCathode ? DIGITS[digit] : ~DIGITS[digit];
-		integer /= 10;
-	} while (integer && i < _nCharacters);
+		newValue /= 10;
+	} while (newValue && i < _nCharacters);
 
 	// place decimal point in first integer
-	if (i < nDecimalPlaces)
+	if (nDecimalPlaces < _nCharacters)
 		characters[nDecimalPlaces] = characters[nDecimalPlaces] + DOT;
 
 	// place minus character on left of numbers
@@ -320,5 +314,4 @@ void ShiftDisplay::fadeIn(int value, int fadeTime, int time) {
 		analogWrite(_outputEnablePin, i);
 		print(value, 10);
 	}
-	return true;
 }

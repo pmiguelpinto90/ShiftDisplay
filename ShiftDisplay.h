@@ -29,6 +29,9 @@ public:
 	void print(float value, int nDecimalPlaces, int time);
 	void print(String text, int time);
 	void printMenu(char c, int value, int time);
+	void printMenu(char c, float value, int time);
+	void printMenu(char c, float value, int nDecimalPlaces, int time);
+	void printMenu(char c, String text, int time);
 	void fadeIn(int value, int fadeTime, int time);
 };
 

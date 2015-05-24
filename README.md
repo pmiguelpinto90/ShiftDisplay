@@ -34,9 +34,15 @@ Arduino library for driving multiple digit 7-segment displays using shift regist
 **ShiftDisplay(int latchPin, int clkPin, int dataPin, bool commonCathode, int nDigits)**
 
 Creates object display.
+fadeIn and fadeOut functions not avaiable.
 latchPin, clkPin and dataPin are the shift register pins connected to the Arduino.
 commonCathode is a boolean for the led type.
 nDigits are the number of digits of the led.
+
+-
+**ShiftDisplay(int latchPin, int clockPin, int dataPin, int outputEnablePin, bool commonCathode, int nDigits)**
+Same as above, except fadeIn and fadeOut functions are avaiable.
+outputEnablePin pin also connected to the Arduino.
 
 -
 **void print(int value, int time)**
@@ -44,7 +50,7 @@ nDigits are the number of digits of the led.
 Displays integer value, right aligned in display, for the given time in milliseconds.
 
 -
-**void ShiftDisplay::print(float value, int time)**
+**void print(float value, int time)**
 
 Displays float value, right aligned in display, rounded to one decimal place,
 for the given time in milliseconds
@@ -66,6 +72,14 @@ Accepted characters for string are A-Z, a-z, 0-9, -, space.
 
 Displays character c left aligned in display, and integer value right aligned
 in display, for the given time in milliseconds.
+
+-
+**void fadeIn()**
+todo
+
+-
+**void fadeOut()**
+todo
 
 ## Example
 A 3 digit common cathode display, with latch, clock and data pins connected to
@@ -109,9 +123,7 @@ void loop() {
 ```
 
 ## TODO
-- [x] Function: printMenu
 - [ ] Improve: examples comments
-- [x] Bug: overflow when rounding float
-- [ ] Function: scroll
-- [ ] Function: fadeIn
-- [ ] Function: fadeOut
+- [ ] Function: scroll int/float/string
+- [ ] Function: fadeIn/fadeOut int/float/string
+- [ ] Function: printMenu int/float/string

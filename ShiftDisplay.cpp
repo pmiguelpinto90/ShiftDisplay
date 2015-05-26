@@ -1,12 +1,19 @@
 /*
-  ShiftDisplay.cpp
-  Library for driving multiple digit 7-segment displays using shift registers
-  Created by Pyntoo, May 9, 2015
-  Released into the public domain
+
+  ShiftDisplay
+  1.0.0 (26/05/2015)
+  Arduino library for driving multiple digit 7-segment displays using shift registers
+  
+  Pyntoo
+  r.pynto@gmail.com
+
+  Released into the public domain on May 9, 2015
+
 */
 
 #include "Arduino.h"
 #include "ShiftDisplay.h"
+
 
 const int POV = 5; // delay for persistence of vision
 
@@ -72,8 +79,8 @@ const byte DISPLAYS_OFF = {
 	B00000000,
 };
 
+
 // CONSTRUCTOR
-// without fade
 ShiftDisplay::ShiftDisplay(int latchPin, int clockPin, int dataPin, bool commonCathode, int nDigits) {
 	pinMode(latchPin, OUTPUT);
 	pinMode(clockPin, OUTPUT);
@@ -81,23 +88,7 @@ ShiftDisplay::ShiftDisplay(int latchPin, int clockPin, int dataPin, bool commonC
 	_latchPin = latchPin;
 	_clockPin = clockPin;
 	_dataPin = dataPin;
-	_outputEnablePin = 0;
-	_commonCathode = commonCathode;
-	_nCharacters = nDigits;
-	_nShiftRegisters = (nDigits-1)/8 + 2;
-}
-
-// CONSTRUCTOR
-// with fade
-ShiftDisplay::ShiftDisplay(int latchPin, int clockPin, int dataPin, int outputEnablePin, bool commonCathode, int nDigits) {
-	pinMode(latchPin, OUTPUT);
-	pinMode(clockPin, OUTPUT);
-	pinMode(dataPin, OUTPUT);
-	pinMode(outputEnablePin, OUTPUT);
-	_latchPin = latchPin;
-	_clockPin = clockPin;
-	_dataPin = dataPin;
-	_outputEnablePin = outputEnablePin;
+	// _outputEnablePin = 0;
 	_commonCathode = commonCathode;
 	_nCharacters = nDigits;
 	_nShiftRegisters = (nDigits-1)/8 + 2;
@@ -122,7 +113,7 @@ void ShiftDisplay::clear() {
 // PRIVATE
 // Displays byte array
 // Pre: characters array size = display number of digits
-void ShiftDisplay::printx(int time, byte characters[]) {
+void ShiftDisplay::printx(byte characters[], int time) {
 	unsigned long start = millis();
 	while (millis() - start < time) {
 		for (int i = 0; i < _nCharacters; i++) {
@@ -148,11 +139,12 @@ void ShiftDisplay::printx(int time, byte characters[]) {
 	clear();
 }
 
+
 // PUBLIC
-// Displays integer value, right aligned in the display, for the
-// given time in milliseconds
+// Display an integer value, right aligned in the display,
+// for the given time in milliseconds.
 void ShiftDisplay::print(int value, int time) {
-	int negative = value < 0;
+	bool negative = value < 0;
 	byte characters[_nCharacters];
 	int i = 0;
 
@@ -175,25 +167,18 @@ void ShiftDisplay::print(int value, int time) {
 	while (i < _nCharacters)
 		characters[i++] = _commonCathode ? SPACE : ~SPACE;
 
-	printx(time, characters);
+	printx(characters, time);
 }
 
 // PUBLIC
-// Displays float value, right aligned in display, rounded to one decimal place,
-// for the given time in milliseconds
-void ShiftDisplay::print(float value, int time) {
-	print(value, 1, time);
-}
-
-// PUBLIC
-// Displays float value, right aligned in display, rounded to nDecimalPlaces,
-// for the given time in milliseconds
-void ShiftDisplay::print(float value, int nDecimalPlaces, int time) {
+// Display a float value, rounded to specified decimal places,
+// right aligned in the display, for the given time in milliseconds.
+void ShiftDisplay::print(float value, int decimalPlaces, int time) {
 
 	// if no decimal places, print int
-	if (nDecimalPlaces == 0) {
+	if (decimalPlaces == 0) {
 		int n = round(value);
-		return print(n, time);
+		return print(n, time); // TODO test return exit
 	}
 
 	bool negative = value < 0;
@@ -205,7 +190,7 @@ void ShiftDisplay::print(float value, int nDecimalPlaces, int time) {
 		value = value * -1;
 
 	// get digits rounded without comma from value
-	long newValue = round(value * power(10, nDecimalPlaces));
+	long newValue = round(value * power(10, decimalPlaces));
 
 	// store digits in array
 	do {
@@ -215,8 +200,8 @@ void ShiftDisplay::print(float value, int nDecimalPlaces, int time) {
 	} while (newValue && i < _nCharacters);
 
 	// place decimal point in first integer
-	if (nDecimalPlaces < _nCharacters)
-		characters[nDecimalPlaces] = characters[nDecimalPlaces] + DOT;
+	if (decimalPlaces < _nCharacters)
+		characters[decimalPlaces] = characters[decimalPlaces] + DOT;
 
 	// place minus character on left of numbers
 	if (negative && i < _nCharacters)
@@ -226,11 +211,11 @@ void ShiftDisplay::print(float value, int nDecimalPlaces, int time) {
 	while (i < _nCharacters)
 		characters[i++] = _commonCathode ? SPACE : ~SPACE;
 
-	printx(time, characters);
+	printx(characters, time);
 }
 
 // PUBLIC
-// Displays text, left aligned in display, for the given time in milliseconds.
+// Display text, left aligned in the display, for the given time in milliseconds.
 // Accepted characters for string are A-Z, a-z, 0-9, -, space.
 void ShiftDisplay::print(String text, int time) {
 	byte characters[_nCharacters];
@@ -259,14 +244,14 @@ void ShiftDisplay::print(String text, int time) {
 	while (i >= 0)
 		characters[i--] = _commonCathode ? SPACE : ~SPACE;
 
-	printx(time, characters);
+	printx(characters, time);
 }
 
 // PUBLIC
-// Displays character c left aligned in display, and integer value right aligned
-// in display, for the given time in milliseconds.
+// Display a character, left aligned in the display, and an integer value,
+// right aligned in the display, for the given time in milliseconds.
 void ShiftDisplay::printMenu(char c, int value, int time) {
-	int negative = value < 0;
+	bool negative = value < 0;
 	byte characters[_nCharacters];
 	int i = 0;
 
@@ -304,14 +289,97 @@ void ShiftDisplay::printMenu(char c, int value, int time) {
 	out = out + DOT;
 	characters[i] = _commonCathode ? out : ~out;
 
-	printx(time, characters);
+	printx(characters, time);
 }
 
 // PUBLIC
-// todo
-void ShiftDisplay::fadeIn(int value, int fadeTime, int time) {
-	for(int i = 255; i >= 0; i--) {
-		analogWrite(_outputEnablePin, i);
-		print(value, 10);
+// Display a character, left aligned in the display, and a float value,
+// right aligned in the display, rounded to specified decimal places,
+// for the given time in milliseconds.
+void printMenu(char c, float value, int decimalPlaces, int time) {
+	
+	// if no decimal places, printMenu int
+	if (decimalPlaces == 0) {
+		int n = round(value);
+		return printMenu(c, n, time);
 	}
+
+	bool negative = value < 0;
+	byte characters[_nCharacters];
+	int i = 0;
+
+	// transform number in positive
+	if (negative)
+		value = value * -1;
+
+	// get digits rounded without comma from value
+	long newValue = round(value * power(10, decimalPlaces));
+
+	// store digits in array
+	do {
+		int digit = newValue % 10;
+		characters[i++] = _commonCathode ? DIGITS[digit] : ~DIGITS[digit];
+		newValue /= 10;
+	} while (newValue && i < _nCharacters - 1);
+
+	// place decimal point in first integer
+	if (decimalPlaces < _nCharacters - 1)
+		characters[decimalPlaces] = characters[decimalPlaces] + DOT;
+
+	// place minus character on left of numbers
+	if (negative && i < _nCharacters - 1)
+		characters[i++] = _commonCathode ? MINUS : ~MINUS;
+
+	// fill remaining characters with empty
+	while (i < _nCharacters - 1)
+		characters[i++] = _commonCathode ? SPACE : ~SPACE;
+
+	// place letter in last, with dot
+	byte out;
+	if (c >= 'A' && c <= 'Z')
+		out = LETTERS[c - 'A'];
+	else if (c >= 'a' && c <= 'z')
+		out = LETTERS[c - 'a'];
+	else if (c >= '0' && c <= '9')
+		out = DIGITS[c - '0'];
+	else if (c == '-')
+		out = MINUS;
+	else
+		out = SPACE;
+	out = out + DOT;
+	characters[i] = _commonCathode ? out : ~out;
+
+	printx(characters, time);
+}
+
+// PUBLIC
+// Display a character, left aligned in the display, and text, right aligned
+// in the display, for the given time in milliseconds.
+void printMenu(char c, String text, int time) {
+	byte characters[_nCharacters];
+	int i = 0;
+
+	// get characters from text
+	while (i < text.length() && i < _nCharacters - 1) {
+		char c = text[i];
+
+		byte out;
+		if (c >= 'A' && c <= 'Z')
+			out = LETTERS[c - 'A'];
+		else if (c >= 'a' && c <= 'z')
+			out = LETTERS[c - 'a'];
+		else if (c >= '0' && c <= '9')
+			out = DIGITS[c - '0'];
+		else if (c == '-')
+			out = MINUS;
+		else
+			out = SPACE;
+		characters[i++] = _commonCathode ? out : ~out;
+	}
+
+	// fill remaining right characters with empty
+	while (i < _nCharacters - 1)
+		characters[i++] = _commonCathode ? SPACE : ~SPACE;
+
+	printx(characters, time);
 }

@@ -4,7 +4,7 @@ Arduino library for driving multiple digit 7-segment displays using shift regist
 - Only 3 pins used on Arduino
 - Displays with any quantity of digits
 - Common cathode and common anode compatible
-- Show numbers or text
+- Show numbers and text
 - Concatenate multiple displays as one
 
 ![breadboard](https://raw.githubusercontent.com/Pyntoo/ShiftDisplay/master/extra/photo.jpg)
@@ -31,55 +31,50 @@ Arduino library for driving multiple digit 7-segment displays using shift regist
 ![wiring shift register to display](https://raw.githubusercontent.com/Pyntoo/ShiftDisplay/master/extra/shift_to_display.png)
 
 ## Reference
-**ShiftDisplay(int latchPin, int clkPin, int dataPin, bool commonCathode, int nDigits)**
+**ShiftDisplay(int latchPin, int clockPin, int dataPin, bool commonCathode, int nDigits)**
 
 Creates object display.
-fadeIn and fadeOut functions not avaiable.
-latchPin, clkPin and dataPin are the shift register pins connected to the Arduino.
+latchPin, clockPin and dataPin are the shift register pins connected to the Arduino.
 commonCathode is a boolean for the led type.
 nDigits are the number of digits of the led.
 
 -
-**ShiftDisplay(int latchPin, int clockPin, int dataPin, int outputEnablePin, bool commonCathode, int nDigits)**
-Same as above, except fadeIn and fadeOut functions are avaiable.
-outputEnablePin pin also connected to the Arduino.
-
--
 **void print(int value, int time)**
 
-Displays integer value, right aligned in display, for the given time in milliseconds.
-
--
-**void print(float value, int time)**
-
-Displays float value, right aligned in display, rounded to one decimal place,
-for the given time in milliseconds
-
--
-**void print(float value, int nDecimalPlaces, int time)**
-
-Displays float value, right aligned in display, rounded to nDecimalPlaces,
+Display an integer value, right aligned in the display,
 for the given time in milliseconds.
+
+-
+**void print(float value, int decimalPlaces, int time)**
+
+Display a float value, rounded to specified decimal places,
+right aligned in the display, for the given time in milliseconds.
 
 -
 **void print(String text, int time)**
 
-Displays text, left aligned in display, for the given time in milliseconds.
+Display text, left aligned in the display, for the given time in milliseconds.
 Accepted characters for string are A-Z, a-z, 0-9, -, space.
 
 -
 **void printMenu(char c, int value, int time)**
 
-Displays character c left aligned in display, and integer value right aligned
-in display, for the given time in milliseconds.
+Display a character, left aligned in the display, and an integer value,
+right aligned in the display, for the given time in milliseconds.
 
 -
-**void fadeIn()**
-todo
+**void printMenu(char c, float value, int decimalPlaces, int time)**
+
+Display a character, left aligned in the display, and a float value,
+right aligned in the display, rounded to specified decimal places,
+for the given time in milliseconds.
 
 -
-**void fadeOut()**
-todo
+**void printMenu(char c, String text, int time)**
+
+Display a character, left aligned in the display, and text, right aligned
+in the display, for the given time in milliseconds.
+
 
 ## Example
 A 3 digit common cathode display, with latch, clock and data pins connected to
@@ -122,8 +117,11 @@ void loop() {
 }
 ```
 
+## Changelog
+- 1.0.0 (26/05/2015)
+  - Initial release
+
 ## TODO
 - [ ] Improve: examples comments
-- [ ] Function: scroll int/float/string
-- [ ] Function: fadeIn/fadeOut int/float/string
-- [ ] Function: printMenu int/float/string
+- [ ] Function: scroll()
+- [ ] Function: fade()

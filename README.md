@@ -125,3 +125,7 @@ void loop() {
 - [ ] Improve: examples comments
 - [ ] Function: scroll()
 - [ ] Function: fade()
+
+---
+
+https://github.com/Pyntoo/ShiftDisplay/

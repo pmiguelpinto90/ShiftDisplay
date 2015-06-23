@@ -2,7 +2,7 @@
 Arduino library for driving multiple digit 7-segment displays using shift registers
 
 - Only 3 pins used on Arduino
-- Displays with any quantity of digits
+- Use displays with any quantity of digits
 - Common cathode and common anode compatible
 - Show numbers and text
 - Concatenate multiple displays as one
@@ -31,49 +31,42 @@ Arduino library for driving multiple digit 7-segment displays using shift regist
 ![wiring shift register to display](https://raw.githubusercontent.com/Pyntoo/ShiftDisplay/master/extra/shift_to_display.png)
 
 ## Reference
-**ShiftDisplay(int latchPin, int clockPin, int dataPin, bool commonCathode, int nDigits)**
+**ShiftDisplay(int latchPin, int clockPin, int dataPin, bool commonCathode, int displaySize)**
 
-Creates object display.
+Creates display object.
 latchPin, clockPin and dataPin are the shift register pins connected to the Arduino.
 commonCathode is a boolean for the led type.
-nDigits are the number of digits of the led.
+displaySize is the quantity of digits the display has.
 
 -
 **void print(int value, int time)**
 
-Display an integer value, right aligned in the display,
-for the given time in milliseconds.
+Show an integer value in the display, for the given time in milliseconds,
+with specified animation and alignment constants.
 
 -
 **void print(float value, int decimalPlaces, int time)**
 
-Display a float value, rounded to specified decimal places,
-right aligned in the display, for the given time in milliseconds.
+Show a float value, rounded to specified number of decimal places, for the
+given time in milliseconds, with specified animation and alignment constants.
 
 -
 **void print(String text, int time)**
 
-Display text, left aligned in the display, for the given time in milliseconds.
-Accepted characters for string are A-Z, a-z, 0-9, -, space.
+Show text in the display, for the given time in milliseconds,
+with specified animation and alignment constants.
+Accepted characters are A-Z, a-z, 0-9, -, space.
 
 -
-**void printMenu(char c, int value, int time)**
+**CONSTANTS**
+ANIMATION_NONE
+ANIMATION_SCROLL
+ANIMATION_FADEIN
+ANIMATION_FADEOUT
 
-Display a character, left aligned in the display, and an integer value,
-right aligned in the display, for the given time in milliseconds.
-
--
-**void printMenu(char c, float value, int decimalPlaces, int time)**
-
-Display a character, left aligned in the display, and a float value,
-right aligned in the display, rounded to specified decimal places,
-for the given time in milliseconds.
-
--
-**void printMenu(char c, String text, int time)**
-
-Display a character, left aligned in the display, and text, right aligned
-in the display, for the given time in milliseconds.
+ALIGNMENT_LEFT
+ALIGNMENT_RIGHT
+ALIGNMENT_CENTER
 
 
 ## Example
@@ -89,16 +82,16 @@ void setup() {
 }
 
 void loop() {
-  disp.printMenu('t', 9, 2000);
-  disp.printMenu('h', 64, 2000);
+  // disp.printMenu('t', 9, 2000);
+  // disp.printMenu('h', 64, 2000);
 
-  disp.print("  c", 500);
-  disp.print(" cl", 500);
-  disp.print("cle", 500);
-  disp.print("lea", 500);
-  disp.print("ear", 500);
-  disp.print("ar", 500);
-  disp.print("r", 500);
+  disp.print("  c", 500, ANIMATION_NONE, ALIGNMENT_LEFT);
+  disp.print(" cl", 500, ANIMATION_NONE, ALIGNMENT_LEFT);
+  disp.print("cle", 500, ANIMATION_NONE, ALIGNMENT_LEFT);
+  disp.print("lea", 500, ANIMATION_NONE, ALIGNMENT_LEFT);
+  disp.print("ear", 500, ANIMATION_NONE, ALIGNMENT_LEFT);
+  disp.print("ar", 500, ANIMATION_NONE, ALIGNMENT_LEFT);
+  disp.print("r", 500, ANIMATION_NONE, ALIGNMENT_LEFT);
 }
 ```
 
@@ -109,22 +102,28 @@ ShiftDisplay disp(6, 7, 5, true, 3);
 
 void setup() {
   for (int i = 42; i > 0; i--)
-    disp.print(i, 400);
+    disp.print(i, 400, ANIMATION_NONE, ALIGNMENT_RIGHT);
 }
 
 void loop() {
-  disp.print("hey", 1);
+  disp.print("hey", 1, ANIMATION_NONE, ALIGNMENT_RIGHT);
 }
 ```
 
 ## Changelog
 - 1.0.0 (26/05/2015)
   - Initial release
+- 2.0.0 (23/06/2015)
+  - Rewrite library
+  - Default (full) and Mini (lightweigth) versions
+  - Control over alignment
 
 ## TODO
-- [ ] Improve: examples comments
-- [ ] Function: scroll()
-- [ ] Function: fade()
+- [ ] Improvement: examples comments
+- [ ] Feature: ALIGNMENT_CENTER
+- [ ] Feature: ANIMATION_SCROLL
+- [ ] Feature: ANIMATION_FADEIN
+- [ ] Feature: ANIMATION_FADEOUT
 
 ---
 

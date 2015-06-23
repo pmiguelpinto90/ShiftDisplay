@@ -1,6 +1,6 @@
 /*
   ShiftDisplayMini
-  1.0.0 (26/05/2015)
+  2.0.0 (24/06/2015)
   https://github.com/Pyntoo/ShiftDisplay
 */
 

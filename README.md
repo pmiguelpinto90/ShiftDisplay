@@ -156,7 +156,6 @@ void loop() {
   - Control over alignment
 
 ## TODO
-- [ ] Improvement: examples comments
 - [ ] Feature: ALIGNMENT_CENTER
 - [ ] Feature: ANIMATION_SCROLL
 - [ ] Feature: ANIMATION_FADEIN

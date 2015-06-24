@@ -1,3 +1,9 @@
+/*
+  ShiftDisplay 2.0.0 (24/06/2015)
+  https://github.com/Pyntoo/ShiftDisplay
+*/
+
+
 #ifndef constants_h
 #define constants_h
 

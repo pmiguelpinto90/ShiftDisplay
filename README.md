@@ -31,14 +31,35 @@ Arduino library for driving multiple digit 7-segment displays using shift regist
 ![wiring shift register to display](https://raw.githubusercontent.com/Pyntoo/ShiftDisplay/master/extra/shift_to_display.png)
 
 ## Reference
+###Constructors
 **ShiftDisplay(int latchPin, int clockPin, int dataPin, bool commonCathode, int displaySize)**
 
-Creates display object.
-latchPin, clockPin and dataPin are the shift register pins connected to the Arduino.
-commonCathode is a boolean for the led type.
-displaySize is the quantity of digits the display has.
+Creates default ShiftDisplay object using 3 pins, fade animations disabled.
+latchPin, clockPin and dataPin are the shift register inputs connected to
+the Arduino digital outputs.
+commonCathode is true if the led type is common cathode, false if it's common anode.
+displaySize is the quantity of digits of all displays together.
 
 -
+**ShiftDisplay(int latchPin, int clockPin, int dataPin,int outputEnablePin, bool commonCathode, int displaySize) {**
+
+Creates advanced ShiftDisplay object using 4 pins, fade animations enabled.
+latchPin, clockPin, dataPin and outputEnablePin are the shift register inputs
+connected to the Arduino digital outputs. outputEnablePin must be connected to a
+PWM pin.
+commonCathode is true if the led type is common cathode, false if it's common anode.
+displaySize is the quantity of digits of all displays together.
+
+-
+**ShiftDisplayMini(int latchPin, int clockPin, int dataPin, bool commonCathode, int displaySize)**
+Creates lightweight ShiftDisplay object using 3 pins.
+You must `#include <ShiftDisplayMini.h>` instead of `<ShiftDisplay.h>` to use this.
+latchPin, clockPin and dataPin are the shift register inputs connected to
+the Arduino digital outputs.
+commonCathode is true if the led type is common cathode, false if it's common anode.
+displaySize is the quantity of digits of all displays together, a maximum of 8.
+
+###Functions (ShiftDisplay)
 **void print(int value, int time)**
 
 Show an integer value in the display, for the given time in milliseconds,
@@ -57,13 +78,26 @@ Show text in the display, for the given time in milliseconds,
 with specified animation and alignment constants.
 Accepted characters are A-Z, a-z, 0-9, -, space.
 
+###Functions (ShiftDisplayMini)
+**void print(int value, int time)**
+Show an integer value, right aligned in the display,
+for the given time in milliseconds.
+
 -
-**CONSTANTS**
+**void print(float value, int decimalPlaces, int time)**
+Show a float value, rounded to specified decimal places,
+right aligned in the display, for the given time in milliseconds.
+
+-
+**void print(String text, int time)**
+Show text, left aligned in the display, for the given time in milliseconds.
+Accepted characters are A-Z, a-z, 0-9, -, space.
+
+###Constants
 ANIMATION_NONE
 ANIMATION_SCROLL
 ANIMATION_FADEIN
 ANIMATION_FADEOUT
-
 ALIGNMENT_LEFT
 ALIGNMENT_RIGHT
 ALIGNMENT_CENTER
@@ -85,28 +119,29 @@ void loop() {
   // disp.printMenu('t', 9, 2000);
   // disp.printMenu('h', 64, 2000);
 
-  disp.print("  c", 500, ANIMATION_NONE, ALIGNMENT_LEFT);
-  disp.print(" cl", 500, ANIMATION_NONE, ALIGNMENT_LEFT);
-  disp.print("cle", 500, ANIMATION_NONE, ALIGNMENT_LEFT);
-  disp.print("lea", 500, ANIMATION_NONE, ALIGNMENT_LEFT);
+  disp.print("c", 500, ANIMATION_NONE, ALIGNMENT_RIGHT);
+  disp.print("cl", 500, ANIMATION_NONE, ALIGNMENT_RIGHT);
+  disp.print("cle", 500, ANIMATION_NONE, ALIGNMENT_RIGHT);
+  disp.print("lea", 500, ANIMATION_NONE, ALIGNMENT_RIGHT);
   disp.print("ear", 500, ANIMATION_NONE, ALIGNMENT_LEFT);
   disp.print("ar", 500, ANIMATION_NONE, ALIGNMENT_LEFT);
   disp.print("r", 500, ANIMATION_NONE, ALIGNMENT_LEFT);
+  disp.print("", 500, ANIMATION_NONE, ALIGNMENT_LEFT);
 }
 ```
 
 ```c
-#include <ShiftDisplay.h>
+#include <ShiftDisplayMini.h>
 
-ShiftDisplay disp(6, 7, 5, true, 3);
+ShiftDisplayMini disp(6, 7, 5, true, 3);
 
 void setup() {
   for (int i = 42; i > 0; i--)
-    disp.print(i, 400, ANIMATION_NONE, ALIGNMENT_RIGHT);
+    disp.print(i, 400);
 }
 
 void loop() {
-  disp.print("hey", 1, ANIMATION_NONE, ALIGNMENT_RIGHT);
+  disp.print("pum", 1);
 }
 ```
 
@@ -115,7 +150,7 @@ void loop() {
   - Initial release
 - 2.0.0 (23/06/2015)
   - Rewrite library
-  - Default (full) and Mini (lightweigth) versions
+  - Full and lightweight versions
   - Control over alignment
 
 ## TODO

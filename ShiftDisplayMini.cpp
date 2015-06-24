@@ -1,16 +1,21 @@
 /*
-  ShiftDisplayMini
-  2.0.0 (24/06/2015)
+  ShiftDisplay 2.0.0 (24/06/2015)
   https://github.com/Pyntoo/ShiftDisplay
 */
 
 
 #include "Arduino.h"
 #include "ShiftDisplayMini.h"
-#include "constants.h"
+#include "ShiftDisplayConstants.h"
 
 
-// CONSTRUCTOR
+// CONSTRUCTORS ********************************************************************
+
+// Creates lightweight ShiftDisplay object using 3 pins.
+// latchPin, clockPin and dataPin are the shift register inputs connected to
+// the Arduino digital outputs.
+// commonCathode is true if the led type is common cathode, false if it's common anode.
+// displaySize is the quantity of digits of all displays together, a maximum of 8.
 ShiftDisplayMini::ShiftDisplayMini(int latchPin, int clockPin, int dataPin, bool commonCathode, int displaySize) {
 	pinMode(latchPin, OUTPUT);
 	pinMode(clockPin, OUTPUT);
@@ -23,14 +28,14 @@ ShiftDisplayMini::ShiftDisplayMini(int latchPin, int clockPin, int dataPin, bool
 }
 
 
-// PRIVATE
+// PRIVATE FUNCTIONS ***************************************************************
+
 // Calculate power of number by exponent.
 int ShiftDisplayMini::power(int value, int exponent) {
 	return round(pow(value, exponent));
 }
 
-// PRIVATE
-// Clears display
+// Clear display.
 void ShiftDisplayMini::clear() {
 	digitalWrite(_latchPin, LOW);
 	shiftOut(_dataPin, _clockPin, MSBFIRST, 0); // both ends of led with same value
@@ -38,10 +43,9 @@ void ShiftDisplayMini::clear() {
 	digitalWrite(_latchPin, HIGH);
 }
 
-// PRIVATE
-// Displays byte array
+// Display byte array.
 // Pre: characters array size = display number of digits
-void ShiftDisplayMini::printPov(byte characters[], int time) {
+void ShiftDisplayMini::printx(byte characters[], int time) {
 	unsigned long start = millis();
 	while (millis() - start < time) {
 		for (int i = 0; i < _displaySize; i++) {
@@ -61,8 +65,9 @@ void ShiftDisplayMini::printPov(byte characters[], int time) {
 	clear();
 }
 
-// PUBLIC
-// Display an integer value, right aligned in the display,
+// PUBLIC FUNCTIONS ****************************************************************
+
+// Show an integer value, right aligned in the display,
 // for the given time in milliseconds.
 void ShiftDisplayMini::print(int value, int time) {
 	bool negative = value < 0;
@@ -88,11 +93,10 @@ void ShiftDisplayMini::print(int value, int time) {
 	while (i < _displaySize)
 		characters[i++] = _commonCathode ? SPACE : ~SPACE;
 
-	printPov(characters, time);
+	printx(characters, time);
 }
 
-// PUBLIC
-// Display a float value, rounded to specified decimal places,
+// Show a float value, rounded to specified decimal places,
 // right aligned in the display, for the given time in milliseconds.
 void ShiftDisplayMini::print(float value, int decimalPlaces, int time) {
 
@@ -133,12 +137,11 @@ void ShiftDisplayMini::print(float value, int decimalPlaces, int time) {
 	while (i < _displaySize)
 		characters[i++] = _commonCathode ? SPACE : ~SPACE;
 
-	printPov(characters, time);
+	printx(characters, time);
 }
 
-// PUBLIC
-// Display text, left aligned in the display, for the given time in milliseconds.
-// Accepted characters for string are A-Z, a-z, 0-9, -, space.
+// Show text, left aligned in the display, for the given time in milliseconds.
+// Accepted characters are A-Z, a-z, 0-9, -, space.
 void ShiftDisplayMini::print(String text, int time) {
 	byte characters[_displaySize];
 	int i = _displaySize - 1; // for inverse array iteration
@@ -166,5 +169,5 @@ void ShiftDisplayMini::print(String text, int time) {
 	while (i >= 0)
 		characters[i--] = _commonCathode ? SPACE : ~SPACE;
 
-	printPov(characters, time);
+	printx(characters, time);
 }

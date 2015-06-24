@@ -1,18 +1,21 @@
 /*
-  ShiftDisplay
-  2.0.0 (24/06/2015)
+  ShiftDisplay 2.0.0 (24/06/2015)
   https://github.com/Pyntoo/ShiftDisplay
 */
 
 
 #include "Arduino.h"
 #include "ShiftDisplay.h"
-#include "constants.h"
+#include "ShiftDisplayConstants.h"
 
 
 // CONSTRUCTORS ********************************************************************
 
-// Simple constructor with 3 output pins from Arduino. Fade animations disabled.
+// Creates default ShiftDisplay object using 3 pins, fade animations disabled.
+// latchPin, clockPin and dataPin are the shift register inputs connected to the
+// Arduino digital outputs.
+// commonCathode is true if the led type is common cathode, false if it's common anode.
+// displaySize is the quantity of digits of all displays together.
 ShiftDisplay::ShiftDisplay(int latchPin, int clockPin, int dataPin, bool commonCathode, int displaySize) {
 	pinMode(latchPin, OUTPUT);
 	pinMode(clockPin, OUTPUT);
@@ -27,7 +30,12 @@ ShiftDisplay::ShiftDisplay(int latchPin, int clockPin, int dataPin, bool commonC
 	
 }
 
-// Constructor with 4 output pins from Arduino. Fade animations possible.
+// Creates advanced ShiftDisplay object using 4 pins, fade animations enabled.
+// latchPin, clockPin, dataPin and outputEnablePin are the shift register inputs
+// connected to the Arduino digital outputs. outputEnablePin must be connected to a
+// PWM pin.
+// commonCathode is true if the led type is common cathode, false if it's common anode.
+// displaySize is the quantity of digits of all displays together.
 ShiftDisplay::ShiftDisplay(int latchPin, int clockPin, int dataPin, int outputEnablePin, bool commonCathode, int displaySize) {
 	pinMode(latchPin, OUTPUT);
 	pinMode(clockPin, OUTPUT);

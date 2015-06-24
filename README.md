@@ -32,7 +32,6 @@ Arduino library for driving multiple digit 7-segment displays using shift regist
 
 ## Reference
 ####Constructors
--
 **ShiftDisplay(int latchPin, int clockPin, int dataPin, bool commonCathode, int displaySize)**
 
 Creates default ShiftDisplay object using 3 pins, fade animations disabled.

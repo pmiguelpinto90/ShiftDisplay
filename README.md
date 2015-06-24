@@ -94,23 +94,22 @@ Show text, left aligned in the display, for the given time in milliseconds.
 Accepted characters are A-Z, a-z, 0-9, -, space.
 
 ###Constants
-ANIMATION_NONE
-ANIMATION_SCROLL
-ANIMATION_FADEIN
-ANIMATION_FADEOUT
-ALIGNMENT_LEFT
-ALIGNMENT_RIGHT
-ALIGNMENT_CENTER
+- ANIMATION_NONE
+- ANIMATION_SCROLL
+- ANIMATION_FADEIN
+- ANIMATION_FADEOUT
+- ALIGNMENT_LEFT
+- ALIGNMENT_RIGHT
+- ALIGNMENT_CENTER
 
 
 ## Example
-A 3 digit common cathode display, with latch, clock and data pins connected to
-6, 7 and 5 respectively.
-
 ```c
 #include <ShiftDisplay.h>
 
-ShiftDisplay disp(6, 7, 5, true, 3);
+// A 4 digit common anode display. With latch, clock and data connected
+// to 6, 7 and 5 pins respectively.
+ShiftDisplay disp(6, 7, 5, false, 4);
 
 void setup() {
 }
@@ -122,7 +121,8 @@ void loop() {
   disp.print("c", 500, ANIMATION_NONE, ALIGNMENT_RIGHT);
   disp.print("cl", 500, ANIMATION_NONE, ALIGNMENT_RIGHT);
   disp.print("cle", 500, ANIMATION_NONE, ALIGNMENT_RIGHT);
-  disp.print("lea", 500, ANIMATION_NONE, ALIGNMENT_RIGHT);
+  disp.print("clea", 500, ANIMATION_NONE, ALIGNMENT_RIGHT);
+  disp.print("lear", 500, ANIMATION_NONE, ALIGNMENT_LEFT);
   disp.print("ear", 500, ANIMATION_NONE, ALIGNMENT_LEFT);
   disp.print("ar", 500, ANIMATION_NONE, ALIGNMENT_LEFT);
   disp.print("r", 500, ANIMATION_NONE, ALIGNMENT_LEFT);
@@ -133,6 +133,8 @@ void loop() {
 ```c
 #include <ShiftDisplayMini.h>
 
+// A 3 digit common cathode display. With latch, clock and data connected
+// to 6, 7 and 5 pins respectively.
 ShiftDisplayMini disp(6, 7, 5, true, 3);
 
 void setup() {

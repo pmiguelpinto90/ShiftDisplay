@@ -32,6 +32,7 @@ Arduino library for driving multiple digit 7-segment displays using shift regist
 
 ## Reference
 ####Constructors
+
 **ShiftDisplay(int latchPin, int clockPin, int dataPin, bool commonCathode, int displaySize)**
 
 Creates default ShiftDisplay object using 3 pins, fade animations disabled.
@@ -55,8 +56,8 @@ latchPin, clockPin and dataPin are the shift register inputs connected to the Ar
 commonCathode is true if the led type is common cathode, false if it's common anode.
 displaySize is the quantity of digits of all displays together, a maximum of 8.
 
-####Functions
 -
+####Functions
 **void print(int value, int time)**
 
 Show an integer value in the display, for the given time in milliseconds, with specified animation and alignment constants.
@@ -72,8 +73,8 @@ Show a float value, rounded to specified number of decimal places, for the given
 Show text in the display, for the given time in milliseconds, with specified animation and alignment constants.
 Accepted characters are A-Z, a-z, 0-9, -, space.
 
-####Functions (ShiftDisplayMini)
 -
+####Functions (ShiftDisplayMini)
 **void print(int value, int time)**
 Show an integer value, right aligned in the display, for the given time in milliseconds.
 
@@ -86,6 +87,7 @@ Show a float value, rounded to specified decimal places, right aligned in the di
 Show text, left aligned in the display, for the given time in milliseconds.
 Accepted characters are A-Z, a-z, 0-9, -, space.
 
+-
 ####Constants
 - ANIMATION_NONE
 - ANIMATION_SCROLL

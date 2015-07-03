@@ -58,17 +58,17 @@ displaySize is the quantity of digits of all displays together, a maximum of 8.
 
 -
 ####Functions
-**void print(int value, int time)**
+**void print(int value, int time, int animation, int alignment)**
 
 Show an integer value in the display, for the given time in milliseconds, with specified animation and alignment constants.
 
 -
-**void print(float value, int decimalPlaces, int time)**
+**void print(float value, int decimalPlaces, int time, int animation, int alignment)**
 
 Show a float value, rounded to specified number of decimal places, for the given time in milliseconds, with specified animation and alignment constants.
 
 -
-**void print(String text, int time)**
+**void print(String text, int time, int animation, int alignment)**
 
 Show text in the display, for the given time in milliseconds, with specified animation and alignment constants.
 Accepted characters are A-Z, a-z, 0-9, -, space.

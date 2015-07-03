@@ -1,5 +1,5 @@
 /*
-  ShiftDisplay 2.0.0 (24/06/2015)
+  ShiftDisplay 2.1.0 (03/07/2015)
   https://github.com/Pyntoo/ShiftDisplay
 */
 

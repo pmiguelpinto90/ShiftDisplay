@@ -1,5 +1,5 @@
 /*
-  ShiftDisplay 2.0.0 (24/06/2015)
+  ShiftDisplay 2.1.0 (03/07/2015)
   https://github.com/Pyntoo/ShiftDisplay
 */
 
@@ -129,13 +129,9 @@ void ShiftDisplay::arrangeCharacters(byte characters[], int nCharacters, byte di
 		begin = nCharacters - 1;
 		end = 0;
 	} else { // alignment == ALIGNMENT_CENTER
-		// TODO
-		// int displayCenter = _displaySize / 2;
-		// int charactersCenter = ((nCharacters + 1) / 2) - 1;
-		// begin = displayCenter + charactersCenter + 1;
-		// end = begin - nCharacters + 1;
-		begin = 0;
-		end = 0;
+		int tmp = _displaySize - nCharacters;
+		end = (tmp/2) + (tmp%2);
+		begin = end + nCharacters - 1;
 	}
 	if (begin > _displaySize - 1) // out of bounds
 		begin = _displaySize - 1;

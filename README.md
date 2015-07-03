@@ -152,12 +152,14 @@ void loop() {
   - Rewrite library
   - Full and lightweight versions
   - Control over alignment
+- 2.1.0 (03/07/2015)
+  - Feature: centered alignment
 
 ## TODO
-- [ ] Feature: ALIGNMENT_CENTER
 - [ ] Feature: ANIMATION_SCROLL
 - [ ] Feature: ANIMATION_FADEIN
 - [ ] Feature: ANIMATION_FADEOUT
+- [ ] Feature: printMenu()
 
 ---
 

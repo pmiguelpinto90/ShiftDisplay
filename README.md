@@ -161,16 +161,17 @@ void loop() {
   - Feature: left and right alignment
 - 2.1.0 (03/07/2015)
   - Feature: center alignment
-- 2. ()
-  - Feature: minimalist print function
-  - TODO CHANGE function animation..alignment switch pos
-  - TODO change display indexing to ltr in all program, and imagem in readme
-  -
+- 2.2.0 (//2015)
+  - Feature: minimal print function
+  - Feature: exit left/right animation
 
 ## TODO
+- [ ] Feature: ANIMATION_SCROLL
 - [ ] Feature: ANIMATION_FADE_IN
 - [ ] Feature: ANIMATION_FADE_OUT
 - [ ] Feature: printMenu()
+- [ ] Change: switch order for animation and alignment arguments in all functions
+- [ ] Change: display indexing LTR in all functions
 
 ---
 

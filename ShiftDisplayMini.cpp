@@ -15,8 +15,8 @@
 // latchPin, clockPin and dataPin are the shift register inputs connected to
 // the Arduino digital outputs.
 // commonCathode is true if the led type is common cathode, false if it's common anode.
-// displaySize is the quantity of digits of all displays together, a maximum of 8.
-ShiftDisplayMini::ShiftDisplayMini(int latchPin, int clockPin, int dataPin, bool commonCathode, int displaySize) {
+// displayLength is the quantity of digits of all displays together, a maximum of 8.
+ShiftDisplayMini::ShiftDisplayMini(int latchPin, int clockPin, int dataPin, bool commonCathode, int displayLength) {
 	pinMode(latchPin, OUTPUT);
 	pinMode(clockPin, OUTPUT);
 	pinMode(dataPin, OUTPUT);
@@ -24,7 +24,7 @@ ShiftDisplayMini::ShiftDisplayMini(int latchPin, int clockPin, int dataPin, bool
 	_clockPin = clockPin;
 	_dataPin = dataPin;
 	_commonCathode = commonCathode;
-	_displaySize = displaySize;
+	_displayLength = displayLength;
 }
 
 
@@ -44,11 +44,11 @@ void ShiftDisplayMini::clear() {
 }
 
 // Display byte array.
-// Pre: characters array size = display number of digits
+// Pre: characters array length = display number of digits
 void ShiftDisplayMini::printx(byte characters[], int time) {
 	unsigned long start = millis();
 	while (millis() - start < time) {
-		for (int i = 0; i < _displaySize; i++) {
+		for (int i = 0; i < _displayLength; i++) {
 			digitalWrite(_latchPin, LOW);
 
 			// shift data for display register
@@ -71,7 +71,7 @@ void ShiftDisplayMini::printx(byte characters[], int time) {
 // for the given time in milliseconds.
 void ShiftDisplayMini::print(int value, int time) {
 	bool negative = value < 0;
-	byte characters[_displaySize];
+	byte characters[_displayLength];
 	int i = 0;
 
 	// tranform number into positive
@@ -83,15 +83,15 @@ void ShiftDisplayMini::print(int value, int time) {
 		int digit = value % 10;
 		characters[i++] = _commonCathode ? DIGITS[digit]: ~DIGITS[digit];
 		value /= 10;
-	} while (value && i < _displaySize);
+	} while (value && i < _displayLength);
 
 	// place minus character on left of number
-	if (negative && i < _displaySize)
+	if (negative && i < _displayLength)
 		characters[i++] = _commonCathode ? MINUS : ~MINUS;
 
 	// fill remaining array with empty
-	while (i < _displaySize)
-		characters[i++] = _commonCathode ? SPACE : ~SPACE;
+	while (i < _displayLength)
+		characters[i++] = _commonCathode ? BLANK : ~BLANK;
 
 	printx(characters, time);
 }
@@ -108,7 +108,7 @@ void ShiftDisplayMini::print(float value, int decimalPlaces, int time) {
 	}
 
 	bool negative = value < 0;
-	byte characters[_displaySize];
+	byte characters[_displayLength];
 	int i = 0;
 
 	// transform number in positive
@@ -119,23 +119,23 @@ void ShiftDisplayMini::print(float value, int decimalPlaces, int time) {
 	long newValue = round(value * power(10, decimalPlaces));
 
 	// store digits in array
-	while ((newValue || i <= decimalPlaces) && i < _displaySize) {
+	while ((newValue || i <= decimalPlaces) && i < _displayLength) {
 		int digit = newValue % 10;
 		characters[i++] = _commonCathode ? DIGITS[digit] : ~DIGITS[digit];
 		newValue /= 10;
 	}
 
 	// place decimal point in first integer
-	if (decimalPlaces < _displaySize)
+	if (decimalPlaces < _displayLength)
 		characters[decimalPlaces] = characters[decimalPlaces] + DOT;
 
 	// place minus character on left of numbers
-	if (negative && i < _displaySize)
+	if (negative && i < _displayLength)
 		characters[i++] = _commonCathode ? MINUS : ~MINUS;
 
 	// fill remaining characters with empty
-	while (i < _displaySize)
-		characters[i++] = _commonCathode ? SPACE : ~SPACE;
+	while (i < _displayLength)
+		characters[i++] = _commonCathode ? BLANK : ~BLANK;
 
 	printx(characters, time);
 }
@@ -143,8 +143,8 @@ void ShiftDisplayMini::print(float value, int decimalPlaces, int time) {
 // Show text, left aligned in the display, for the given time in milliseconds.
 // Accepted characters are A-Z, a-z, 0-9, -, space.
 void ShiftDisplayMini::print(String text, int time) {
-	byte characters[_displaySize];
-	int i = _displaySize - 1; // for inverse array iteration
+	byte characters[_displayLength];
+	int i = _displayLength - 1; // for inverse array iteration
 	int j = 0; // for text iteration
 
 	// get characters from text
@@ -161,13 +161,13 @@ void ShiftDisplayMini::print(String text, int time) {
 		else if (c == '-')
 			out = MINUS;
 		else
-			out = SPACE;
+			out = BLANK;
 		characters[i--] = _commonCathode ? out : ~out;
 	}
 
 	// fill remaining right characters with empty
 	while (i >= 0)
-		characters[i--] = _commonCathode ? SPACE : ~SPACE;
+		characters[i--] = _commonCathode ? BLANK : ~BLANK;
 
 	printx(characters, time);
 }

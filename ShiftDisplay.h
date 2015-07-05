@@ -10,12 +10,14 @@
 
 
 #define ANIMATION_NONE 0
-#define ANIMATION_SCROLL 1
-#define ANIMATION_FADEIN 2
-#define ANIMATION_FADEOUT 3
-#define ALIGNMENT_LEFT 1
-#define ALIGNMENT_RIGHT 2
-#define ALIGNMENT_CENTER 3
+#define ANIMATION_SCROLL 2
+#define ANIMATION_EXIT_LEFT 3
+#define ANIMATION_EXIT_RIGHT 4
+#define ANIMATION_FADE_IN 5
+#define ANIMATION_FADE_OUT 6
+#define ALIGNMENT_LEFT 9
+#define ALIGNMENT_RIGHT 10
+#define ALIGNMENT_CENTER 11
 
 
 class ShiftDisplay {
@@ -26,7 +28,7 @@ class ShiftDisplay {
 		int _dataPin;
 		int _outputEnablePin;
 		bool _commonCathode;
-		int _displaySize;
+		int _displayLength;
 		int _nShiftRegisters;
 
 		int power(int number, int exponent);
@@ -36,17 +38,18 @@ class ShiftDisplay {
 
 		void getDigits(long number, byte digits[], int nDigits);
 		void getCharacters(String text, byte characters[], int nCharacters);
-		void arrangeCharacters(byte characters[], int nCharacters, byte display[], int alignment);
-		void arrangeCharactersScroll(byte characters[], int nCharacters, byte display[], int alignment, int step);
 		
 		void clear();
-		void printDisplay(byte display[], int time, int animation);
+		void printDisplay(byte display[], int time);
+		void shiftDisplay(byte display[], bool toRight);
+		void prepareDisplay(byte characters[], int nCharacters, byte display[], int alignment);
 		void printCharacters(byte characters[], int nCharacters, int time, int animation, int alignment);
 
 	public:
-		ShiftDisplay(int latchPin, int clockPin, int dataPin, bool commonCathode, int displaySize);
-		ShiftDisplay(int latchPin, int clockPin, int dataPin, int outputEnablePin, bool commonCathode, int displaySize);
+		ShiftDisplay(int latchPin, int clockPin, int dataPin, bool commonCathode, int displayLength);
+		ShiftDisplay(int latchPin, int clockPin, int dataPin, int outputEnablePin, bool commonCathode, int displayLength);
 		
+		void print(int value);
 		void print(int value, int time, int animation, int alignment);
 		void print(float value, int decimalPlaces, int time, int animation, int alignment);
 		void print(String text, int time, int animation, int alignment);

@@ -55,7 +55,7 @@ const byte LETTERS[26] = {
 };
 const byte MINUS = B01000000;
 const byte DOT = B10000000;
-const byte SPACE = B00000000;
+const byte BLANK = B00000000;
 
 // displays encoding
 const byte DISPLAYS[8] = {

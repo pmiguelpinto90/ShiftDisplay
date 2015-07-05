@@ -32,32 +32,37 @@ Arduino library for driving multiple digit 7-segment displays using shift regist
 
 ## Reference
 ####Constructors
-**ShiftDisplay(int latchPin, int clockPin, int dataPin, bool commonCathode, int displaySize)**
+**ShiftDisplay(int latchPin, int clockPin, int dataPin, bool commonCathode, int displayLength)**
 
 Creates default ShiftDisplay object using 3 pins, fade animations disabled.
 latchPin, clockPin and dataPin are the shift register inputs connected to the Arduino digital outputs.
 commonCathode is true if the led type is common cathode, false if it's common anode.
-displaySize is the quantity of digits of all displays together.
+displayLength is the quantity of digits of all displays together.
 
 -
-**ShiftDisplay(int latchPin, int clockPin, int dataPin,int outputEnablePin, bool commonCathode, int displaySize)**
+**ShiftDisplay(int latchPin, int clockPin, int dataPin,int outputEnablePin, bool commonCathode, int displayLength)**
 
 Creates advanced ShiftDisplay object using 4 pins, fade animations enabled.
 latchPin, clockPin, dataPin and outputEnablePin are the shift register inputs connected to the Arduino digital outputs. outputEnablePin must be connected to a PWM pin.
 commonCathode is true if the led type is common cathode, false if it's common anode.
-displaySize is the quantity of digits of all displays together.
+displayLength is the quantity of digits of all displays together.
 
 -
-**ShiftDisplayMini(int latchPin, int clockPin, int dataPin, bool commonCathode, int displaySize)**
+**ShiftDisplayMini(int latchPin, int clockPin, int dataPin, bool commonCathode, int displayLength)**
 
 Creates lightweight ShiftDisplay object using 3 pins.
 You must `#include <ShiftDisplayMini.h>` instead of `<ShiftDisplay.h>` to use this.
 latchPin, clockPin and dataPin are the shift register inputs connected to the Arduino digital outputs.
 commonCathode is true if the led type is common cathode, false if it's common anode.
-displaySize is the quantity of digits of all displays together, a maximum of 8.
+displayLength is the quantity of digits of all displays together, a maximum of 8.
 
 -
 ####Functions
+**void print(int value)**
+
+Show an integer value for 2 seconds, right aligned in the display.
+
+-
 **void print(int value, int time, int animation, int alignment)**
 
 Show an integer value in the display, for the given time in milliseconds, with specified animation and alignment constants.
@@ -94,8 +99,10 @@ Accepted characters are A-Z, a-z, 0-9, -, space.
 ####Constants
 - ANIMATION_NONE
 - ANIMATION_SCROLL
-- ANIMATION_FADEIN
-- ANIMATION_FADEOUT
+- ANIMATION_EXIT_LEFT
+- ANIMATION_EXIT_RIGHT
+- ANIMATION_FADE_IN
+- ANIMATION_FADE_OUT
 - ALIGNMENT_LEFT
 - ALIGNMENT_RIGHT
 - ALIGNMENT_CENTER
@@ -149,16 +156,20 @@ void loop() {
 - 1.0.0 (26/05/2015)
   - Initial release
 - 2.0.0 (23/06/2015)
-  - Rewrite library
+  - Code refactoring
   - Full and lightweight versions
-  - Control over alignment
+  - Feature: left and right alignment
 - 2.1.0 (03/07/2015)
-  - Feature: centered alignment
+  - Feature: center alignment
+- 2. ()
+  - Feature: minimalist print function
+  - TODO CHANGE function animation..alignment switch pos
+  - TODO change display indexing to ltr in all program, and imagem in readme
+  -
 
 ## TODO
-- [ ] Feature: ANIMATION_SCROLL
-- [ ] Feature: ANIMATION_FADEIN
-- [ ] Feature: ANIMATION_FADEOUT
+- [ ] Feature: ANIMATION_FADE_IN
+- [ ] Feature: ANIMATION_FADE_OUT
 - [ ] Feature: printMenu()
 
 ---

@@ -1,5 +1,5 @@
 /*
-  ShiftDisplay 2.1.0 (03/07/2015)
+  ShiftDisplay 2.2.0 (14/07/2015)
   https://github.com/Pyntoo/ShiftDisplay
 */
 
@@ -10,14 +10,15 @@
 
 
 #define ANIMATION_NONE 0
-#define ANIMATION_SCROLL 2
-#define ANIMATION_EXIT_LEFT 3
-#define ANIMATION_EXIT_RIGHT 4
+#define ANIMATION_EXIT_LEFT 1
+#define ANIMATION_EXIT_RIGHT 2
+#define ANIMATION_SCROLL 4
 #define ANIMATION_FADE_IN 5
 #define ANIMATION_FADE_OUT 6
-#define ALIGNMENT_LEFT 9
-#define ALIGNMENT_RIGHT 10
-#define ALIGNMENT_CENTER 11
+
+#define ALIGNMENT_LEFT 1
+#define ALIGNMENT_RIGHT 2
+#define ALIGNMENT_CENTER 3
 
 
 class ShiftDisplay {

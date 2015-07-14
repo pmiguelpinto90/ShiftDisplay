@@ -1,5 +1,5 @@
 /*
-  ShiftDisplay 2.1.0 (03/07/2015)
+  ShiftDisplay 2.2.0 (14/07/2015)
   https://github.com/Pyntoo/ShiftDisplay
 */
 
@@ -216,11 +216,15 @@ void ShiftDisplay::printCharacters(byte characters[], int charactersLength, int 
 	prepareDisplay(characters, charactersLength, display, alignment);
 
 	switch (animation) {
+		int steps;
 		case ANIMATION_EXIT_LEFT:
 		case ANIMATION_EXIT_RIGHT:
-			for (int i = 0; i < _displayLength; i++) {
-				bool toRight = (animation == ANIMATION_EXIT_RIGHT);
-				shiftDisplay(display, toRight);
+			// same side or not
+			steps = (animation == alignment) ? charactersLength : _displayLength;
+			time /= steps;
+			printDisplay(display, time);
+			for (int i = 1; i < steps; i++) {
+				shiftDisplay(display, animation == ANIMATION_EXIT_RIGHT);
 				printDisplay(display, time);
 			}
 			break;

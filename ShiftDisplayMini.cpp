@@ -45,7 +45,7 @@ void ShiftDisplayMini::clear() {
 
 // Display byte array.
 // Pre: characters array length = display number of digits
-void ShiftDisplayMini::printx(byte characters[], int time) {
+void ShiftDisplayMini::show(byte characters[], int time) {
 	unsigned long start = millis();
 	while (millis() - start < time) {
 		for (int i = 0; i < _displayLength; i++) {
@@ -53,7 +53,7 @@ void ShiftDisplayMini::printx(byte characters[], int time) {
 
 			// shift data for display register
 			byte out = _commonCathode ? ~DISPLAYS[i] : DISPLAYS[i];
-			shiftOut(_dataPin, _clockPin, MSBFIRST, out);
+			shiftOut(_dataPin, _clockPin, LSBFIRST, out);
 
 			// shift data for character register
 			shiftOut(_dataPin, _clockPin, MSBFIRST, characters[i]);
@@ -72,7 +72,7 @@ void ShiftDisplayMini::printx(byte characters[], int time) {
 void ShiftDisplayMini::print(int value, int time) {
 	bool negative = value < 0;
 	byte characters[_displayLength];
-	int i = 0;
+	int i = _displayLength - 1;
 
 	// tranform number into positive
 	if (negative)
@@ -81,19 +81,19 @@ void ShiftDisplayMini::print(int value, int time) {
 	// store digits from number in array
 	do { // if number is zero, prints single 0
 		int digit = value % 10;
-		characters[i++] = _commonCathode ? DIGITS[digit]: ~DIGITS[digit];
+		characters[i--] = _commonCathode ? DIGITS[digit]: ~DIGITS[digit];
 		value /= 10;
-	} while (value && i < _displayLength);
+	} while (value && i >= 0);
 
 	// place minus character on left of number
-	if (negative && i < _displayLength)
-		characters[i++] = _commonCathode ? MINUS : ~MINUS;
+	if (negative && i >= 0)
+		characters[i--] = _commonCathode ? MINUS : ~MINUS;
 
 	// fill remaining array with empty
-	while (i < _displayLength)
-		characters[i++] = _commonCathode ? BLANK : ~BLANK;
+	while (i >= 0)
+		characters[i--] = _commonCathode ? BLANK : ~BLANK;
 
-	printx(characters, time);
+	show(characters, time);
 }
 
 // Show a float value, rounded to specified decimal places,
@@ -109,7 +109,7 @@ void ShiftDisplayMini::print(float value, int decimalPlaces, int time) {
 
 	bool negative = value < 0;
 	byte characters[_displayLength];
-	int i = 0;
+	int i = _displayLength - 1;
 
 	// transform number in positive
 	if (negative)
@@ -119,37 +119,38 @@ void ShiftDisplayMini::print(float value, int decimalPlaces, int time) {
 	long newValue = round(value * power(10, decimalPlaces));
 
 	// store digits in array
-	while ((newValue || i <= decimalPlaces) && i < _displayLength) {
+	while ((newValue || i > decimalPlaces) && i >= 0) {
 		int digit = newValue % 10;
-		characters[i++] = _commonCathode ? DIGITS[digit] : ~DIGITS[digit];
+		characters[i--] = _commonCathode ? DIGITS[digit] : ~DIGITS[digit];
 		newValue /= 10;
 	}
 
-	// place decimal point in first integer
-	if (decimalPlaces < _displayLength)
-		characters[decimalPlaces] = characters[decimalPlaces] + DOT;
+	// place decimal point in unity value
+	if (decimalPlaces < _displayLength) {
+		int unity = _displayLength - decimalPlaces - 1;
+		characters[unity] += DOT;
+	}
 
 	// place minus character on left of numbers
-	if (negative && i < _displayLength)
-		characters[i++] = _commonCathode ? MINUS : ~MINUS;
+	if (negative && i >= 0)
+		characters[i--] = _commonCathode ? MINUS : ~MINUS;
 
 	// fill remaining characters with empty
-	while (i < _displayLength)
-		characters[i++] = _commonCathode ? BLANK : ~BLANK;
+	while (i >= 0)
+		characters[i--] = _commonCathode ? BLANK : ~BLANK;
 
-	printx(characters, time);
+	show(characters, time);
 }
 
 // Show text, left aligned in the display, for the given time in milliseconds.
 // Accepted characters are A-Z, a-z, 0-9, -, space.
 void ShiftDisplayMini::print(String text, int time) {
 	byte characters[_displayLength];
-	int i = _displayLength - 1; // for inverse array iteration
-	int j = 0; // for text iteration
+	int i = 0;
 
 	// get characters from text
-	while (j < text.length() && i >= 0) {
-		char c = text[j++];
+	while (i < text.length() && i < _displayLength) {
+		char c = text[i];
 
 		byte out;
 		if (c >= 'A' && c <= 'Z')
@@ -162,12 +163,12 @@ void ShiftDisplayMini::print(String text, int time) {
 			out = MINUS;
 		else
 			out = BLANK;
-		characters[i--] = _commonCathode ? out : ~out;
+		characters[i++] = _commonCathode ? out : ~out;
 	}
 
 	// fill remaining right characters with empty
-	while (i >= 0)
-		characters[i--] = _commonCathode ? BLANK : ~BLANK;
+	while (i < _displayLength)
+		characters[i++] = _commonCathode ? BLANK : ~BLANK;
 
-	printx(characters, time);
+	show(characters, time);
 }

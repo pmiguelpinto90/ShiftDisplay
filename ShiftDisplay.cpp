@@ -27,7 +27,6 @@ ShiftDisplay::ShiftDisplay(int latchPin, int clockPin, int dataPin, bool commonC
 	_commonCathode = commonCathode;
 	_displayLength = displayLength;
 	_nShiftRegisters = (displayLength-1)/8 + 2;
-	
 }
 
 
@@ -139,7 +138,7 @@ void ShiftDisplay::clear() {
 void ShiftDisplay::showDisplay(byte display[], int time) {
 	unsigned long start = millis();
 	while (millis() - start < time) {
-		for (int i = 0; i < _displayLength; i++) {
+		for (int i = 0; i < _displayLength; i++) { // for each digit of display
 			digitalWrite(_latchPin, LOW);
 
 			// shift data for all display registers
@@ -149,7 +148,7 @@ void ShiftDisplay::showDisplay(byte display[], int time) {
 					pos = _commonCathode ? ~DISPLAYS[i] : DISPLAYS[i];
 				else
 					pos = _commonCathode ? ~DISPLAYS_OFF : DISPLAYS_OFF;
-				shiftOut(_dataPin, _clockPin, MSBFIRST, pos);
+				shiftOut(_dataPin, _clockPin, LSBFIRST, pos);
 			}
 
 			// shift data for character register
@@ -169,11 +168,11 @@ void ShiftDisplay::shiftDisplay(byte display[], bool toRight) {
 
 	// shift all characters, except the last witch is moved to out of view
 	if (toRight) {
-		for (i = 0; i < _displayLength - 1; i++)
-			display[i] = display[i + 1];
-	} else { // to left
 		for (i = _displayLength - 1; i > 0 ; i--)
 			display[i] = display[i - 1];
+	} else { // to left
+		for (i = 0; i < _displayLength - 1; i++)
+			display[i] = display[i + 1];
 	}
 
 	// new character from out of view
@@ -183,40 +182,36 @@ void ShiftDisplay::shiftDisplay(byte display[], bool toRight) {
 
 // Arrange characters for printing in phisical display.
 void ShiftDisplay::prepareDisplay(byte characters[], int charactersLength, byte display[], int alignment) {
-	int begin; // left side of display, highest index
-	int end; // right side of display, lowest index
+	int begin; // left side of display, lowest index
+	int end; // right side of display, highest index
 
 	// calculate where characters are in the display, according to alignment
 	switch (alignment) {
 		case ALIGNMENT_LEFT:
-			begin = _displayLength - 1;
-			end = _displayLength - charactersLength;
+			begin = 0;
+			end = charactersLength - 1;
 			break;
-
-
-
-
 
 		case ALIGNMENT_RIGHT:
-			begin = charactersLength - 1;
-			end = 0;
+			begin = _displayLength - charactersLength;
+			end = _displayLength - 1;
 			break;
+
 		case ALIGNMENT_CENTER:
-			int tmp = _displayLength - charactersLength;
-			end = (tmp/2) + (tmp%2);
-			begin = end + charactersLength - 1;
+			begin = (_displayLength - charactersLength) / 2;
+			end = begin + charactersLength - 1;
 			break;
 	}
 
 	// check out of bounds
-	if (begin > _displayLength - 1)
-		begin = _displayLength - 1;
-	if (end < 0)
-		end = 0;
+	if (begin < 0)
+		begin = 0;
+	if (end > _displayLength - 1)
+		end = _displayLength - 1;
 
 	// fill display array with the right characters or empty spaces
-	for (int i = _displayLength - 1, j = 0; i >= 0; i--) {
-		if (i <= begin && i >= end)
+	for (int i = 0, j = 0; i < _displayLength; i++) {
+		if (i >= begin && i <= end)
 			display[i] = characters[j++];
 		else
 			display[i] = _commonCathode ? BLANK : ~BLANK;
@@ -232,7 +227,7 @@ void ShiftDisplay::printCharacters(byte characters[], int charactersLength, int 
 	prepareDisplay(characters, charactersLength, display, alignment);
 
 	switch (animation) {
-		int steps;
+		int steps; // this has to be here instead of inside a case
 		case ANIMATION_EXIT_LEFT:
 		case ANIMATION_EXIT_RIGHT:
 			// same side or not

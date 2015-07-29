@@ -164,16 +164,17 @@ void loop() {
 - 2.2.0 (14/07/2015)
   - Feature: minimal print function
   - Feature: exit left/right animation
-- 2.x.x (//2015)
-  - Change: switch order for animation and alignment arguments
 
 ## TODO
 - [ ] Feature: ANIMATION_SCROLL
 - [ ] Feature: ANIMATION_FADE_IN
 - [ ] Feature: ANIMATION_FADE_OUT
 - [ ] Feature: printMenu()
-- [ ] Change: display indexing LTR in all functions
-- [ ] Bugfix: align and out of bounds
+- [x] Change: all arrays (displays, characters, etc) indexing LTR
+- [x] Change: switch order for animation and alignment arguments
+- [ ] Bugfix: align right out of bounds not aligning
+- [ ] Documentation: Display wiring image LTR
+- [ ] Documentation: download location to last stable version
 
 ---
 

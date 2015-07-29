@@ -41,7 +41,7 @@ class ShiftDisplay {
 		void getCharacters(String text, byte characters[], int nCharacters);
 		
 		void clear();
-		void printDisplay(byte display[], int time);
+		void showDisplay(byte display[], int time);
 		void shiftDisplay(byte display[], bool toRight);
 		void prepareDisplay(byte characters[], int nCharacters, byte display[], int alignment);
 		void printCharacters(byte characters[], int nCharacters, int time, int animation, int alignment);

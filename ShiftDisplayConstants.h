@@ -10,7 +10,7 @@
 
 const int POV = 5; // delay for persistence of vision
 
-// characters encoding
+// characters encoding for common cathode in MSBFIRST
 const byte DIGITS[10] = {
 	//GFEDCBA
 	B00111111, // 0
@@ -57,16 +57,16 @@ const byte MINUS = B01000000;
 const byte DOT = B10000000;
 const byte BLANK = B00000000;
 
-// displays encoding
+// displays encoding for common cathode in LSBFIRST
 const byte DISPLAYS[8] = {
-	B00000001,
-	B00000010,
-	B00000100,
-	B00001000,
-	B00010000,
-	B00100000,
+	B10000000,
 	B01000000,
-	B10000000
+	B00100000,
+	B00010000,
+	B00001000,
+	B00000100,
+	B00000010,
+	B00000001
 };
 const byte DISPLAYS_OFF = {
 	B00000000,

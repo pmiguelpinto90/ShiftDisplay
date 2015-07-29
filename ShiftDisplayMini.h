@@ -20,7 +20,7 @@ class ShiftDisplayMini {
 
 		int power(int number, int exponent);
 		void clear();
-		void printx(byte characters[], int time);
+		void show(byte characters[], int time);
 
 	public:
 		ShiftDisplayMini(int latchPin, int clockPin, int dataPin, bool commonCathode, int displayLength);

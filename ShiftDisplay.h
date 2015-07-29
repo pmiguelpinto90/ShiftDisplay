@@ -9,16 +9,16 @@
 #include "Arduino.h"
 
 
+#define ALIGNMENT_LEFT 1
+#define ALIGNMENT_RIGHT 2
+#define ALIGNMENT_CENTER 3
+
 #define ANIMATION_NONE 0
 #define ANIMATION_EXIT_LEFT 1
 #define ANIMATION_EXIT_RIGHT 2
 #define ANIMATION_SCROLL 4
 #define ANIMATION_FADE_IN 5
 #define ANIMATION_FADE_OUT 6
-
-#define ALIGNMENT_LEFT 1
-#define ALIGNMENT_RIGHT 2
-#define ALIGNMENT_CENTER 3
 
 
 class ShiftDisplay {
@@ -51,9 +51,9 @@ class ShiftDisplay {
 		ShiftDisplay(int latchPin, int clockPin, int dataPin, int outputEnablePin, bool commonCathode, int displayLength);
 		
 		void print(int value);
-		void print(int value, int time, int animation, int alignment);
-		void print(float value, int decimalPlaces, int time, int animation, int alignment);
-		void print(String text, int time, int animation, int alignment);
+		void print(int value, int time, int alignment, int animation);
+		void print(float value, int decimalPlaces, int time, int alignment, int animation);
+		void print(String text, int time, int alignment, int animation);
 
 		// void printMenu(char c, int value, int time);
 		// void printMenu(char c, float value, int decimalPlaces, int time);

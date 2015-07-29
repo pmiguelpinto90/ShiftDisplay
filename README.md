@@ -63,19 +63,19 @@ displayLength is the quantity of digits of all displays together, a maximum of 8
 Show an integer value for 2 seconds, right aligned in the display.
 
 -
-**void print(int value, int time, int animation, int alignment)**
+**void print(int value, int time, int alignment, int animation)**
 
-Show an integer value in the display, for the given time in milliseconds, with specified animation and alignment constants.
-
--
-**void print(float value, int decimalPlaces, int time, int animation, int alignment)**
-
-Show a float value, rounded to specified number of decimal places, for the given time in milliseconds, with specified animation and alignment constants.
+Show an integer value in the display, for the given time in milliseconds, with specified alignment and animation constants.
 
 -
-**void print(String text, int time, int animation, int alignment)**
+**void print(float value, int decimalPlaces, int time, int alignment int animation,)**
 
-Show text in the display, for the given time in milliseconds, with specified animation and alignment constants.
+Show a float value, rounded to specified number of decimal places, for the given time in milliseconds, with specified alignment and animation constants.
+
+-
+**void print(String text, int time, int alignment, int animation)**
+
+Show text in the display, for the given time in milliseconds, with specified alignment and animation constants.
 Accepted characters are A-Z, a-z, 0-9, -, space.
 
 -
@@ -97,15 +97,15 @@ Accepted characters are A-Z, a-z, 0-9, -, space.
 
 -
 ####Constants
+- ALIGNMENT_LEFT
+- ALIGNMENT_RIGHT
+- ALIGNMENT_CENTER
 - ANIMATION_NONE
 - ANIMATION_SCROLL
 - ANIMATION_EXIT_LEFT
 - ANIMATION_EXIT_RIGHT
 - ANIMATION_FADE_IN
 - ANIMATION_FADE_OUT
-- ALIGNMENT_LEFT
-- ALIGNMENT_RIGHT
-- ALIGNMENT_CENTER
 
 
 ## Example
@@ -123,15 +123,15 @@ void loop() {
   // disp.printMenu('t', 9, 2000);
   // disp.printMenu('h', 64, 2000);
 
-  disp.print("c", 500, ANIMATION_NONE, ALIGNMENT_RIGHT);
-  disp.print("cl", 500, ANIMATION_NONE, ALIGNMENT_RIGHT);
-  disp.print("cle", 500, ANIMATION_NONE, ALIGNMENT_RIGHT);
-  disp.print("clea", 500, ANIMATION_NONE, ALIGNMENT_RIGHT);
-  disp.print("lear", 500, ANIMATION_NONE, ALIGNMENT_LEFT);
-  disp.print("ear", 500, ANIMATION_NONE, ALIGNMENT_LEFT);
-  disp.print("ar", 500, ANIMATION_NONE, ALIGNMENT_LEFT);
-  disp.print("r", 500, ANIMATION_NONE, ALIGNMENT_LEFT);
-  disp.print("", 500, ANIMATION_NONE, ALIGNMENT_LEFT);
+  disp.print("c", 500, ALIGNMENT_RIGHT, ANIMATION_NONE);
+  disp.print("cl", 500, ALIGNMENT_RIGHT, ANIMATION_NONE);
+  disp.print("cle", 500, ALIGNMENT_RIGHT, ANIMATION_NONE);
+  disp.print("clea", 500, ALIGNMENT_RIGHT, ANIMATION_NONE);
+  disp.print("lear", 500, ALIGNMENT_LEFT, ANIMATION_NONE);
+  disp.print("ear", 500, ALIGNMENT_LEFT, ANIMATION_NONE);
+  disp.print("ar", 500, ALIGNMENT_LEFT, ANIMATION_NONE);
+  disp.print("r", 500, ALIGNMENT_LEFT, ANIMATION_NONE);
+  disp.print("", 500, ALIGNMENT_LEFT, ANIMATION_NONE);
 }
 ```
 
@@ -164,14 +164,16 @@ void loop() {
 - 2.2.0 (14/07/2015)
   - Feature: minimal print function
   - Feature: exit left/right animation
+- 2.x.x (//2015)
+  - Change: switch order for animation and alignment arguments
 
 ## TODO
 - [ ] Feature: ANIMATION_SCROLL
 - [ ] Feature: ANIMATION_FADE_IN
 - [ ] Feature: ANIMATION_FADE_OUT
 - [ ] Feature: printMenu()
-- [ ] Change: switch order for animation and alignment arguments in all functions
 - [ ] Change: display indexing LTR in all functions
+- [ ] Bugfix: align and out of bounds
 
 ---
 

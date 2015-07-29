@@ -30,6 +30,7 @@ ShiftDisplay::ShiftDisplay(int latchPin, int clockPin, int dataPin, bool commonC
 	
 }
 
+
 // Creates advanced ShiftDisplay object using 4 pins, fade animations enabled.
 // latchPin, clockPin, dataPin and outputEnablePin are the shift register inputs
 // connected to the Arduino digital outputs. outputEnablePin must be connected to a
@@ -57,6 +58,7 @@ int power(int value, int exponent) {
 	return round(pow(value, exponent));
 }
 
+
 // Count the number of digits in an integer value.
 // If the number is negative, the minus also counts as a digit.
 int ShiftDisplay::countDigits(long value) {
@@ -67,6 +69,7 @@ int ShiftDisplay::countDigits(long value) {
 	return 1 + countDigits(value / 10);
 }
 
+
 // Count the number of integer digits in a float value.
 // If the number is negative zero, the minus and zero count as two digits.
 int ShiftDisplay::countIntegerDigits(float value) {
@@ -75,10 +78,12 @@ int ShiftDisplay::countIntegerDigits(float value) {
 	return countDigits((int) value);
 }
 
+
 // Count the number of characters in a String.
 int ShiftDisplay::countCharacters(String text) {
 	return text.length();
 }
+
 
 // Extract a number to an array of byte characters, from most significant to less.
 // If the number is negative also place the minus character.
@@ -97,6 +102,7 @@ void ShiftDisplay::getDigits(long number, byte digits[], int nDigits) {
 	if (negative)
 		digits[0] = _commonCathode ? MINUS : ~MINUS;
 }
+
 
 // Extract a string to an array of byte characters, from left to right.
 // An unknown character will be replaced with a space character.
@@ -118,6 +124,7 @@ void ShiftDisplay::getCharacters(String text, byte characters[], int charactersL
 	}
 }
 
+
 // Clears display
 void ShiftDisplay::clear() {
 	digitalWrite(_latchPin, LOW);
@@ -126,9 +133,10 @@ void ShiftDisplay::clear() {
 	digitalWrite(_latchPin, HIGH);
 }
 
+
 // Displays byte array
 // Pre: characters array length = display number of digits
-void ShiftDisplay::printDisplay(byte display[], int time) {
+void ShiftDisplay::showDisplay(byte display[], int time) {
 	unsigned long start = millis();
 	while (millis() - start < time) {
 		for (int i = 0; i < _displayLength; i++) {
@@ -154,6 +162,7 @@ void ShiftDisplay::printDisplay(byte display[], int time) {
 	clear();
 }
 
+
 // Move all characters in display one position to left or right.
 void ShiftDisplay::shiftDisplay(byte display[], bool toRight) {
 	int i;
@@ -171,6 +180,7 @@ void ShiftDisplay::shiftDisplay(byte display[], bool toRight) {
 	display[i] = _commonCathode ? BLANK : ~BLANK;
 }
 
+
 // Arrange characters for printing in phisical display.
 void ShiftDisplay::prepareDisplay(byte characters[], int charactersLength, byte display[], int alignment) {
 	int begin; // left side of display, highest index
@@ -182,6 +192,11 @@ void ShiftDisplay::prepareDisplay(byte characters[], int charactersLength, byte 
 			begin = _displayLength - 1;
 			end = _displayLength - charactersLength;
 			break;
+
+
+
+
+
 		case ALIGNMENT_RIGHT:
 			begin = charactersLength - 1;
 			end = 0;
@@ -208,6 +223,7 @@ void ShiftDisplay::prepareDisplay(byte characters[], int charactersLength, byte 
 	}
 }
 
+
 // Arrange characters by alignment and animation and send it to print.
 void ShiftDisplay::printCharacters(byte characters[], int charactersLength, int time, int animation, int alignment) {
 	byte display[_displayLength]; // display formated array
@@ -222,10 +238,10 @@ void ShiftDisplay::printCharacters(byte characters[], int charactersLength, int 
 			// same side or not
 			steps = (animation == alignment) ? charactersLength : _displayLength;
 			time /= steps;
-			printDisplay(display, time);
+			showDisplay(display, time);
 			for (int i = 1; i < steps; i++) {
 				shiftDisplay(display, animation == ANIMATION_EXIT_RIGHT);
-				printDisplay(display, time);
+				showDisplay(display, time);
 			}
 			break;
 		case ANIMATION_SCROLL:
@@ -235,7 +251,7 @@ void ShiftDisplay::printCharacters(byte characters[], int charactersLength, int 
 		// case ANIMATION_FADE_IN:
 			// fadeDisplay();
 		case ANIMATION_NONE:
-			printDisplay(display, time);
+			showDisplay(display, time);
 			break;
 	}
 }
@@ -245,21 +261,23 @@ void ShiftDisplay::printCharacters(byte characters[], int charactersLength, int 
 
 // Show an integer value for 2 seconds, right aligned in the display.
 void ShiftDisplay::print(int value) {
-	print(value, 2000, ANIMATION_NONE, ALIGNMENT_RIGHT);
+	print(value, 2000, ALIGNMENT_RIGHT, ANIMATION_NONE);
 }
 
+
 // Show an integer value in the display, for the given time in milliseconds,
-// with specified animation and alignment constants.
-void ShiftDisplay::print(int value, int time, int animation, int alignment) {
+// with specified alignment and animation constants.
+void ShiftDisplay::print(int value, int time, int alignment, int animation) {
 	int charactersLength = countDigits(value);
 	byte characters[charactersLength];
 	getDigits(value, characters, charactersLength);
 	printCharacters(characters, charactersLength, time, animation, alignment);
 }
 
+
 // Show a float value, rounded to specified number of decimal places, for the
-// given time in milliseconds, with specified animation and alignment constants.
-void ShiftDisplay::print(float value, int decimalPlaces, int time, int animation, int alignment) {
+// given time in milliseconds, with specified alignment and animation constants.
+void ShiftDisplay::print(float value, int decimalPlaces, int time, int alignment, int animation) {
 	if (decimalPlaces == 0) {
 		print(round(value), time, animation, alignment);
 		return;
@@ -274,10 +292,11 @@ void ShiftDisplay::print(float value, int decimalPlaces, int time, int animation
 	printCharacters(characters, charactersLength, time, animation, alignment);
 }
 
+
 // Show text in the display, for the given time in milliseconds,
-// with specified animation and alignment constants.
+// with specified alignment and animation constants.
 // Accepted characters are A-Z, a-z, 0-9, -, space.
-void ShiftDisplay::print(String text, int time, int animation, int alignment) {
+void ShiftDisplay::print(String text, int time, int alignment, int animation) {
 	int charactersLength = countCharacters(text);
 	byte characters[charactersLength];
 	getCharacters(text, characters, charactersLength);

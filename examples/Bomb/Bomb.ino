@@ -1,14 +1,17 @@
-#include <ShiftDisplayMini.h>
+#include <ShiftDisplay.h>
 
-// A 3 digit common cathode display. With latch, clock and data connected
-// to 6, 7 and 5 pins respectively.
-ShiftDisplayMini disp(6, 7, 5, true, 3);
+// A common cathode display with 3 digit. Latch, clock and data
+// are connected to 6, 7 and 5 pins respectively.
+ShiftDisplay disp(6, 7, 5, true, 3);
 
 void setup() {
-  for (int i = 42; i > 0; i--)
-    disp.print(i, 400);
+	for (int i = 600; i > 0; i--) {
+		disp.set(i);
+		disp.show(100);
+	}
+	disp.set("pum");
 }
 
 void loop() {
-  disp.print("pum", 1);
+	disp.refresh();
 }

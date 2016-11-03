@@ -1,23 +1,30 @@
 #include <ShiftDisplay.h>
 
-// A 4 digit common anode display. With latch, clock and data connected
-// to 6, 7 and 5 pins respectively.
+// A common anode display with 4 digits. Latch, clock and data
+// are connected to 6, 7 and 5 pins respectively.
 ShiftDisplay disp(6, 7, 5, false, 4);
 
 void setup() {
 }
 
 void loop() {
-  // disp.printMenu('t', 9, 2000);
-  // disp.printMenu('h', 64, 2000);
-
-  disp.print("c", 500, ALIGNMENT_RIGHT, ANIMATION_NONE);
-  disp.print("cl", 500, ALIGNMENT_RIGHT, ANIMATION_NONE);
-  disp.print("cle", 500, ALIGNMENT_RIGHT, ANIMATION_NONE);
-  disp.print("clea", 500, ALIGNMENT_RIGHT, ANIMATION_NONE);
-  disp.print("lear", 500, ALIGNMENT_LEFT, ANIMATION_NONE);
-  disp.print("ear", 500, ALIGNMENT_LEFT, ANIMATION_NONE);
-  disp.print("ar", 500, ALIGNMENT_LEFT, ANIMATION_NONE);
-  disp.print("r", 500, ALIGNMENT_LEFT, ANIMATION_NONE);
-  disp.print("", 500, ALIGNMENT_LEFT, ANIMATION_NONE);
+	String s;
+	disp.set(s = "s", ALIGN_RIGHT);
+	disp.show(500);
+	disp.set(s = "su", ALIGN_RIGHT);
+	disp.show(500);
+	disp.set(s = "sun", ALIGN_RIGHT);
+	disp.show(500);
+	disp.set(s = "sunn", ALIGN_RIGHT);
+	disp.show(500);
+	disp.set(s = "unny", ALIGN_LEFT);
+	disp.show(500);
+	disp.set(s = "nny", ALIGN_LEFT);
+	disp.show(500);
+	disp.set(s = "ny", ALIGN_LEFT);
+	disp.show(500);
+	disp.set(s = "y", ALIGN_LEFT);
+	disp.show(500);
+	disp.set(s = "");
+	disp.show(500);
 }

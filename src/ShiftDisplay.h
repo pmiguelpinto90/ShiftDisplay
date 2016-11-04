@@ -24,13 +24,13 @@ class ShiftDisplay {
 
 		int countCharacters(long number);
 		int countCharacters(double number);
-		int countCharacters(char text[]);
+		int countCharacters(const char text[]);
 		void getCharacters(long input, char output[], int size);
-		void getCharacters(char input[], char output[], int size);
-		void formatCharacters(char input[], int size, char output[], int alignment);
-		int formatCharacters(char input[], int size, char output[], int alignment, int decimalPlaces);
-		void encodeCharacters(char input[]);
-		void encodeCharacters(char input[], int pointPosition);
+		void getCharacters(const char input[], char output[], int size);
+		void formatCharacters(const char input[], int size, char output[], int alignment);
+		int formatCharacters(const char input[], int size, char output[], int alignment, int decimalPlaces);
+		void encodeCharacters(const char input[]);
+		void encodeCharacters(const char input[], int pointPosition);
 		void clearDisplay();
 		void printDisplay();
 
@@ -39,10 +39,10 @@ class ShiftDisplay {
 
 		void set(int number, int alignment = ALIGN_RIGHT);
 		void set(long number, int alignment = ALIGN_RIGHT);
-		void set(float number, int decimalPlaces = 2, int alignment = ALIGN_RIGHT);
 		void set(double number, int decimalPlaces = 2, int alignment = ALIGN_RIGHT);
-		void set(char text[], int alignment = ALIGN_LEFT);
-		void set(String text, int alignment = ALIGN_LEFT);
+		void set(char letter, int alignment = ALIGN_CENTER);
+		void set(const char text[], int alignment = ALIGN_LEFT);
+		void set(const String &text, int alignment = ALIGN_LEFT);
 		void refresh();
 		void show(int time);
 };

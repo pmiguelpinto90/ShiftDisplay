@@ -48,7 +48,7 @@ int ShiftDisplay::countCharacters(double number) {
 
 
 // Count the number of characters in a char array
-int ShiftDisplay::countCharacters(char text[]) {
+int ShiftDisplay::countCharacters(const char text[]) {
 	return strlen(text);
 }
 
@@ -74,7 +74,7 @@ void ShiftDisplay::getCharacters(long input, char output[], int size) {
 
 // Convert a string to an array of characters
 // Unknown characters are replaced with a space character
-void ShiftDisplay::getCharacters(char input[], char output[], int size) {
+void ShiftDisplay::getCharacters(const char input[], char output[], int size) {
 	for (int i = 0; i < size; i++) {
 		char c = input[i];
 		if ((c >= 'A' && c <= 'Z') ||
@@ -90,14 +90,14 @@ void ShiftDisplay::getCharacters(char input[], char output[], int size) {
 
 
 // Format characters to display length over specified alignment
-void ShiftDisplay::formatCharacters(char input[], int size, char output[], int alignment) {
+void ShiftDisplay::formatCharacters(const char input[], int size, char output[], int alignment) {
 	formatCharacters(input, size, output, alignment, -1);
 }
 
 
 // Format characters to display length over specified alignment, and calculate point position based on decimalPlaces
 // Return point position on display or -1 if there is no point
-int ShiftDisplay::formatCharacters(char input[], int size, char output[], int alignment, int decimalPlaces) {
+int ShiftDisplay::formatCharacters(const char input[], int size, char output[], int alignment, int decimalPlaces) {
 	
 	// index of character virtual borders
 	int left; // lowest index
@@ -139,13 +139,13 @@ int ShiftDisplay::formatCharacters(char input[], int size, char output[], int al
 
 
 // Encode array of characters to array of bytes read by the display
-void ShiftDisplay::encodeCharacters(char input[]) {
+void ShiftDisplay::encodeCharacters(const char input[]) {
 	encodeCharacters(input, -1);
 }
 
 
 // Encode array of characters and point to array of bytes read by the display
-void ShiftDisplay::encodeCharacters(char input[], int pointIndex) {
+void ShiftDisplay::encodeCharacters(const char input[], int pointIndex) {
 	for (int i = 0; i < _displaySize; i++) {
 		char c = input[i];
 		
@@ -202,13 +202,13 @@ void ShiftDisplay::printDisplay() {
 // PUBLIC FUNCTIONS
 
 
-// Set the display to show an integer (int) number, default right aligned
+// Set the display to show an integer (int) number, right aligned by default
 void ShiftDisplay::set(int number, int alignment) {
 	set((long) number, alignment); // call long function
 }
 
 
-// Set the display to show an integer (long) number, default right aligned
+// Set the display to show an integer (long) number, right aligned by default
 void ShiftDisplay::set(long number, int alignment) {
 	int size = countCharacters(number);
 	char originalCharacters[size];
@@ -216,21 +216,17 @@ void ShiftDisplay::set(long number, int alignment) {
 	char formattedCharacters[_displaySize];
 	formatCharacters(originalCharacters, size, formattedCharacters, alignment);
 	encodeCharacters(formattedCharacters);
+	// return max(_displaySize - size, 0);
 }
 
 
-// Set the display to show a real (float) number, default 2 decimal places and right aligned
-void ShiftDisplay::set(float number, int decimalPlaces, int alignment) {
-	set((double) number, decimalPlaces, alignment); // call double function
-}
-
-
-// Set the display to show a real (double) number, default 2 decimal places and right aligned
+// Set the display to show a real (double) number, with 2 decimal places and right aligned by default
 void ShiftDisplay::set(double number, int decimalPlaces, int alignment) {
 
 	// if no decimal places, call integer function instead
 	if (decimalPlaces == 0) {
-		set(round(number));
+		long newNumber = round(number);
+		set(newNumber, alignment);
 		return;
 	}
 
@@ -246,27 +242,32 @@ void ShiftDisplay::set(double number, int decimalPlaces, int alignment) {
 }
 
 
-// Set the display to show text (char array), default left aligned
+// Set the display to show a letter (char), center aligned by default
 // Valid characters are A-Z, a-z, 0-9, -, space
-void ShiftDisplay::set(char text[], int alignment) {
+void ShiftDisplay::set(char letter, int alignment) {
+	char originalCharacters[] = {letter};
+	char formattedCharacters[_displaySize];
+	formatCharacters(originalCharacters, 1, formattedCharacters, alignment);
+	encodeCharacters(formattedCharacters);
+}
+
+
+// Set the display to show text (char array), left aligned by default
+// Valid characters are A-Z, a-z, 0-9, -, space
+void ShiftDisplay::set(const char text[], int alignment) {
 	int size = countCharacters(text);
 	char originalCharacters[size];
-	getCharacters(text, originalCharacters, size);
+	getCharacters(text, originalCharacters, size); // TODO realmente necessario? tanto o get como o encode filtram caracteres nao suportados
 	char formattedCharacters[_displaySize];
 	formatCharacters(originalCharacters, size, formattedCharacters, alignment);
 	encodeCharacters(formattedCharacters);
 }
 
 
-// Set the display to show a text (string object), default left aligned
+// Set the display to show a text (string object), left aligned by default
 // Valid characters are A-Z, a-z, 0-9, -, space
-void ShiftDisplay::set(String text, int alignment) {
-	// convert String to char array
-	int len = text.length();
-	char newText[len+1];
-	text.toCharArray(newText, len+1);
-
-	set(newText, alignment);
+void ShiftDisplay::set(const String &text, int alignment) {
+	set(text.c_str(), alignment); // call char array function
 }
 
 

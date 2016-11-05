@@ -26,7 +26,6 @@ class ShiftDisplay {
 		int countCharacters(double number);
 		int countCharacters(const char text[]);
 		void getCharacters(long input, char output[], int size);
-		void getCharacters(const char input[], char output[], int size);
 		void formatCharacters(const char input[], int size, char output[], int alignment);
 		int formatCharacters(const char input[], int size, char output[], int alignment, int decimalPlaces);
 		void encodeCharacters(const char input[]);

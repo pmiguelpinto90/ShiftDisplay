@@ -53,11 +53,11 @@ int ShiftDisplay::countCharacters(const char text[]) {
 }
 
 
-// Convert an integer number to an array of characters
-// If the number is negative, a minus character is placed
+// Convert a number to an array of characters
 void ShiftDisplay::getCharacters(long input, char output[], int size) {
 	
-	if (input < 0) { // negative
+	// if negative, insert a minus character
+	if (input < 0) {
 		input = -input;
 		output[0] = '-';
 	}
@@ -69,23 +69,6 @@ void ShiftDisplay::getCharacters(long input, char output[], int size) {
 		output[i--] = c;
 		input /= 10;
 	} while (input != 0);
-}
-
-
-// Convert a string to an array of characters
-// Unknown characters are replaced with a space character
-void ShiftDisplay::getCharacters(const char input[], char output[], int size) {
-	for (int i = 0; i < size; i++) {
-		char c = input[i];
-		if ((c >= 'A' && c <= 'Z') ||
-				(c >= 'a' && c <= 'z') ||
-				(c >= '0' && c <= '9') ||
-				(c == '-')) {
-			output[i] = c;
-		} else {
-			output[i] = ' ';
-		}
-	}
 }
 
 
@@ -158,7 +141,7 @@ void ShiftDisplay::encodeCharacters(const char input[], int pointIndex) {
 			code = NUMBERS[c - '0'];
 		} else if (c == '-') {
 			code = MINUS;
-		} else {
+		} else { // space or invalid
 			code = BLANK;
 		}
 
@@ -256,10 +239,8 @@ void ShiftDisplay::set(char letter, int alignment) {
 // Valid characters are A-Z, a-z, 0-9, -, space
 void ShiftDisplay::set(const char text[], int alignment) {
 	int size = countCharacters(text);
-	char originalCharacters[size];
-	getCharacters(text, originalCharacters, size); // TODO realmente necessario? tanto o get como o encode filtram caracteres nao suportados
 	char formattedCharacters[_displaySize];
-	formatCharacters(originalCharacters, size, formattedCharacters, alignment);
+	formatCharacters(text, size, formattedCharacters, alignment);
 	encodeCharacters(formattedCharacters);
 }
 

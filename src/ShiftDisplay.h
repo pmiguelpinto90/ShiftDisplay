@@ -9,6 +9,8 @@
 #define ALIGN_LEFT 0
 #define ALIGN_RIGHT 1
 #define ALIGN_CENTER 2
+#define COMMON_ANODE 0
+#define COMMON_CATHODE 1
 
 
 class ShiftDisplay {
@@ -17,7 +19,7 @@ class ShiftDisplay {
 		int _latchPin;
 		int _clockPin;
 		int _dataPin;
-		bool _commonCathode;
+		int _displayType;
 		int _displaySize;
 		byte _display[8]; // value set by user, encoded to print
 		int _povDelay;
@@ -34,7 +36,7 @@ class ShiftDisplay {
 		void printDisplay();
 
 	public:
-		ShiftDisplay(int latchPin, int clockPin, int dataPin, bool commonCathode, int displayLength);
+		ShiftDisplay(int latchPin, int clockPin, int dataPin, int displayType, int displayLength);
 
 		void set(int number, int alignment = ALIGN_RIGHT);
 		void set(long number, int alignment = ALIGN_RIGHT);

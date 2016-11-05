@@ -8,18 +8,18 @@
 
 // Create ShiftDisplay object
 // latchPin, clockPin and dataPin are the shift register pins connected to the Arduino digital outputs
-// commonCathode is true if the led type is common cathode, false if it's common anode
+// displayType is common cathode or common anode constants
 // displaySize is the quantity of digits of all displays together, maximum of 8
-ShiftDisplay::ShiftDisplay(int latchPin, int clockPin, int dataPin, bool commonCathode, int displaySize) {
+ShiftDisplay::ShiftDisplay(int latchPin, int clockPin, int dataPin, int displayType, int displaySize) {
 	pinMode(latchPin, OUTPUT);
 	pinMode(clockPin, OUTPUT);
 	pinMode(dataPin, OUTPUT);
 	_latchPin = latchPin;
 	_clockPin = clockPin;
 	_dataPin = dataPin;
-	_commonCathode = commonCathode;
-	_displaySize = displaySize;
-	_povDelay = POV / displaySize;
+	_displayType = displayType;
+	_displaySize = min(displaySize, 8);
+	_povDelay = POV / _displaySize;
 }
 
 
@@ -145,12 +145,12 @@ void ShiftDisplay::encodeCharacters(const char input[], int pointIndex) {
 			code = BLANK;
 		}
 
-		_display[i] = _commonCathode ? code : ~code;
+		_display[i] = _displayType ? code : ~code;
 	}
 
 	// add point to encoded character if needed
 	if (pointIndex != -1)
-		_display[pointIndex] +=  _commonCathode ? POINT : ~POINT;
+		_display[pointIndex] +=  _displayType ? POINT : ~POINT;
 }
 
 
@@ -169,7 +169,7 @@ void ShiftDisplay::printDisplay() {
 		digitalWrite(_latchPin, LOW);
 
 		// data for last shift register
-		byte out = _commonCathode ? ~DIGITS[i] : DIGITS[i];
+		byte out = _displayType ? ~DIGITS[i] : DIGITS[i];
 		shiftOut(_dataPin, _clockPin, LSBFIRST, out);
 
 		// data for first shift register

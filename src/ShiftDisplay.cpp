@@ -63,7 +63,7 @@ void ShiftDisplay::getCharacters(long input, char output[], int size) {
 	}
 
 	int i = size - 1;
-	do { // enters loop even if zero
+	do { // still enter if zero
 		int digit = input % 10;
 		char c = digit + '0';
 		output[i--] = c;
@@ -163,8 +163,8 @@ void ShiftDisplay::clearDisplay() {
 }
 
 
-// Print value to display in a single iteration
-void ShiftDisplay::printDisplay() {
+// Show buffer value on display
+void ShiftDisplay::showDisplay() {
 	for (int i = 0; i < _displaySize; i++) {
 		digitalWrite(_latchPin, LOW);
 
@@ -185,13 +185,13 @@ void ShiftDisplay::printDisplay() {
 // PUBLIC FUNCTIONS
 
 
-// Set the display to show an integer (int) number, right aligned by default
+// Save to buffer an integer (int) number, right aligned by default
 void ShiftDisplay::set(int number, int alignment) {
 	set((long) number, alignment); // call long function
 }
 
 
-// Set the display to show an integer (long) number, right aligned by default
+// Save to buffer an integer (long) number, right aligned by default
 void ShiftDisplay::set(long number, int alignment) {
 	int size = countCharacters(number);
 	char originalCharacters[size];
@@ -203,7 +203,7 @@ void ShiftDisplay::set(long number, int alignment) {
 }
 
 
-// Set the display to show a real (double) number, with 2 decimal places and right aligned by default
+// Save to buffer a real (double) number, with 2 decimal places and right aligned by default
 void ShiftDisplay::set(double number, int decimalPlaces, int alignment) {
 
 	// if no decimal places, call integer function instead
@@ -225,7 +225,7 @@ void ShiftDisplay::set(double number, int decimalPlaces, int alignment) {
 }
 
 
-// Set the display to show a letter (char), center aligned by default
+// Save to buffer a letter (char), center aligned by default
 // Valid characters are A-Z, a-z, 0-9, -, space
 void ShiftDisplay::set(char letter, int alignment) {
 	char originalCharacters[] = {letter};
@@ -235,7 +235,7 @@ void ShiftDisplay::set(char letter, int alignment) {
 }
 
 
-// Set the display to show text (char array), left aligned by default
+// Save to buffer a text (char array), left aligned by default
 // Valid characters are A-Z, a-z, 0-9, -, space
 void ShiftDisplay::set(const char text[], int alignment) {
 	int size = countCharacters(text);
@@ -245,24 +245,71 @@ void ShiftDisplay::set(const char text[], int alignment) {
 }
 
 
-// Set the display to show a text (string object), left aligned by default
+// Save to buffer a text (string object), left aligned by default
 // Valid characters are A-Z, a-z, 0-9, -, space
 void ShiftDisplay::set(const String &text, int alignment) {
 	set(text.c_str(), alignment); // call char array function
 }
 
 
-// Display value set previously by user
-void ShiftDisplay::refresh() {
-	printDisplay();
+// Show value on buffer for one iteration
+void ShiftDisplay::show() {
+	showDisplay();
 	clearDisplay();
 }
 
 
-// Display value set previously by user, for the specified time in milliseconds
+// Show value on buffer for the specified time in milliseconds
 void ShiftDisplay::show(int time) {
 	unsigned long start = millis();
 	while (millis()-start < time)
-		printDisplay();
+		showDisplay();
 	clearDisplay();
 }
+
+
+// Save to buffer and show an integer (int) number for the specified time in milliseconds, right aligned by default
+void ShiftDisplay::print(int time, int number, int alignment) {
+	set(number, alignment);
+	show(time);
+}
+
+
+// Save to buffer and show an integer (long) number for the specified time in milliseconds, right aligned by default
+void ShiftDisplay::print(int time, long number, int alignment) {
+	set(number, alignment);
+	show(time);
+}
+
+
+// Save to buffer and show a real (double) number for the specified time in milliseconds, with 2 decimal places and right aligned by default
+void ShiftDisplay::print(int time, double number, int decimalPlaces, int alignment) {
+	set(number, decimalPlaces, alignment);
+	show(time);
+}
+
+
+// Save to buffer and show a letter (char) for the specified time in milliseconds, center aligned by default
+// Valid characters are A-Z, a-z, 0-9, -, space
+void ShiftDisplay::print(int time, char letter, int alignment) {
+	set(letter, alignment);
+	show(time);
+}
+
+
+// Save to buffer and show a text (char array) for the specified time in milliseconds, center aligned by default
+// Valid characters are A-Z, a-z, 0-9, -, space
+void ShiftDisplay::print(int time, const char text[], int alignment) {
+	set(text, alignment);
+	show(time);
+}
+
+
+// Save to buffer and show a text (string object) for the specified time in milliseconds, left aligned by default
+// Valid characters are A-Z, a-z, 0-9, -, space
+void ShiftDisplay::print(int time, const String &text, int alignment) {
+	set(text, alignment);
+	show(time);
+}
+
+

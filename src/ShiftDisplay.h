@@ -33,7 +33,7 @@ class ShiftDisplay {
 		void encodeCharacters(const char input[]);
 		void encodeCharacters(const char input[], int pointPosition);
 		void clearDisplay();
-		void printDisplay();
+		void showDisplay();
 
 	public:
 		ShiftDisplay(int latchPin, int clockPin, int dataPin, int displayType, int displayLength);
@@ -44,8 +44,14 @@ class ShiftDisplay {
 		void set(char letter, int alignment = ALIGN_CENTER);
 		void set(const char text[], int alignment = ALIGN_LEFT);
 		void set(const String &text, int alignment = ALIGN_LEFT);
-		void refresh();
+		void show();
 		void show(int time);
+		void print(int time, int number, int alignment = ALIGN_RIGHT);
+		void print(int time, long number, int alignment = ALIGN_RIGHT);
+		void print(int time, double number, int decimalPlaces = 2, int alignment = ALIGN_RIGHT);
+		void print(int time, char letter, int alignment = ALIGN_CENTER);
+		void print(int time, const char text[], int alignment = ALIGN_LEFT);
+		void print(int time, const String &text, int alignment = ALIGN_LEFT);
 };
 
 

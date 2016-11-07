@@ -1,30 +1,42 @@
 #include <ShiftDisplay.h>
 
-// A common anode display with 4 digits. Latch, clock and data
-// are connected to 6, 7 and 5 pins respectively.
-ShiftDisplay disp(6, 7, 5, false, 4);
+
+const int LATCH_PIN = 6;
+const int CLOCK_PIN = 7;
+const int DATA_PIN = 5;
+const int DISPLAY_TYPE = COMMON_CATHODE;
+const int DISPLAY_SIZE = 8; // number of digits
+
+ShiftDisplay disp(LATCH_PIN, CLOCK_PIN, DATA_PIN, DISPLAY_TYPE, DISPLAY_SIZE);
+
+
+float getTemperature() {
+	delay(1000);
+	return 21.36;
+}
+
+
+String getCondition() {
+	delay(1000);
+	return "Sunny";
+}
+
 
 void setup() {
 }
 
+
 void loop() {
-	String s;
-	disp.set(s = "s", ALIGN_RIGHT);
-	disp.show(500);
-	disp.set(s = "su", ALIGN_RIGHT);
-	disp.show(500);
-	disp.set(s = "sun", ALIGN_RIGHT);
-	disp.show(500);
-	disp.set(s = "sunn", ALIGN_RIGHT);
-	disp.show(500);
-	disp.set(s = "unny", ALIGN_LEFT);
-	disp.show(500);
-	disp.set(s = "nny", ALIGN_LEFT);
-	disp.show(500);
-	disp.set(s = "ny", ALIGN_LEFT);
-	disp.show(500);
-	disp.set(s = "y", ALIGN_LEFT);
-	disp.show(500);
-	disp.set(s = "");
-	disp.show(500);
+	float temp = getTemperature();
+	String condition = getCondition();
+	condition = = "        " + condition;
+
+	// print temperature with one decimal number, aligned to center of display, for 4 seconds
+	disp.print(4000, temp, 1, ALIGN_CENTER);
+
+	// print string with marquee effect
+	while (condition.length() > 0) {
+		disp.print(500, condition, ALIGN_LEFT);
+		condition.remove(0,1);
+	}
 }

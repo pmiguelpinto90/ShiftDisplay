@@ -45,13 +45,13 @@ class ShiftDisplay {
 		void set(const char text[], int alignment = ALIGN_LEFT);
 		void set(const String &text, int alignment = ALIGN_LEFT);
 		void show();
-		void show(int time);
-		void print(int time, int number, int alignment = ALIGN_RIGHT);
-		void print(int time, long number, int alignment = ALIGN_RIGHT);
-		void print(int time, double number, int decimalPlaces = 2, int alignment = ALIGN_RIGHT);
-		void print(int time, char letter, int alignment = ALIGN_CENTER);
-		void print(int time, const char text[], int alignment = ALIGN_LEFT);
-		void print(int time, const String &text, int alignment = ALIGN_LEFT);
+		void show(unsigned long time);
+		void print(unsigned long time, int number, int alignment = ALIGN_RIGHT);
+		void print(unsigned long time, long number, int alignment = ALIGN_RIGHT);
+		void print(unsigned long time, double number, int decimalPlaces = 2, int alignment = ALIGN_RIGHT);
+		void print(unsigned long time, char letter, int alignment = ALIGN_CENTER);
+		void print(unsigned long time, const char text[], int alignment = ALIGN_LEFT);
+		void print(unsigned long time, const String &text, int alignment = ALIGN_LEFT);
 };
 
 

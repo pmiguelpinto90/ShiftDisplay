@@ -10,10 +10,12 @@ const int DISPLAY_SIZE = 6; // number of digits
 ShiftDisplay disp(LATCH_PIN, CLOCK_PIN, DATA_PIN, DISPLAY_TYPE, DISPLAY_SIZE);
 
 void receiveEvent(int numBytes) {
-	String input;
-	while (Wire.available())
-		input += Wire.read();
-	disp.set(input);
+	char text[5]; // string length is 4 plus \0
+	for (int i = 0; i < 4; i++)
+		text[i] = Wire.read();
+	text[4] = '\0';
+	int alignment = Wire.read(); // last byte from received data is alignment
+	disp.set(text, alignment);
 }
 
 void setup() {

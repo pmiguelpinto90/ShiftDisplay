@@ -4,7 +4,7 @@ const int LATCH_PIN = 6;
 const int CLOCK_PIN = 7;
 const int DATA_PIN = 5;
 const int DISPLAY_TYPE = COMMON_CATHODE; // COMMON_CATHODE or COMMON_ANODE
-const int DISPLAY_SIZE = 3; // number of digits
+const int DISPLAY_SIZE = 3; // number of digits on display
 const int BUTTON_PIN = 2;
 
 volatile bool buttonPressed;

@@ -1,158 +1,150 @@
 # ShiftDisplay
-Arduino library for driving multiple digit 7-segment displays using shift registers
 
-- Only 3 pins used on Arduino
-- Use displays with any quantity of digits
-- Common cathode and common anode compatible
+Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 shift registers
+
 - Show numbers and text
-- Concatenate multiple displays as one
+- Concatenate multiple displays as one, for a maximum of 8 digits
+- Compatible with common cathode and common anode
+- Only 3 pins used on Arduino
 
-![breadboard](https://raw.githubusercontent.com/Pyntoo/ShiftDisplay/master/extra/photo.jpg)
+![breadboard](https://raw.githubusercontent.com/MiguelPynto/ShiftDisplay/master/extra/photo.jpg)
 
+________________________________________________________________________________
 ## Hardware
-- 1x (or more) Multiple-Digit 7-Segment LED Display (common anode or common cathode)
-- 2x (or more) 74HC595 Shift Register (other 8-bit shift registers should work)
-- 8x 220 Ohm Resistor
 
+- 1x (or more) 7-segment LED display
+- 2x 74HC595 shift register
+- 8x (per display) 220 Ohm resistor
+
+________________________________________________________________________________
 ## Install
-1. Download library https://github.com/Pyntoo/ShiftDisplay/archive/master.zip
-2. Extract to `<arduino-sketch-folder>/libraries/` folder.
+
+1. Download library from https://github.com/MiguelPynto/ShiftDisplay/archive/master.zip
+2. Extract to `Documents/Arduino/libraries` folder.
 3. Rename extracted folder `ShiftDisplay-master` to `ShiftDisplay`.
 4. Restart the Arduino IDE.
 
+________________________________________________________________________________
 ## Wiring
-1. Connect Arduino voltage to shift registers:
-![wiring arduino voltage to shift register](https://raw.githubusercontent.com/Pyntoo/ShiftDisplay/master/extra/arduino1_to_shift.png)
 
-2. Connect Arduino outputs to shift registers:
-![wiring arduino output to shift register](https://raw.githubusercontent.com/Pyntoo/ShiftDisplay/master/extra/arduino2_to_shift.png)
+1. Connect Arduino power pins to shift registers power pins:
+![voltage](https://raw.githubusercontent.com/MiguelPynto/ShiftDisplay/master/extra/arduino1_to_shift.png)
 
-3. Connect shift registers to display:
-![wiring shift register to display](https://raw.githubusercontent.com/Pyntoo/ShiftDisplay/master/extra/shift_to_display.png)
+2. Connect Arduino digital pins to shift registers latch, clock and data pins:
+![digitaloutput](https://raw.githubusercontent.com/MiguelPynto/ShiftDisplay/master/extra/arduino2_to_shift.png)
 
+3. Connect shift registers output pins to display(s) pins:
+![leds](https://raw.githubusercontent.com/MiguelPynto/ShiftDisplay/master/extra/shift_to_display.png)
+
+________________________________________________________________________________
 ## Reference
-####Constructors
-**ShiftDisplay(int latchPin, int clockPin, int dataPin, bool commonCathode, int displayLength)**
 
-Creates default ShiftDisplay object using 3 pins, fade animations disabled.
-latchPin, clockPin and dataPin are the shift register inputs connected to the Arduino digital outputs.
-commonCathode is true if the led type is common cathode, false if it's common anode.
-displayLength is the quantity of digits of all displays together.
+### Constructors
 
--
-**ShiftDisplay(int latchPin, int clockPin, int dataPin,int outputEnablePin, bool commonCathode, int displayLength)**
+* __ShiftDisplay()__
+  * ShiftDisplay led(latchPin, clockPin, dataPin, displayType, displayLength)
 
-Creates advanced ShiftDisplay object using 4 pins, fade animations enabled.
-latchPin, clockPin, dataPin and outputEnablePin are the shift register inputs connected to the Arduino digital outputs. outputEnablePin must be connected to a PWM pin.
-commonCathode is true if the led type is common cathode, false if it's common anode.
-displayLength is the quantity of digits of all displays together.
+  Creates ShiftDisplay object, initialize the library with the interface pins, and sets up with the display properties.
 
--
-**ShiftDisplayMini(int latchPin, int clockPin, int dataPin, bool commonCathode, int displayLength)**
+  `led`: is a variable of type ShiftDisplay.
 
-Creates lightweight ShiftDisplay object using 3 pins.
-You must `#include <ShiftDisplayMini.h>` instead of `<ShiftDisplay.h>` to use this.
-latchPin, clockPin and dataPin are the shift register inputs connected to the Arduino digital outputs.
-commonCathode is true if the led type is common cathode, false if it's common anode.
-displayLength is the quantity of digits of all displays together, a maximum of 8.
+  `latchPin`, `clockPin`, `dataPin`: are the number of the Arduino digital pins connected to the shift registers latch, clock and data pins respectively.
 
--
-####Functions
-**void print(int value)**
+  `displayType`: is a constant `COMMON_CATHODE` or `COMMON_ANODE`, depending on your display(s) type.
 
-Show an integer value for 2 seconds, right aligned in the display.
+  `displayLength`: is the quantity of digits on all displays combined.
 
--
-**void print(int value, int time, int alignment, int animation)**
+### Functions
 
-Show an integer value in the display, for the given time in milliseconds, with specified alignment and animation constants.
+* __set()__
+  * led.set(value)
+  * led.set(value, alignment)
+  * led.set(value, decimalPlaces)
+  * led.set(value, decimalPlaces, alignment)
 
--
-**void print(float value, int decimalPlaces, int time, int alignment int animation,)**
+  Save a value to buffer for printing latter.
 
-Show a float value, rounded to specified number of decimal places, for the given time in milliseconds, with specified alignment and animation constants.
+  `led`: is a variable of type ShiftDisplay.
 
--
-**void print(String text, int time, int alignment, int animation)**
+  `value`: is the value to save;
+  can be of type int, long, float, double, char, char array or String object;
+  for text, valid characters are A-Z, a-z, 0-9, -, space.
 
-Show text in the display, for the given time in milliseconds, with specified alignment and animation constants.
-Accepted characters are A-Z, a-z, 0-9, -, space.
+  `alignment`: is the alignment of the value on the display;
+  optional, constant `ALIGN_LEFT`, `ALIGN_RIGHT` or `ALIGN_CENTER`;
+  if not defined, the default is ALIGN_RIGHT for numbers, ALIGN_LEFT for strings, and ALIGN_CENTER for characters;
+  if the value is a float or double number, decimalPlaces has to be defined before alignment.
 
--
-####Functions (ShiftDisplayMini)
-**void print(int value, int time)**
+  `decimalPlaces`: is the number of digits following the decimal point;
+  optional and only avaiable if the value is a float or double number;
+  if not defined, the default is 2.
 
-Show an integer value, right aligned in the display, for the given time in milliseconds.
+* __show()__
+  * led.show()
+  * led.show(time)
 
--
-**void print(float value, int decimalPlaces, int time)**
+  Show buffer value on the display.
 
-Show a float value, rounded to specified decimal places, right aligned in the display, for the given time in milliseconds.
+  `led`: is a variable of type ShiftDisplay.
 
--
-**void print(String text, int time)**
+  `time`: is the time in milliseconds for the value to be visible on the display;
+  optional; if not defined, the value is shown for a single iteration of each character.
 
-Show text, left aligned in the display, for the given time in milliseconds.
-Accepted characters are A-Z, a-z, 0-9, -, space.
+* __print()__
+  * led.print(time, value)
+  * led.print(time, value, alignment)
+  * led.print(time, value, decimalPlaces)
+  * led.print(time, value, decimalPlaces, alignment)
 
--
-####Constants
-- ALIGNMENT_LEFT
-- ALIGNMENT_RIGHT
-- ALIGNMENT_CENTER
-- ANIMATION_NONE
-- ANIMATION_SCROLL
-- ANIMATION_EXIT_LEFT
-- ANIMATION_EXIT_RIGHT
-- ANIMATION_FADE_IN
-- ANIMATION_FADE_OUT
+  Save a value to buffer and show it on the display.
 
+  `led`: is a variable of type ShiftDisplay.
 
+  `time`: is the time in milliseconds for the value to be visible on the display;
+
+  `value`: is the value to save and show.
+  can be of type int, long, float, double, char, char array or String object;
+  for text, valid characters are A-Z, a-z, 0-9, -, space.
+
+  `alignment`: is the alignment of the value on the display;
+  optional, constant `ALIGN_LEFT`, `ALIGN_RIGHT` or `ALIGN_CENTER`;
+  if not defined, the default is ALIGN_RIGHT for numbers, ALIGN_LEFT for strings, and ALIGN_CENTER for characters;
+  if the value is a float or double number, decimalPlaces has to be defined before alignment.
+
+  `decimalPlaces`: is the number of digits following the decimal point;
+  optional and only avaiable if the value is a float or double number;
+  if not defined, the default is 2.
+
+### Constants
+
+- ALIGN_LEFT
+- ALIGN_RIGHT
+- ALIGN_CENTER
+- COMMON_ANODE
+- COMMON_CATHODE
+
+________________________________________________________________________________
 ## Example
+
 ```c
 #include <ShiftDisplay.h>
 
-// A 4 digit common anode display. With latch, clock and data connected
-// to 6, 7 and 5 pins respectively.
-ShiftDisplay disp(6, 7, 5, false, 4);
+ShiftDisplay led(6, 7, 5, COMMON_CATHODE, 3);
 
 void setup() {
+	for (int i = 3; i > 0; i--)
+		led.print(800, i);
+	led.set("GO");
 }
 
 void loop() {
-  // disp.printMenu('t', 9, 2000);
-  // disp.printMenu('h', 64, 2000);
-
-  disp.print("c", 500, ALIGNMENT_RIGHT, ANIMATION_NONE);
-  disp.print("cl", 500, ALIGNMENT_RIGHT, ANIMATION_NONE);
-  disp.print("cle", 500, ALIGNMENT_RIGHT, ANIMATION_NONE);
-  disp.print("clea", 500, ALIGNMENT_RIGHT, ANIMATION_NONE);
-  disp.print("lear", 500, ALIGNMENT_LEFT, ANIMATION_NONE);
-  disp.print("ear", 500, ALIGNMENT_LEFT, ANIMATION_NONE);
-  disp.print("ar", 500, ALIGNMENT_LEFT, ANIMATION_NONE);
-  disp.print("r", 500, ALIGNMENT_LEFT, ANIMATION_NONE);
-  disp.print("", 500, ALIGNMENT_LEFT, ANIMATION_NONE);
+	led.show();
 }
 ```
 
-```c
-#include <ShiftDisplayMini.h>
-
-// A 3 digit common cathode display. With latch, clock and data connected
-// to 6, 7 and 5 pins respectively.
-ShiftDisplayMini disp(6, 7, 5, true, 3);
-
-void setup() {
-  for (int i = 42; i > 0; i--)
-    disp.print(i, 400);
-}
-
-void loop() {
-  disp.print("pum", 1);
-}
-```
-
+________________________________________________________________________________
 ## Changelog
+
 - 1.0.0 (26/05/2015)
   - Initial release
 - 2.0.0 (23/06/2015)
@@ -164,18 +156,24 @@ void loop() {
 - 2.2.0 (14/07/2015)
   - Feature: minimal print function
   - Feature: exit left/right animation
+- 3.0.0 (14/11/2016)
+  - Code rewriting: performance and behavior improvement
+  - Change: function signatures
+  - Feature: buffer
+  - Documentation: new examples
+  - Documentation: updated images
 
+________________________________________________________________________________
 ## TODO
-- [ ] Feature: ANIMATION_SCROLL
-- [ ] Feature: ANIMATION_FADE_IN
-- [ ] Feature: ANIMATION_FADE_OUT
-- [ ] Feature: printMenu()
-- [x] Change: all arrays (displays, characters, etc) indexing LTR
-- [x] Change: switch order for animation and alignment arguments
-- [ ] Bugfix: align right out of bounds not aligning
-- [ ] Documentation: Display wiring image LTR
-- [ ] Documentation: download location to last stable version
 
----
+- [ ] Feature: custom chars
+- [ ] Feature: change char in position
+- [ ] Feature: pontuation chars
+- [ ] Change: function begin with displayLength and displayType
+- [ ] Feature: fade
+- [ ] Bugfix: time minus pov
+- [ ] Bugfix: real number 0.x only shows .x
+- [ ] Documentation: rand() to random() in example
 
-https://github.com/Pyntoo/ShiftDisplay/
+________________________________________________________________________________
+https://github.com/MiguelPynto/ShiftDisplay

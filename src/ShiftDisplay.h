@@ -21,7 +21,7 @@ class ShiftDisplay {
 		int _dataPin;
 		int _displayType;
 		int _displaySize;
-		byte _display[8]; // value set by user, encoded to print
+		byte _buffer[8]; // value set by user, encoded to print
 		int _povDelay;
 
 		int countCharacters(long number);
@@ -38,20 +38,20 @@ class ShiftDisplay {
 	public:
 		ShiftDisplay(int latchPin, int clockPin, int dataPin, int displayType, int displayLength);
 
-		void set(int number, int alignment = ALIGN_RIGHT);
-		void set(long number, int alignment = ALIGN_RIGHT);
-		void set(double number, int decimalPlaces = 2, int alignment = ALIGN_RIGHT);
-		void set(char letter, int alignment = ALIGN_CENTER);
-		void set(const char text[], int alignment = ALIGN_LEFT);
-		void set(const String &text, int alignment = ALIGN_LEFT);
+		void set(int value, int alignment = ALIGN_RIGHT);
+		void set(long value, int alignment = ALIGN_RIGHT);
+		void set(double value, unsigned int decimalPlaces = 2, int alignment = ALIGN_RIGHT);
+		void set(char value, int alignment = ALIGN_CENTER);
+		void set(const char value[], int alignment = ALIGN_LEFT);
+		void set(const String &value, int alignment = ALIGN_LEFT);
 		void show();
 		void show(unsigned long time);
-		void print(unsigned long time, int number, int alignment = ALIGN_RIGHT);
-		void print(unsigned long time, long number, int alignment = ALIGN_RIGHT);
-		void print(unsigned long time, double number, int decimalPlaces = 2, int alignment = ALIGN_RIGHT);
-		void print(unsigned long time, char letter, int alignment = ALIGN_CENTER);
-		void print(unsigned long time, const char text[], int alignment = ALIGN_LEFT);
-		void print(unsigned long time, const String &text, int alignment = ALIGN_LEFT);
+		void print(unsigned long time, int value, int alignment = ALIGN_RIGHT);
+		void print(unsigned long time, long value, int alignment = ALIGN_RIGHT);
+		void print(unsigned long time, double value, unsigned int decimalPlaces = 2, int alignment = ALIGN_RIGHT);
+		void print(unsigned long time, char value, int alignment = ALIGN_CENTER);
+		void print(unsigned long time, const char value[], int alignment = ALIGN_LEFT);
+		void print(unsigned long time, const String &value, int alignment = ALIGN_LEFT);
 };
 
 

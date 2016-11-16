@@ -9,10 +9,10 @@ const int BUTTON_PIN = 2;
 
 volatile bool buttonPressed;
 
-ShiftDisplay disp(LATCH_PIN, CLOCK_PIN, DATA_PIN, DISPLAY_TYPE, DISPLAY_SIZE);
+ShiftDisplay led(LATCH_PIN, CLOCK_PIN, DATA_PIN, DISPLAY_TYPE, DISPLAY_SIZE);
 
 void debounce() {
-	disp.show(100); // execution will delay for 100ms
+	led.show(100); // execution will delay for 100ms
 }
 
 void buttonPressInterrupt() {
@@ -35,18 +35,18 @@ void loop() {
 			debounce();
 			buttonPressed = false;
 			while (!buttonPressed)
-				disp.show(); // show previous value (that was on display when button was pressed)
+				led.show(); // show previous value (that was on display when button was pressed)
 
 			// unpause
 			debounce();
 			buttonPressed = false;
 		}
-		disp.print(97, n, 1); // 97 instead of 100 for computing compensation, float with one decimal place
+		led.print(97, n, 1); // 97 instead of 100 for computing compensation, float with one decimal place
 	}
 
-	disp.set("end");
+	led.set("end");
 	while (!buttonPressed)
-		disp.show();
+		led.show();
 	debounce();
 	buttonPressed = false;
 }

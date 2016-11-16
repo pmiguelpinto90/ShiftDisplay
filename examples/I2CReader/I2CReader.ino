@@ -7,7 +7,7 @@ const int DATA_PIN = 5;
 const int DISPLAY_TYPE = COMMON_CATHODE; // COMMON_CATHODE or COMMON_ANODE
 const int DISPLAY_SIZE = 6; // number of digits on display
 
-ShiftDisplay disp(LATCH_PIN, CLOCK_PIN, DATA_PIN, DISPLAY_TYPE, DISPLAY_SIZE);
+ShiftDisplay led(LATCH_PIN, CLOCK_PIN, DATA_PIN, DISPLAY_TYPE, DISPLAY_SIZE);
 
 void receiveEvent(int numBytes) {
 	char text[5]; // string length is 4 plus \0
@@ -15,7 +15,7 @@ void receiveEvent(int numBytes) {
 		text[i] = Wire.read();
 	text[4] = '\0';
 	int alignment = Wire.read(); // last byte from received data is alignment
-	disp.set(text, alignment);
+	led.set(text, alignment);
 }
 
 void setup() {
@@ -24,5 +24,5 @@ void setup() {
 }
 
 void loop() {
-	disp.show();
+	led.show();
 }

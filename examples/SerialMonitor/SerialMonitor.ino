@@ -6,7 +6,7 @@ const int DATA_PIN = 5;
 const int DISPLAY_TYPE = COMMON_ANODE; // COMMON_CATHODE or COMMON_ANODE
 const int DISPLAY_SIZE = 8; // number of digits on display
 
-ShiftDisplay disp(LATCH_PIN, CLOCK_PIN, DATA_PIN, DISPLAY_TYPE, DISPLAY_SIZE);
+ShiftDisplay led(LATCH_PIN, CLOCK_PIN, DATA_PIN, DISPLAY_TYPE, DISPLAY_SIZE);
 
 void readSerial() {
 	char input[Serial.available() + 1];
@@ -19,7 +19,7 @@ void readSerial() {
 			input[i++] = c;
 	}
 	input[i] = '\0';
-	disp.set(input);
+	led.set(input);
 }
 
 void setup() {
@@ -29,5 +29,5 @@ void setup() {
 void loop() {
 	if (Serial.available() > 0)
 		readSerial();
-	disp.show();
+	led.show();
 }

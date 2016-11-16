@@ -6,7 +6,7 @@ const int DATA_PIN = 5;
 const int DISPLAY_TYPE = COMMON_ANODE; // COMMON_CATHODE or COMMON_ANODE
 const int DISPLAY_SIZE = 8; // number of digits on display
 
-ShiftDisplay disp(LATCH_PIN, CLOCK_PIN, DATA_PIN, DISPLAY_TYPE, DISPLAY_SIZE);
+ShiftDisplay led(LATCH_PIN, CLOCK_PIN, DATA_PIN, DISPLAY_TYPE, DISPLAY_SIZE);
 
 float getTemperature() {
 	delay(1000);
@@ -27,11 +27,11 @@ void loop() {
 	condition = "        " + condition;
 
 	// print temperature with one decimal number, aligned to center of display, for 4 seconds
-	disp.print(4000, temp, 1, ALIGN_CENTER);
+	led.print(4000, temp, 1, ALIGN_CENTER);
 
 	// print string with marquee effect
 	while (condition.length() > 0) {
-		disp.print(500, condition, ALIGN_LEFT);
+		led.print(500, condition, ALIGN_LEFT);
 		condition.remove(0,1);
 	}
 }

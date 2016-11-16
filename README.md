@@ -7,7 +7,7 @@ Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 
 - Compatible with common cathode and common anode
 - Only 3 pins used on Arduino
 
-![breadboard](https://raw.githubusercontent.com/MiguelPynto/ShiftDisplay/master/extra/photo.jpg)
+![breadboard](https://raw.githubusercontent.com/MiguelPynto/ShiftDisplay/master/extra/extra.jpg)
 
 ________________________________________________________________________________
 ## Hardware
@@ -27,14 +27,11 @@ ________________________________________________________________________________
 ________________________________________________________________________________
 ## Wiring
 
-1. Connect Arduino power pins to shift registers power pins:
-![voltage](https://raw.githubusercontent.com/MiguelPynto/ShiftDisplay/master/extra/arduino1_to_shift.png)
+1. Connect Arduino to shift registers:
+![input](https://raw.githubusercontent.com/MiguelPynto/ShiftDisplay/master/extra/input.png)
 
-2. Connect Arduino digital pins to shift registers latch, clock and data pins:
-![digitaloutput](https://raw.githubusercontent.com/MiguelPynto/ShiftDisplay/master/extra/arduino2_to_shift.png)
-
-3. Connect shift registers output pins to display(s) pins:
-![leds](https://raw.githubusercontent.com/MiguelPynto/ShiftDisplay/master/extra/shift_to_display.png)
+2. Connect shift registers to display(s):
+![output](https://raw.githubusercontent.com/MiguelPynto/ShiftDisplay/master/extra/output.png)
 
 ________________________________________________________________________________
 ## Reference
@@ -44,13 +41,13 @@ ________________________________________________________________________________
 * __ShiftDisplay()__
   * ShiftDisplay led(latchPin, clockPin, dataPin, displayType, displayLength)
 
-  Creates ShiftDisplay object, initialize the library with the interface pins, and sets up with the display properties.
+  Creates ShiftDisplay object, initializes the library with the interface pins, and sets up with the display properties.
 
   `led`: is a variable of type ShiftDisplay.
 
   `latchPin`, `clockPin`, `dataPin`: are the number of the Arduino digital pins connected to the shift registers latch, clock and data pins respectively.
 
-  `displayType`: is a constant `COMMON_CATHODE` or `COMMON_ANODE`, depending on your display(s) type.
+  `displayType`: is a constant `COMMON_CATHODE` or `COMMON_ANODE`, depending on the type of your display(s).
 
   `displayLength`: is the quantity of digits on all displays combined.
 
@@ -62,7 +59,7 @@ ________________________________________________________________________________
   * led.set(value, decimalPlaces)
   * led.set(value, decimalPlaces, alignment)
 
-  Save a value to buffer for printing latter.
+  Saves a value to buffer for printing latter.
 
   `led`: is a variable of type ShiftDisplay.
 
@@ -76,18 +73,18 @@ ________________________________________________________________________________
   if the value is a float or double number, decimalPlaces has to be defined before alignment.
 
   `decimalPlaces`: is the number of digits following the decimal point;
-  optional and only avaiable if the value is a float or double number;
+  optional and only available if the value is a float or double number;
   if not defined, the default is 2.
 
 * __show()__
   * led.show()
   * led.show(time)
 
-  Show buffer value on the display.
+  Shows buffer value on the display.
 
   `led`: is a variable of type ShiftDisplay.
 
-  `time`: is the time in milliseconds for the value to be visible on the display;
+  `time`: is the time in milliseconds for the value to be shown on the display;
   optional; if not defined, the value is shown for a single iteration of each character.
 
 * __print()__
@@ -96,11 +93,11 @@ ________________________________________________________________________________
   * led.print(time, value, decimalPlaces)
   * led.print(time, value, decimalPlaces, alignment)
 
-  Save a value to buffer and show it on the display.
+  Saves a value to buffer and shows it on the display.
 
   `led`: is a variable of type ShiftDisplay.
 
-  `time`: is the time in milliseconds for the value to be visible on the display;
+  `time`: is the time in milliseconds for the value to be shown on the display;
 
   `value`: is the value to save and show.
   can be of type int, long, float, double, char, char array or String object;
@@ -112,7 +109,7 @@ ________________________________________________________________________________
   if the value is a float or double number, decimalPlaces has to be defined before alignment.
 
   `decimalPlaces`: is the number of digits following the decimal point;
-  optional and only avaiable if the value is a float or double number;
+  optional and only available if the value is a float or double number;
   if not defined, the default is 2.
 
 ### Constants
@@ -156,7 +153,7 @@ ________________________________________________________________________________
 - 2.2.0 (14/07/2015)
   - Feature: minimal print function
   - Feature: exit left/right animation
-- 3.0.0 (14/11/2016)
+- 3.0.0 (16/11/2016)
   - Code rewriting: performance and behavior improvement
   - Change: function signatures
   - Feature: buffer
@@ -168,7 +165,7 @@ ________________________________________________________________________________
 
 - [ ] Feature: custom chars
 - [ ] Feature: change char in position
-- [ ] Feature: pontuation chars
+- [ ] Feature: punctuation chars
 - [ ] Change: function begin with displayLength and displayType
 - [ ] Feature: fade
 - [ ] Bugfix: time minus pov
@@ -176,4 +173,6 @@ ________________________________________________________________________________
 - [ ] Documentation: rand() to random() in example
 
 ________________________________________________________________________________
+![breadboard](https://raw.githubusercontent.com/MiguelPynto/ShiftDisplay/master/extra/foobar.jpg)
+
 https://github.com/MiguelPynto/ShiftDisplay

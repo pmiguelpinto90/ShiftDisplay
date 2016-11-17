@@ -7,17 +7,17 @@ Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 
 - Compatible with common cathode and common anode
 - Only 3 pins used on Arduino
 
-![breadboard](https://raw.githubusercontent.com/MiguelPynto/ShiftDisplay/master/extra/extra.jpg)
+![breadboard](https://raw.githubusercontent.com/MiguelPynto/ShiftDisplay/master/extras/blank.jpg)
 
 ________________________________________________________________________________
-## Hardware
+### Hardware
 
 - 1x (or more) 7-segment LED display
 - 2x 74HC595 shift register
 - 8x (per display) 220 Ohm resistor
 
 ________________________________________________________________________________
-## Install
+### Install
 
 1. Download library from https://github.com/MiguelPynto/ShiftDisplay/archive/master.zip
 2. Extract to `Documents/Arduino/libraries` folder.
@@ -25,18 +25,18 @@ ________________________________________________________________________________
 4. Restart the Arduino IDE.
 
 ________________________________________________________________________________
-## Wiring
+### Wiring
 
 1. Connect Arduino to shift registers:
-![input](https://raw.githubusercontent.com/MiguelPynto/ShiftDisplay/master/extra/input.png)
+![input](https://raw.githubusercontent.com/MiguelPynto/ShiftDisplay/master/extras/input.png)
 
 2. Connect shift registers to display(s):
-![output](https://raw.githubusercontent.com/MiguelPynto/ShiftDisplay/master/extra/output.png)
+![output](https://raw.githubusercontent.com/MiguelPynto/ShiftDisplay/master/extras/output.png)
 
 ________________________________________________________________________________
-## Reference
+### Reference
 
-### Constructors
+#### Constructors
 
 * __ShiftDisplay()__
   * ShiftDisplay led(latchPin, clockPin, dataPin, displayType, displayLength)
@@ -51,7 +51,7 @@ ________________________________________________________________________________
 
   `displayLength`: is the quantity of digits on all displays combined.
 
-### Functions
+#### Functions
 
 * __set()__
   * led.set(value)
@@ -112,7 +112,7 @@ ________________________________________________________________________________
   optional and only available if the value is a float or double number;
   if not defined, the default is 2.
 
-### Constants
+#### Constants
 
 - ALIGN_LEFT
 - ALIGN_RIGHT
@@ -121,7 +121,7 @@ ________________________________________________________________________________
 - COMMON_CATHODE
 
 ________________________________________________________________________________
-## Example
+### Example
 
 ```c
 #include <ShiftDisplay.h>
@@ -140,7 +140,7 @@ void loop() {
 ```
 
 ________________________________________________________________________________
-## Changelog
+### Changelog
 
 - 1.0.0 (26/05/2015)
   - Initial release
@@ -161,7 +161,7 @@ ________________________________________________________________________________
   - Documentation: updated images
 
 ________________________________________________________________________________
-## TODO
+### TODO
 
 - [ ] Feature: custom chars
 - [ ] Feature: change char in position
@@ -173,6 +173,6 @@ ________________________________________________________________________________
 - [ ] Documentation: rand() to random() in example
 
 ________________________________________________________________________________
-![breadboard](https://raw.githubusercontent.com/MiguelPynto/ShiftDisplay/master/extra/foobar.jpg)
+![breadboard](https://raw.githubusercontent.com/MiguelPynto/ShiftDisplay/master/extras/foobar.jpg)
 
 https://github.com/MiguelPynto/ShiftDisplay

@@ -9,14 +9,14 @@ Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 
 
 ![breadboard](https://raw.githubusercontent.com/MiguelPynto/ShiftDisplay/master/extras/blank.jpg)
 
-________________________________________________________________________________
+
 ## Hardware
 
 - 1x (or more) 7-segment LED display
 - 2x 74HC595 shift register
 - 8x (per display) 220 Ohm resistor
 
-________________________________________________________________________________
+
 ## Install
 
 1. Download library from https://github.com/MiguelPynto/ShiftDisplay/archive/master.zip
@@ -24,7 +24,7 @@ ________________________________________________________________________________
 3. Rename extracted folder `ShiftDisplay-master` to `ShiftDisplay`.
 4. Restart the Arduino IDE.
 
-________________________________________________________________________________
+
 ## Wiring
 
 1. Connect Arduino to shift registers:
@@ -33,7 +33,7 @@ ________________________________________________________________________________
 2. Connect shift registers to display(s):
 ![output](https://raw.githubusercontent.com/MiguelPynto/ShiftDisplay/master/extras/output.png)
 
-________________________________________________________________________________
+
 ## Reference
 
 ### Constructors
@@ -120,7 +120,7 @@ ________________________________________________________________________________
 - COMMON_ANODE
 - COMMON_CATHODE
 
-________________________________________________________________________________
+
 ## Example
 
 ```c
@@ -139,7 +139,7 @@ void loop() {
 }
 ```
 
-________________________________________________________________________________
+
 ## Changelog
 
 - 1.0.0 (26/05/2015)
@@ -160,7 +160,7 @@ ________________________________________________________________________________
   - Documentation: new examples
   - Documentation: updated images
 
-________________________________________________________________________________
+
 ## TODO
 
 - [ ] Feature: custom chars
@@ -172,7 +172,7 @@ ________________________________________________________________________________
 - [ ] Bugfix: real number 0.x only shows .x
 - [ ] Documentation: rand() to random() in example
 
-________________________________________________________________________________
+
 ![breadboard](https://raw.githubusercontent.com/MiguelPynto/ShiftDisplay/master/extras/foobar.jpg)
 
 https://github.com/MiguelPynto/ShiftDisplay

@@ -142,23 +142,23 @@ void loop() {
 
 ## Changelog
 
-- 1.0.0 (26/05/2015)
-  - Initial release
-- 2.0.0 (23/06/2015)
-  - Code refactoring
-  - Full and lightweight versions
-  - Feature: left and right alignment
-- 2.1.0 (03/07/2015)
-  - Feature: center alignment
-- 2.2.0 (14/07/2015)
-  - Feature: minimal print function
-  - Feature: exit left/right animation
 - 3.0.0 (17/11/2016)
   - Code rewriting: performance and behavior improvement
   - Change: function signatures
   - Feature: buffer
   - Documentation: new examples
   - Documentation: updated images
+- 2.2.0 (14/07/2015)
+  - Feature: minimal print function
+  - Feature: exit left/right animation
+- 2.1.0 (03/07/2015)
+  - Feature: center alignment
+- 2.0.0 (23/06/2015)
+  - Code refactoring
+  - Full and lightweight versions
+  - Feature: left and right alignment
+- 1.0.0 (26/05/2015)
+  - Initial release
 
 
 ## TODO

@@ -153,7 +153,7 @@ ________________________________________________________________________________
 - 2.2.0 (14/07/2015)
   - Feature: minimal print function
   - Feature: exit left/right animation
-- 3.0.0 (16/11/2016)
+- 3.0.0 (17/11/2016)
   - Code rewriting: performance and behavior improvement
   - Change: function signatures
   - Feature: buffer

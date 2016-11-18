@@ -40,7 +40,7 @@ class ShiftDisplay {
 
 		void set(int value, int alignment = ALIGN_RIGHT);
 		void set(long value, int alignment = ALIGN_RIGHT);
-		void set(double value, unsigned int decimalPlaces = 2, int alignment = ALIGN_RIGHT);
+		void set(double value, int decimalPlaces = 2, int alignment = ALIGN_RIGHT);
 		void set(char value, int alignment = ALIGN_CENTER);
 		void set(const char value[], int alignment = ALIGN_LEFT);
 		void set(const String &value, int alignment = ALIGN_LEFT);
@@ -48,7 +48,7 @@ class ShiftDisplay {
 		void show(unsigned long time);
 		void print(unsigned long time, int value, int alignment = ALIGN_RIGHT);
 		void print(unsigned long time, long value, int alignment = ALIGN_RIGHT);
-		void print(unsigned long time, double value, unsigned int decimalPlaces = 2, int alignment = ALIGN_RIGHT);
+		void print(unsigned long time, double value, int decimalPlaces = 2, int alignment = ALIGN_RIGHT);
 		void print(unsigned long time, char value, int alignment = ALIGN_CENTER);
 		void print(unsigned long time, const char value[], int alignment = ALIGN_LEFT);
 		void print(unsigned long time, const String &value, int alignment = ALIGN_LEFT);

@@ -262,7 +262,8 @@ void ShiftDisplay::show() {
 // Show buffer value for the specified time in milliseconds
 void ShiftDisplay::show(unsigned long time) {
 	unsigned long start = millis();
-	while (millis()-start < time)
+	time -= POV; // for not exceed time in last iteration
+	while (millis()-start <= time)
 		showDisplay();
 	clearDisplay();
 }

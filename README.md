@@ -85,7 +85,8 @@ Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 
   `led`: is a variable of type ShiftDisplay.
 
   `time`: is the time in milliseconds for the value to be shown on the display;
-  optional; if not defined, the value is shown for a single iteration of each character.
+  optional; if not defined, the value is shown for a single iteration;
+  time will not be exceeded, the function returns just before it hits the mark.
 
 * __print()__
   * led.print(time, value)
@@ -98,6 +99,7 @@ Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 
   `led`: is a variable of type ShiftDisplay.
 
   `time`: is the time in milliseconds for the value to be shown on the display;
+  time will not be exceeded, the function returns just before it hits the mark.
 
   `value`: is the value to save and show.
   can be of type int, long, float, double, char, char array or String object;
@@ -142,6 +144,9 @@ void loop() {
 
 ## Changelog
 
+- x.x.x (x/x/x)
+  - Bugfix: float/double functions not working
+  - Bugfix: show/print functions exceeding time
 - 3.0.0 (17/11/2016)
   - Code rewriting: performance and behavior improvement
   - Change: function signatures
@@ -168,7 +173,7 @@ void loop() {
 - [ ] Feature: punctuation chars
 - [ ] Change: function begin with displayLength and displayType
 - [ ] Feature: fade
-- [ ] Bugfix: time minus pov
+- [x] Bugfix: time minus pov
 - [ ] Bugfix: real number 0.x only shows .x
 - [ ] Documentation: rand() to random() in example
 

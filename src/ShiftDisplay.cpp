@@ -260,31 +260,30 @@ void ShiftDisplay::show() {
 
 
 // Show buffer value for the specified time in milliseconds
-void ShiftDisplay::show(unsigned long time) {
-	unsigned long start = millis();
-	time -= POV; // for not exceed time in last iteration
-	while (millis()-start <= time)
+void ShiftDisplay::show(long time) {
+	long end = millis() + time - POV; // start + total duration - last iteration (so it doesnt exceed time requested)
+	while ((long)millis() <= end)
 		showDisplay();
 	clearDisplay();
 }
 
 
 // Save to buffer and show an int value for the specified time in milliseconds, right aligned by default
-void ShiftDisplay::print(unsigned long time, int value, int alignment) {
+void ShiftDisplay::print(long time, int value, int alignment) {
 	set(value, alignment);
 	show(time);
 }
 
 
 // Save to buffer and show a long value for the specified time in milliseconds, right aligned by default
-void ShiftDisplay::print(unsigned long time, long value, int alignment) {
+void ShiftDisplay::print(long time, long value, int alignment) {
 	set(value, alignment);
 	show(time);
 }
 
 
 // Save to buffer and show a double value for the specified time in milliseconds, with 2 decimal places and right aligned by default
-void ShiftDisplay::print(unsigned long time, double value, int decimalPlaces, int alignment) {
+void ShiftDisplay::print(long time, double value, int decimalPlaces, int alignment) {
 	set(value, decimalPlaces, alignment);
 	show(time);
 }
@@ -292,7 +291,7 @@ void ShiftDisplay::print(unsigned long time, double value, int decimalPlaces, in
 
 // Save to buffer and show a char value for the specified time in milliseconds, center aligned by default
 // Valid characters are A-Z, a-z, 0-9, -, space
-void ShiftDisplay::print(unsigned long time, char value, int alignment) {
+void ShiftDisplay::print(long time, char value, int alignment) {
 	set(value, alignment);
 	show(time);
 }
@@ -300,7 +299,7 @@ void ShiftDisplay::print(unsigned long time, char value, int alignment) {
 
 // Save to buffer and show a char array value for the specified time in milliseconds, center aligned by default
 // Valid characters are A-Z, a-z, 0-9, -, space
-void ShiftDisplay::print(unsigned long time, const char value[], int alignment) {
+void ShiftDisplay::print(long time, const char value[], int alignment) {
 	set(value, alignment);
 	show(time);
 }
@@ -308,7 +307,7 @@ void ShiftDisplay::print(unsigned long time, const char value[], int alignment) 
 
 // Save to buffer and show a string object value for the specified time in milliseconds, left aligned by default
 // Valid characters are A-Z, a-z, 0-9, -, space
-void ShiftDisplay::print(unsigned long time, const String &value, int alignment) {
+void ShiftDisplay::print(long time, const String &value, int alignment) {
 	set(value, alignment);
 	show(time);
 }

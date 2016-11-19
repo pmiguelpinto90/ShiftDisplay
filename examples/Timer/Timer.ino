@@ -41,7 +41,7 @@ void loop() {
 			debounce();
 			buttonPressed = false;
 		}
-		led.print(97, n, 1); // 97 instead of 100 for computing compensation, float with one decimal place
+		led.print(100, n, 1); // float with one decimal place
 	}
 
 	led.set("end");

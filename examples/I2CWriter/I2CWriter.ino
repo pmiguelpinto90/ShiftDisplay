@@ -2,12 +2,12 @@
 #include <Wire.h>
 
 char getSomething() {
-	char c = 'A' + (rand() % 26); // random letter between A and Z
+	char c = 'A' + random(26); // random letter between A and Z
 	return c;
 }
 
 int getSomethingMore() {
-	int n = 100 + (rand() % 900); // random number between 100 and 999
+	int n = random(100, 1000); // random number between 100 and 999
 	delay(n); // simulate processing
 	return n;
 }

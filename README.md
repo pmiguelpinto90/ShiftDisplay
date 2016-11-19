@@ -144,7 +144,7 @@ void loop() {
 
 ## Changelog
 
-- x.x.x (x/x/x)
+- 3.0.1 (19/11/2016)
   - Bugfix: float/double functions not working
   - Bugfix: show/print functions exceeding time
 - 3.0.0 (17/11/2016)

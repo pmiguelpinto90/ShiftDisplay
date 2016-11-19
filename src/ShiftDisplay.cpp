@@ -21,8 +21,10 @@ ShiftDisplay::ShiftDisplay(int latchPin, int clockPin, int dataPin, int displayT
 	_clockPin = clockPin;
 	_dataPin = dataPin;
 	_displayType = displayType;
-	_displaySize = min(displaySize, 8);
-	_povDelay = POV / _displaySize;
+	_displaySize = min(displaySize, 8); // displaySize max value is 8
+	_povDelay = POV / displaySize; // delay per display digit
+	byte initial = displayType ? BLANK : ~BLANK; // initial character for every display digit
+	memset(_buffer, initial, 8); // fill buffer with initial character
 }
 
 

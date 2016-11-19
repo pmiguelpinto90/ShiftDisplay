@@ -44,8 +44,10 @@ int ShiftDisplay::countCharacters(long number) {
 // If the number is negative, the minus also counts as a character
 // If the number is negative zero (eg -0.42), the minus and zero count as two characters
 int ShiftDisplay::countCharacters(double number) {
-	if (number > -1 && number < 0)
+	if (number > -1 && number < 0) // -0.x
 		return 2;
+	if (number > 0 && number < 1) // 0.x
+		return 1;
 	return countCharacters((long) number);
 }
 
@@ -59,19 +61,24 @@ int ShiftDisplay::countCharacters(const char text[]) {
 // Convert a number to an array of characters
 void ShiftDisplay::getCharacters(long input, char output[], int size) {
 	
-	// if negative, insert a minus character
+	// invert negative
+	bool negative = false;
 	if (input < 0) {
+		negative = true;
 		input = -input;
-		output[0] = '-';
 	}
 
-	int i = size - 1;
-	do { // still enter if zero
+	// iterate every array position, even if all zeros
+	for (int i = size-1; i >= 0; i--) {
 		int digit = input % 10;
 		char c = digit + '0';
-		output[i--] = c;
+		output[i] = c;
 		input /= 10;
-	} while (input != 0);
+	}
+
+	// insert a minus character if negative
+	if (negative)
+		output[0] = '-';
 }
 
 
@@ -230,7 +237,7 @@ void ShiftDisplay::set(double value, int decimalPlaces, int alignment) {
  	// calculate value with specified decimal places as integer (eg 1.236, 2 = 124)
 	long newValue = round(value * pow(10, decimalPlaces));
 
-	int size = countCharacters(newValue);
+	int size = countCharacters(value) + decimalPlaces;
 	char originalCharacters[size];
 	getCharacters(newValue, originalCharacters, size);
 	char formattedCharacters[_displaySize];

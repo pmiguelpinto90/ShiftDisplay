@@ -6,9 +6,12 @@
 #include "ShiftDisplayConstants.h"
 
 
-// Create ShiftDisplay object
+// CONSTRUCTORS
+
+
+// Initializes the library with the pin numbers and display information
 // latchPin, clockPin and dataPin are the shift register pins connected to the Arduino digital outputs
-// displayType is common cathode or common anode constants
+// displayType is COMMON_CATHODE or COMMON_ANODE constant
 // displaySize is the quantity of digits of all displays together, maximum of 8
 ShiftDisplay::ShiftDisplay(int latchPin, int clockPin, int dataPin, int displayType, int displaySize) {
 	pinMode(latchPin, OUTPUT);
@@ -184,6 +187,17 @@ void ShiftDisplay::showDisplay() {
 
 // PUBLIC FUNCTIONS
 
+/*
+// Set up the library with display information
+// displayType is COMMON_CATHODE or COMMON_ANODE constant
+// displaySize is the quantity of digits of all displays together, maximum of 8
+void ShiftDisplay::begin(int displayType, int displaySize) {
+	_displayType = displayType;
+	_displaySize = min(displaySize, 8);
+	_povDelay = POV / _displaySize;
+	_buffer[_displaySize];
+}
+*/
 
 // Save to buffer an int value, right aligned by default
 void ShiftDisplay::set(int value, int alignment) {

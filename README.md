@@ -175,6 +175,7 @@ void loop() {
 - [ ] Feature: fade
 - [ ] Bugfix: real number 0.x only shows .x
 - [ ] Documentation: rand() to random() in example
+- [ ] Documentation: explain examples and example in readme
 
 
 --------------------------------------------------------------------------------

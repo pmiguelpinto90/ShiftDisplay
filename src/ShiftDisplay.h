@@ -22,8 +22,9 @@ class ShiftDisplay {
 		int _displayType;
 		int _displaySize;
 		byte _buffer[8]; // value set by user, encoded to print
-		int _povDelay;
+		int _povDelay; // delay showing each digit in display for pov effect
 
+		void construct(int latchPin, int clockPin, int dataPin, int displayType, int displaySize);
 		int countCharacters(long number);
 		int countCharacters(double number);
 		int countCharacters(const char text[]);
@@ -36,6 +37,7 @@ class ShiftDisplay {
 		void showDisplay();
 
 	public:
+		ShiftDisplay(int displayType, int displaySize);
 		ShiftDisplay(int latchPin, int clockPin, int dataPin, int displayType, int displaySize);
 
 		//void begin(int displayType, int displaySize);

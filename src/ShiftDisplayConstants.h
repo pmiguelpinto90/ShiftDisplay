@@ -4,6 +4,11 @@
 #ifndef constants_h
 #define constants_h
 
+// defaults
+const int DEFAULT_LATCH_PIN = 6;
+const int DEFAULT_CLOCK_PIN = 7;
+const int DEFAULT_DATA_PIN = 5;
+
 
 // time (in milliseconds) to complete a loop, achieving persistence of vision
 const int POV = 10;

@@ -9,11 +9,28 @@
 // CONSTRUCTORS
 
 
+// Initializes the library with the display information and default pin numbers
+// displayType is COMMON_CATHODE or COMMON_ANODE constant
+// displaySize is the quantity of digits of all displays together, maximum of 8
+ShiftDisplay::ShiftDisplay(int displayType, int displaySize) {
+	construct(DEFAULT_LATCH_PIN, DEFAULT_CLOCK_PIN, DEFAULT_DATA_PIN, displayType, displaySize);
+}
+
+
 // Initializes the library with the pin numbers and display information
 // latchPin, clockPin and dataPin are the shift register pins connected to the Arduino digital outputs
 // displayType is COMMON_CATHODE or COMMON_ANODE constant
 // displaySize is the quantity of digits of all displays together, maximum of 8
 ShiftDisplay::ShiftDisplay(int latchPin, int clockPin, int dataPin, int displayType, int displaySize) {
+	construct(latchPin, clockPin, dataPin, displayType, displaySize);
+}
+
+
+// PRIVATE FUNCTIONS
+
+
+// Function to be called by constructors
+void ShiftDisplay::construct(int latchPin, int clockPin, int dataPin, int displayType, int displaySize) {
 	pinMode(latchPin, OUTPUT);
 	pinMode(clockPin, OUTPUT);
 	pinMode(dataPin, OUTPUT);
@@ -26,10 +43,6 @@ ShiftDisplay::ShiftDisplay(int latchPin, int clockPin, int dataPin, int displayT
 	byte initial = displayType ? BLANK : ~BLANK; // initial character for every display digit
 	memset(_buffer, initial, 8); // fill buffer with initial character
 }
-
-
-// PRIVATE FUNCTIONS
-
 
 // Count the characters in an integer number
 // If the number is negative, the minus also counts as a character

@@ -39,13 +39,15 @@ Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 
 ### Constructors
 
 * __ShiftDisplay()__
+  * ShiftDisplay led(displayType, displayLength)
   * ShiftDisplay led(latchPin, clockPin, dataPin, displayType, displayLength)
 
   Creates ShiftDisplay object, initializes the library with the interface pins, and sets up with the display properties.
 
   `led`: is a variable of type ShiftDisplay.
 
-  `latchPin`, `clockPin`, `dataPin`: are the number of the Arduino digital pins connected to the shift registers latch, clock and data pins respectively.
+  `latchPin`, `clockPin`, `dataPin`: are the number of the Arduino digital pins connected to the shift registers latch, clock and data pins.
+  optional; if not defined, the default pins are 6, 7 and 5 respectively.
 
   `displayType`: is a constant `COMMON_CATHODE` or `COMMON_ANODE`, depending on the type of your display(s).
 

@@ -71,7 +71,7 @@ Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 
 
   `alignment`: is the alignment of the value on the display;
   optional, constant `ALIGN_LEFT`, `ALIGN_RIGHT` or `ALIGN_CENTER`;
-  if not defined, the default is ALIGN_RIGHT for numbers, ALIGN_LEFT for strings, and ALIGN_CENTER for characters;
+  if not defined, the default is ALIGN_RIGHT for numbers, ALIGN_LEFT for text;
   if the value is a float or double number, decimalPlaces has to be defined before alignment.
 
   `decimalPlaces`: is the number of digits following the decimal point;
@@ -109,7 +109,7 @@ Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 
 
   `alignment`: is the alignment of the value on the display;
   optional, constant `ALIGN_LEFT`, `ALIGN_RIGHT` or `ALIGN_CENTER`;
-  if not defined, the default is ALIGN_RIGHT for numbers, ALIGN_LEFT for strings, and ALIGN_CENTER for characters;
+  if not defined, the default is ALIGN_RIGHT for numbers, ALIGN_LEFT for text;
   if the value is a float or double number, decimalPlaces has to be defined before alignment.
 
   `decimalPlaces`: is the number of digits following the decimal point;

@@ -3,7 +3,7 @@
 
 #include "Arduino.h"
 #include "ShiftDisplay.h"
-#include "ShiftDisplayConstants.h"
+#include "CharacterEncoding.h"
 
 
 // CONSTRUCTORS
@@ -261,7 +261,7 @@ void ShiftDisplay::set(double value, int decimalPlaces, int alignment) {
 }
 
 
-// Save to buffer a char value, center aligned by default
+// Save to buffer a char value, left aligned by default
 // Valid characters are A-Z, a-z, 0-9, -, space
 void ShiftDisplay::set(char value, int alignment) {
 	char originalCharacters[] = {value};
@@ -325,7 +325,7 @@ void ShiftDisplay::print(long time, double value, int decimalPlaces, int alignme
 }
 
 
-// Save to buffer and show a char value for the specified time in milliseconds, center aligned by default
+// Save to buffer and show a char value for the specified time in milliseconds, left aligned by default
 // Valid characters are A-Z, a-z, 0-9, -, space
 void ShiftDisplay::print(long time, char value, int alignment) {
 	set(value, alignment);
@@ -333,7 +333,7 @@ void ShiftDisplay::print(long time, char value, int alignment) {
 }
 
 
-// Save to buffer and show a char array value for the specified time in milliseconds, center aligned by default
+// Save to buffer and show a char array value for the specified time in milliseconds, left aligned by default
 // Valid characters are A-Z, a-z, 0-9, -, space
 void ShiftDisplay::print(long time, const char value[], int alignment) {
 	set(value, alignment);

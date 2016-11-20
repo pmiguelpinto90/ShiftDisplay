@@ -6,11 +6,22 @@
 #include "Arduino.h"
 
 
-#define ALIGN_LEFT 0
-#define ALIGN_RIGHT 1
-#define ALIGN_CENTER 2
-#define COMMON_ANODE 0
-#define COMMON_CATHODE 1
+const int ALIGN_LEFT = 0;
+const int ALIGN_RIGHT = 1;
+const int ALIGN_CENTER = 2;
+
+const int COMMON_ANODE = 0;
+const int COMMON_CATHODE = 1;
+
+const int DEFAULT_LATCH_PIN = 6;
+const int DEFAULT_CLOCK_PIN = 7;
+const int DEFAULT_DATA_PIN = 5;
+
+const int DEFAULT_DECIMAL_PLACES = 2;
+const int DEFAULT_ALIGN_TEXT = ALIGN_RIGHT;
+const int DEFAULT_ALIGN_NUMBER = ALIGN_LEFT;
+
+const int POV = 10; // time (in milliseconds) to complete a loop, achieving persistence of vision
 
 
 class ShiftDisplay {
@@ -41,20 +52,20 @@ class ShiftDisplay {
 		ShiftDisplay(int latchPin, int clockPin, int dataPin, int displayType, int displaySize);
 
 		//void begin(int displayType, int displaySize);
-		void set(int value, int alignment = ALIGN_RIGHT);
-		void set(long value, int alignment = ALIGN_RIGHT);
-		void set(double value, int decimalPlaces = 2, int alignment = ALIGN_RIGHT);
-		void set(char value, int alignment = ALIGN_CENTER);
-		void set(const char value[], int alignment = ALIGN_LEFT);
-		void set(const String &value, int alignment = ALIGN_LEFT);
+		void set(int value, int alignment = DEFAULT_ALIGN_NUMBER);
+		void set(long value, int alignment = DEFAULT_ALIGN_NUMBER);
+		void set(double value, int decimalPlaces = DEFAULT_DECIMAL_PLACES, int alignment = DEFAULT_ALIGN_NUMBER);
+		void set(char value, int alignment = DEFAULT_ALIGN_TEXT);
+		void set(const char value[], int alignment = DEFAULT_ALIGN_TEXT);
+		void set(const String &value, int alignment = DEFAULT_ALIGN_TEXT);
 		void show();
 		void show(long time);
-		void print(long time, int value, int alignment = ALIGN_RIGHT);
-		void print(long time, long value, int alignment = ALIGN_RIGHT);
-		void print(long time, double value, int decimalPlaces = 2, int alignment = ALIGN_RIGHT);
-		void print(long time, char value, int alignment = ALIGN_CENTER);
-		void print(long time, const char value[], int alignment = ALIGN_LEFT);
-		void print(long time, const String &value, int alignment = ALIGN_LEFT);
+		void print(long time, int value, int alignment = DEFAULT_ALIGN_NUMBER);
+		void print(long time, long value, int alignment = DEFAULT_ALIGN_NUMBER);
+		void print(long time, double value, int decimalPlaces = DEFAULT_DECIMAL_PLACES, int alignment = DEFAULT_ALIGN_NUMBER);
+		void print(long time, char value, int alignment = DEFAULT_ALIGN_TEXT);
+		void print(long time, const char value[], int alignment = DEFAULT_ALIGN_TEXT);
+		void print(long time, const String &value, int alignment = DEFAULT_ALIGN_TEXT);
 };
 
 

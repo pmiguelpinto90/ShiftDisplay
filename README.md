@@ -149,6 +149,7 @@ void loop() {
 - x.x.x (x/x/2016)
   - Bugfix: float/double functions problems with 0.x and -0.x
   - Bugfix: common anode display initiates unclear
+  - Feature: new constructor with default pins
 - 3.0.1 (19/11/2016)
   - Bugfix: float/double functions not working
   - Bugfix: show/print functions exceeding time
@@ -175,8 +176,6 @@ void loop() {
 
 - [ ] Feature: punctuation chars
 - [ ] Change: function begin with displayLength and displayType
-- [x] Bugfix: real number 0.x only shows .x
-- [x] Documentation: rand() to random() in example
 - [ ] Documentation: explain examples and example in readme
 
 

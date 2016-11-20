@@ -67,7 +67,7 @@ Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 
 
   `value`: is the value to save;
   can be of type int, long, float, double, char, char array or String object;
-  for text, valid characters are A-Z, a-z, 0-9, -, space.
+  for text, valid characters are 0-9 a-z A-Z - _ . ! ? " ' space.
 
   `alignment`: is the alignment of the value on the display;
   optional, constant `ALIGN_LEFT`, `ALIGN_RIGHT` or `ALIGN_CENTER`;
@@ -105,7 +105,7 @@ Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 
 
   `value`: is the value to save and show.
   can be of type int, long, float, double, char, char array or String object;
-  for text, valid characters are A-Z, a-z, 0-9, -, space.
+  for text, valid characters are 0-9 a-z A-Z - _ . ! ? " ' space.
 
   `alignment`: is the alignment of the value on the display;
   optional, constant `ALIGN_LEFT`, `ALIGN_RIGHT` or `ALIGN_CENTER`;
@@ -150,6 +150,7 @@ void loop() {
   - Bugfix: float/double functions problems with 0.x and -0.x
   - Bugfix: common anode display initiates unclear
   - Feature: new constructor with default pins
+  - Feature: punctuation characters
 - 3.0.1 (19/11/2016)
   - Bugfix: float/double functions not working
   - Bugfix: show/print functions exceeding time
@@ -174,7 +175,6 @@ void loop() {
 
 ## TODO
 
-- [ ] Feature: punctuation chars
 - [ ] Change: function begin with displayLength and displayType
 - [ ] Documentation: explain examples and example in readme
 

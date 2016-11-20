@@ -158,18 +158,27 @@ void ShiftDisplay::encodeCharacters(const char input[], int pointIndex) {
 		char c = input[i];
 		
 		byte code;
-		if (c >= 'A' && c <= 'Z') {
+		if (c >= 'A' && c <= 'Z')
 			code = LETTERS[c - 'A'];
-		} else if (c >= 'a' && c <= 'z') {
+		else if (c >= 'a' && c <= 'z')
 			code = LETTERS[c - 'a'];
-		} else if (c >= '0' && c <= '9') {
+		else if (c >= '0' && c <= '9')
 			code = NUMBERS[c - '0'];
-		} else if (c == '-') {
+		else if (c == '-')
 			code = MINUS;
-		} else { // space or invalid
+		else if (c == '!')
+			code = EXCLAMATION;
+		else if (c == '?')
+			code = INTERROGATION;
+		else if (c == '.')
+			code = POINT;
+		else if (c == '_')
+			code = UNDERSCORE;
+		else if (c == '"' || c == '\'')
+			code = QUOTATION;
+		else // space or invalid
 			code = BLANK;
-		}
-
+		
 		_buffer[i] = _displayType ? code : ~code;
 	}
 

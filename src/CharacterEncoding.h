@@ -5,7 +5,7 @@
 #define CharacterEncoding_h
 
 
-// characters encoding for common cathode with LSBFIRST
+// encoding for characters segments (common cathode with LSBFIRST)
 const byte NUMBERS[] = {
 	//ABCDEFG
 	 B11111100, // 0
@@ -59,8 +59,8 @@ const byte QUOTATION = B01000100;
 const byte BLANK = B00000000;
 
 
-// digit positions encoding for common anode with LSBFIRST
-const byte DIGITS[] = {
+// encoding for each index in display (common anode with LSBFIRST)
+const byte INDEXES[] = {
 	B10000000,
 	B01000000,
 	B00100000,

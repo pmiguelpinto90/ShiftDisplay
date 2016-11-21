@@ -39,8 +39,8 @@ Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 
 ### Constructors
 
 * __ShiftDisplay()__
-  * ShiftDisplay led(displayType, displayLength)
-  * ShiftDisplay led(latchPin, clockPin, dataPin, displayType, displayLength)
+  * ShiftDisplay led(displayType, displaySize)
+  * ShiftDisplay led(latchPin, clockPin, dataPin, displayType, displaySize)
 
   Creates ShiftDisplay object, initializes the library with the interface pins, and sets up with the display properties.
 
@@ -51,7 +51,7 @@ Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 
 
   `displayType`: is a constant `COMMON_CATHODE` or `COMMON_ANODE`, depending on the type of your display(s).
 
-  `displayLength`: is the quantity of digits on all displays combined.
+  `displaySize`: is the quantity of digits on all displays combined.
 
 ### Functions
 
@@ -151,6 +151,7 @@ void loop() {
   - Bugfix: common anode display initiates unclear
   - Feature: new constructor with default pins
   - Feature: punctuation characters
+  - Change: small improvements
 - 3.0.1 (19/11/2016)
   - Bugfix: float/double functions not working
   - Bugfix: show/print functions exceeding time
@@ -175,7 +176,7 @@ void loop() {
 
 ## TODO
 
-- [ ] Change: function begin with displayLength and displayType
+- [ ] Change: function begin with displaySize and displayType
 - [ ] Documentation: explain examples and example in readme
 
 

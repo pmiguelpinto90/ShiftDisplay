@@ -66,13 +66,12 @@ Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 
   `led`: is a variable of type ShiftDisplay.
 
   `value`: is the value to save;
-  can be of type int, long, float, double, char, char array or String object;
+  can be a number (int, long, float, double) or text (char, char array, String object);
   for text, valid characters are 0-9 a-z A-Z - _ . ! ? " ' space.
 
   `alignment`: is the alignment of the value on the display;
   optional, constant `ALIGN_LEFT`, `ALIGN_RIGHT` or `ALIGN_CENTER`;
-  if not defined, the default is ALIGN_RIGHT for numbers and ALIGN_LEFT for text;
-  if the value is a float or double number, decimalPlaces has to be defined before alignment.
+  if not defined, the default is ALIGN_RIGHT for numbers and ALIGN_LEFT for text.
 
   `decimalPlaces`: is the number of digits following the decimal point;
   optional and only available if the value is a float or double number;
@@ -103,14 +102,13 @@ Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 
   `time`: is the time in milliseconds for the value to be shown on the display;
   exact time running will be an aproximation.
 
-  `value`: is the value to save and show.
-  can be of type int, long, float, double, char, char array or String object;
+  `value`: is the value to save and show;
+  can be a number (int, long, float, double) or text (char, char array, String object);
   for text, valid characters are 0-9 a-z A-Z - _ . ! ? " ' space.
 
   `alignment`: is the alignment of the value on the display;
   optional, constant `ALIGN_LEFT`, `ALIGN_RIGHT` or `ALIGN_CENTER`;
-  if not defined, the default is ALIGN_RIGHT for numbers and ALIGN_LEFT for text;
-  if the value is a float or double number, decimalPlaces has to be defined before alignment.
+  if not defined, the default is ALIGN_RIGHT for numbers and ALIGN_LEFT for text.
 
   `decimalPlaces`: is the number of digits following the decimal point;
   optional and only available if the value is a float or double number;
@@ -135,7 +133,7 @@ ShiftDisplay led(6, 7, 5, COMMON_CATHODE, 3);
 void setup() {
 	for (int i = 3; i > 0; i--)
 		led.print(800, i);
-	led.set("GO");
+	led.set("GO!");
 }
 
 void loop() {
@@ -146,6 +144,9 @@ void loop() {
 
 ## Changelog
 
+- 3.2.0 (22/11/2016)
+  - Bugfix: default alignments
+  - Change: float/double function alignment without decimalPlaces obligation
 - 3.1.0 (21/11/2016)
   - Bugfix: float/double functions problems with 0.x and -0.x
   - Bugfix: common anode display initiates unclear
@@ -176,6 +177,7 @@ void loop() {
 
 ## TODO
 
+- [ ] Feature: displays with more than 8 digits
 - [ ] Documentation: explain examples
 
 

@@ -1,4 +1,4 @@
-// github.com/MiguelPynto/ShiftDisplay
+// https://github.com/MiguelPynto/ShiftDisplay
 
 
 #ifndef CharacterEncoding_h

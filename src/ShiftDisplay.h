@@ -1,4 +1,4 @@
-// github.com/MiguelPynto/ShiftDisplay
+// https://github.com/MiguelPynto/ShiftDisplay
 
 
 #ifndef ShiftDisplay_h
@@ -6,9 +6,9 @@
 #include "Arduino.h"
 
 
-const int ALIGN_LEFT = 0;
-const int ALIGN_RIGHT = 1;
-const int ALIGN_CENTER = 2;
+const char ALIGN_LEFT = 'L';
+const char ALIGN_RIGHT = 'R';
+const char ALIGN_CENTER = 'C';
 
 const int COMMON_ANODE = 0;
 const int COMMON_CATHODE = 1;
@@ -18,8 +18,8 @@ const int DEFAULT_CLOCK_PIN = 7;
 const int DEFAULT_DATA_PIN = 5;
 
 const int DEFAULT_DECIMAL_PLACES = 2;
-const int DEFAULT_ALIGN_TEXT = ALIGN_RIGHT;
-const int DEFAULT_ALIGN_NUMBER = ALIGN_LEFT;
+const char DEFAULT_ALIGN_TEXT = ALIGN_LEFT;
+const char DEFAULT_ALIGN_NUMBER = ALIGN_RIGHT;
 
 const int POV_TOTAL_TIME = 10; // time (in milliseconds) to complete one display iteration, achieving persistence of vision
 
@@ -39,7 +39,7 @@ class ShiftDisplay {
 		int countCharacters(long number);
 		int countCharacters(double number);
 		void getCharacters(long input, char output[], int size);
-		int formatCharacters(const char input[], int size, char output[], int alignment, int decimalPlaces);
+		int formatCharacters(const char input[], int size, char output[], char alignment, int decimalPlaces);
 		void encodeCharacters(const char input[], int pointPosition);
 		void clearDisplay();
 		void showDisplay();
@@ -49,20 +49,22 @@ class ShiftDisplay {
 		ShiftDisplay(int latchPin, int clockPin, int dataPin, int displayType, int displaySize);
 
 		//void begin(int displayType, int displaySize);
-		void set(int value, int alignment = DEFAULT_ALIGN_NUMBER);
-		void set(long value, int alignment = DEFAULT_ALIGN_NUMBER);
-		void set(double value, int decimalPlaces = DEFAULT_DECIMAL_PLACES, int alignment = DEFAULT_ALIGN_NUMBER);
-		void set(char value, int alignment = DEFAULT_ALIGN_TEXT);
-		void set(const char value[], int alignment = DEFAULT_ALIGN_TEXT);
-		void set(const String &value, int alignment = DEFAULT_ALIGN_TEXT);
+		void set(int value, char alignment = DEFAULT_ALIGN_NUMBER);
+		void set(long value, char alignment = DEFAULT_ALIGN_NUMBER);
+		void set(double value, int decimalPlaces = DEFAULT_DECIMAL_PLACES, char alignment = DEFAULT_ALIGN_NUMBER);
+		void set(double value, char alignment); // for overriding decimalPlaces obligation with alignment
+		void set(char value, char alignment = DEFAULT_ALIGN_TEXT);
+		void set(const char value[], char alignment = DEFAULT_ALIGN_TEXT);
+		void set(const String &value, char alignment = DEFAULT_ALIGN_TEXT);
 		void show();
 		void show(long time);
-		void print(long time, int value, int alignment = DEFAULT_ALIGN_NUMBER);
-		void print(long time, long value, int alignment = DEFAULT_ALIGN_NUMBER);
-		void print(long time, double value, int decimalPlaces = DEFAULT_DECIMAL_PLACES, int alignment = DEFAULT_ALIGN_NUMBER);
-		void print(long time, char value, int alignment = DEFAULT_ALIGN_TEXT);
-		void print(long time, const char value[], int alignment = DEFAULT_ALIGN_TEXT);
-		void print(long time, const String &value, int alignment = DEFAULT_ALIGN_TEXT);
+		void print(long time, int value, char alignment = DEFAULT_ALIGN_NUMBER);
+		void print(long time, long value, char alignment = DEFAULT_ALIGN_NUMBER);
+		void print(long time, double value, int decimalPlaces = DEFAULT_DECIMAL_PLACES, char alignment = DEFAULT_ALIGN_NUMBER);
+		void print(long time, double value, char alignment); // for overriding decimalPlaces obligation with alignment
+		void print(long time, char value, char alignment = DEFAULT_ALIGN_TEXT);
+		void print(long time, const char value[], char alignment = DEFAULT_ALIGN_TEXT);
+		void print(long time, const String &value, char alignment = DEFAULT_ALIGN_TEXT);
 };
 
 

@@ -1,4 +1,4 @@
-// github.com/MiguelPynto/ShiftDisplay
+// https://github.com/MiguelPynto/ShiftDisplay
 
 
 #include "Arduino.h"
@@ -83,7 +83,7 @@ void ShiftDisplay::getCharacters(long input, char output[], int size) {
 
 // Arrange characters for display format over specified alignment
 // Return point index on display or NULL if none
-int ShiftDisplay::formatCharacters(const char input[], int size, char output[], int alignment, int decimalPlaces = NULL) {
+int ShiftDisplay::formatCharacters(const char input[], int size, char output[], char alignment, int decimalPlaces = NULL) {
 	
 	// index of character virtual borders
 	int left; // lowest index
@@ -202,13 +202,13 @@ void ShiftDisplay::begin(int displayType, int displaySize) {
 */
 
 // Save to buffer an int value
-void ShiftDisplay::set(int value, int alignment) {
+void ShiftDisplay::set(int value, char alignment) {
 	set((long) value, alignment); // call long function
 }
 
 
 // Save to buffer a long value
-void ShiftDisplay::set(long value, int alignment) {
+void ShiftDisplay::set(long value, char alignment) {
 	int size = countCharacters(value);
 	char originalCharacters[size];
 	getCharacters(value, originalCharacters, size);
@@ -219,7 +219,7 @@ void ShiftDisplay::set(long value, int alignment) {
 
 
 // Save to buffer a double value
-void ShiftDisplay::set(double value, int decimalPlaces, int alignment) {
+void ShiftDisplay::set(double value, int decimalPlaces, char alignment) {
 
 	// if no decimal places, call integer function instead
 	if (decimalPlaces == 0) {
@@ -240,8 +240,14 @@ void ShiftDisplay::set(double value, int decimalPlaces, int alignment) {
 }
 
 
+// Save to buffer a double value with default number of decimal places
+void ShiftDisplay::set(double value, char alignment) {
+	set(value, DEFAULT_DECIMAL_PLACES, alignment);
+}
+
+
 // Save to buffer a char value
-void ShiftDisplay::set(char value, int alignment) {
+void ShiftDisplay::set(char value, char alignment) {
 	char originalCharacters[] = {value};
 	char formattedCharacters[_displaySize];
 	formatCharacters(originalCharacters, 1, formattedCharacters, alignment);
@@ -250,7 +256,7 @@ void ShiftDisplay::set(char value, int alignment) {
 
 
 // Save to buffer a char array value
-void ShiftDisplay::set(const char value[], int alignment) {
+void ShiftDisplay::set(const char value[], char alignment) {
 	int size = strlen(value);
 	char formattedCharacters[_displaySize];
 	formatCharacters(value, size, formattedCharacters, alignment);
@@ -259,7 +265,7 @@ void ShiftDisplay::set(const char value[], int alignment) {
 
 
 // Save to buffer a string object value
-void ShiftDisplay::set(const String &value, int alignment) {
+void ShiftDisplay::set(const String &value, char alignment) {
 	set(value.c_str(), alignment); // call char array function
 }
 
@@ -281,42 +287,49 @@ void ShiftDisplay::show(long time) {
 
 
 // Save to buffer and show an int value for the specified time
-void ShiftDisplay::print(long time, int value, int alignment) {
+void ShiftDisplay::print(long time, int value, char alignment) {
 	set(value, alignment);
 	show(time);
 }
 
 
 // Save to buffer and show a long value for the specified time
-void ShiftDisplay::print(long time, long value, int alignment) {
+void ShiftDisplay::print(long time, long value, char alignment) {
 	set(value, alignment);
 	show(time);
 }
 
 
 // Save to buffer and show a double value for the specified time
-void ShiftDisplay::print(long time, double value, int decimalPlaces, int alignment) {
+void ShiftDisplay::print(long time, double value, int decimalPlaces, char alignment) {
 	set(value, decimalPlaces, alignment);
 	show(time);
 }
 
 
+// Save to buffer and show a double value with default number of decimal places for the specified time
+void ShiftDisplay::print(long time, double value, char alignment) {
+	set(value, DEFAULT_DECIMAL_PLACES, alignment);
+	show(time);
+}
+
+
 // Save to buffer and show a char value for the specified time
-void ShiftDisplay::print(long time, char value, int alignment) {
+void ShiftDisplay::print(long time, char value, char alignment) {
 	set(value, alignment);
 	show(time);
 }
 
 
 // Save to buffer and show a char array value for the specified time
-void ShiftDisplay::print(long time, const char value[], int alignment) {
+void ShiftDisplay::print(long time, const char value[], char alignment) {
 	set(value, alignment);
 	show(time);
 }
 
 
 // Save to buffer and show a string object value for the specified time
-void ShiftDisplay::print(long time, const String &value, int alignment) {
+void ShiftDisplay::print(long time, const String &value, char alignment) {
 	set(value, alignment);
 	show(time);
 }

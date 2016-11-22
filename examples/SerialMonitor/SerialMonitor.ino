@@ -1,3 +1,5 @@
+// https://github.com/MiguelPynto/ShiftDisplay
+
 #include <ShiftDisplay.h>
 
 const int LATCH_PIN = 6;

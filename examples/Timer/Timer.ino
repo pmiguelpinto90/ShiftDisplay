@@ -1,15 +1,14 @@
+// https://github.com/MiguelPynto/ShiftDisplay
+
 #include <ShiftDisplay.h>
 
-const int LATCH_PIN = 6;
-const int CLOCK_PIN = 7;
-const int DATA_PIN = 5;
 const int DISPLAY_TYPE = COMMON_CATHODE; // COMMON_CATHODE or COMMON_ANODE
 const int DISPLAY_SIZE = 3; // number of digits on display
 const int BUTTON_PIN = 2;
 
 volatile bool buttonPressed;
 
-ShiftDisplay led(LATCH_PIN, CLOCK_PIN, DATA_PIN, DISPLAY_TYPE, DISPLAY_SIZE);
+ShiftDisplay led(DISPLAY_TYPE, DISPLAY_SIZE);
 
 void debounce() {
 	led.show(100); // execution will delay for 100ms

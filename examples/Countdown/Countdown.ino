@@ -1,3 +1,5 @@
+// https://github.com/MiguelPynto/ShiftDisplay
+
 #include <ShiftDisplay.h>
 
 ShiftDisplay led(6, 7, 5, COMMON_CATHODE, 3);
@@ -5,7 +7,7 @@ ShiftDisplay led(6, 7, 5, COMMON_CATHODE, 3);
 void setup() {
 	for (int i = 3; i > 0; i--)
 		led.print(800, i);
-	led.set("GO");
+	led.set("GO!");
 }
 
 void loop() {

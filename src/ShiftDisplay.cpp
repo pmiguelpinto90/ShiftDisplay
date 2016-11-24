@@ -57,7 +57,7 @@ int ShiftDisplay::countCharacters(long number) {
 // Calculate the length of an array of chars for the integer part on a real number
 int ShiftDisplay::countCharacters(double number) {
 	if (number > -1 && number < 0) // -0.x
-		return 2; // minus and zero counts as 2 characters
+		return 2; // minus and zero count as 2 characters
 	return countCharacters((long) number);
 }
 

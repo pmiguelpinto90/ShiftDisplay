@@ -1,4 +1,5 @@
 # ShiftDisplay
+#### by Miguel Pynto
 
 Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 shift registers.
 
@@ -46,7 +47,7 @@ Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 
 
   `led`: is a variable of type ShiftDisplay.
 
-  `latchPin`, `clockPin`, `dataPin`: are the number of the Arduino digital pins connected to the shift registers latch, clock and data pins.
+  `latchPin`, `clockPin`, `dataPin`: are the number of the Arduino digital pins connected to the shift registers latch, clock and data pins;
   optional; if not defined, the default pins are 6, 7 and 5 respectively.
 
   `displayType`: is a constant `COMMON_CATHODE` or `COMMON_ANODE`, depending on the type of your display(s).
@@ -128,22 +129,26 @@ Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 
 ```c
 #include <ShiftDisplay.h>
 
+// Arduino pin 6 connected to shift register latch, pin 7 to clock and pin 5 to data
+// common cathode display with 3 digits
 ShiftDisplay led(6, 7, 5, COMMON_CATHODE, 3);
 
 void setup() {
 	for (int i = 3; i > 0; i--)
-		led.print(800, i);
-	led.set("GO!");
+		led.print(800, i, ALIGN_CENTER); // save number and show it for 800ms
+	led.set("GO!"); // save "GO!" to buffer
 }
 
 void loop() {
-	led.show();
+	led.show(); // show "GO!" while in loop
 }
 ```
 
 
 ## Changelog
 
+- 3.2.1 (24/11/2016)
+  - Documentation: explain examples
 - 3.2.0 (22/11/2016)
   - Bugfix: default alignments
   - Change: float/double function alignment without decimalPlaces obligation
@@ -178,7 +183,6 @@ void loop() {
 ## TODO
 
 - [ ] Feature: displays with more than 8 digits
-- [ ] Documentation: explain examples
 
 
 --------------------------------------------------------------------------------

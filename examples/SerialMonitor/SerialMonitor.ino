@@ -1,4 +1,9 @@
-// https://github.com/MiguelPynto/ShiftDisplay
+/*
+ShiftDisplay example
+by Miguel Pynto
+Print strings from Serial Monitor (250000 baud) on display
+https://github.com/MiguelPynto/ShiftDisplay
+*/
 
 #include <ShiftDisplay.h>
 
@@ -11,7 +16,7 @@ const int DISPLAY_SIZE = 8; // number of digits on display
 ShiftDisplay led(LATCH_PIN, CLOCK_PIN, DATA_PIN, DISPLAY_TYPE, DISPLAY_SIZE);
 
 void readSerial() {
-	char input[Serial.available() + 1];
+	char input[Serial.available() + 1]; // str len + NULL
 	int i = 0;
 	while (Serial.available() > 0) {
 		char c = Serial.read();
@@ -20,8 +25,8 @@ void readSerial() {
 		else
 			input[i++] = c;
 	}
-	input[i] = '\0';
-	led.set(input);
+	input[i] = '\0'; // NULL terminate string
+	led.set(input); // save
 }
 
 void setup() {
@@ -31,5 +36,5 @@ void setup() {
 void loop() {
 	if (Serial.available() > 0)
 		readSerial();
-	led.show();
+	led.show(); // show last read from serial
 }

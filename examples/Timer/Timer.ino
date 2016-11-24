@@ -1,10 +1,15 @@
-// https://github.com/MiguelPynto/ShiftDisplay
+/*
+ShiftDisplay example
+by Miguel Pynto
+One minute clock timer, pausable with button
+https://github.com/MiguelPynto/ShiftDisplay
+*/
 
 #include <ShiftDisplay.h>
 
 const int DISPLAY_TYPE = COMMON_CATHODE; // COMMON_CATHODE or COMMON_ANODE
 const int DISPLAY_SIZE = 3; // number of digits on display
-const int BUTTON_PIN = 2;
+const int BUTTON_PIN = 2; // connect one end of button to pin 2 and other to ground
 
 volatile bool buttonPressed;
 
@@ -25,6 +30,8 @@ void setup() {
 }
 
 void loop() {
+
+	// start
 	float n;
 	for (float i = 600; i > 0; i--) {
 		n = i / 10;
@@ -43,9 +50,12 @@ void loop() {
 		led.print(100, n, 1); // float with one decimal place
 	}
 
+	// finished
 	led.set("end");
 	while (!buttonPressed)
-		led.show();
+		led.show(); // show end while button isnt pressed
+
+	// restart
 	debounce();
 	buttonPressed = false;
 }

@@ -1,7 +1,13 @@
-// https://github.com/MiguelPynto/ShiftDisplay
+/*
+ShiftDisplay example
+by Miguel Pynto
+Send pre-formatted data over I2C
+https://github.com/MiguelPynto/ShiftDisplay
+*/
 
 #include <ShiftDisplay.h>
 #include <Wire.h>
+// connect pin A4 to other Arduino pin A4, and pin A5 to other Arduino pin A5
 
 char getSomething() {
 	char c = 'A' + random(26); // random letter between A and Z
@@ -15,7 +21,7 @@ int getSomethingMore() {
 }
 
 void setup() {
-	Wire.begin();
+	Wire.begin(); // this is master
 }
 
 void loop() {

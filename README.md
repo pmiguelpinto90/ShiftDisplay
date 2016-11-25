@@ -147,6 +147,8 @@ void loop() {
 
 ## Changelog
 
+- 3.2.2 (25/11/2016)
+  - Documentation: website
 - 3.2.1 (24/11/2016)
   - Documentation: explain examples
 - 3.2.0 (22/11/2016)

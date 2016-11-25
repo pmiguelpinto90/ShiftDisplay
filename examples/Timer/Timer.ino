@@ -2,7 +2,7 @@
 ShiftDisplay example
 by Miguel Pynto
 One minute clock timer, pausable with button
-https://github.com/MiguelPynto/ShiftDisplay
+http://pynto.me/ShiftDisplay/
 */
 
 #include <ShiftDisplay.h>

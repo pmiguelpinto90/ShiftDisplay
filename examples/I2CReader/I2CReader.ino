@@ -2,7 +2,7 @@
 ShiftDisplay example
 by Miguel Pynto
 Receive pre-formatted data over I2C
-https://github.com/MiguelPynto/ShiftDisplay
+http://pynto.me/ShiftDisplay/
 */
 
 #include <ShiftDisplay.h>

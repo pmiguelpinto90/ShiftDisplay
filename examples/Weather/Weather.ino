@@ -2,7 +2,7 @@
 ShiftDisplay example
 by Miguel Pynto
 Simulate a weather station, showing info such as temperature and condition
-https://github.com/MiguelPynto/ShiftDisplay
+http://pynto.me/ShiftDisplay/
 */
 
 #include <ShiftDisplay.h>

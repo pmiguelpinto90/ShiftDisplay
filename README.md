@@ -186,4 +186,4 @@ void loop() {
 
 
 --------------------------------------------------------------------------------
-https://github.com/MiguelPynto/ShiftDisplay
+http://pynto.me/ShiftDisplay/

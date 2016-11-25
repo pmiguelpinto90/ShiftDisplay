@@ -2,7 +2,7 @@
 ShiftDisplay example
 by Miguel Pynto
 Race countdown: 3.. 2.. 1.. GO!
-https://github.com/MiguelPynto/ShiftDisplay
+http://pynto.me/ShiftDisplay/
 */
 
 #include <ShiftDisplay.h>

@@ -1,12 +1,12 @@
 # ShiftDisplay
 _by Miguel Pynto_
 
-Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 shift registers.
+Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 shift registers
 
-- Show numbers and text.
-- Concatenate multiple displays as one, for a maximum of 8 digits.
-- Compatible with common cathode and common anode.
-- Only 3 pins used on Arduino.
+- Show numbers and text
+- Concatenate multiple displays as one, for a maximum of 8 digits
+- Compatible with common cathode and common anode
+- Only 3 pins used on Arduino
 
 ![breadboard](https://raw.githubusercontent.com/MiguelPynto/ShiftDisplay/master/extras/foobar.jpg)
 
@@ -21,9 +21,9 @@ Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 
 ## Install
 
 1. Download library from https://github.com/MiguelPynto/ShiftDisplay/archive/master.zip
-2. Extract to `Documents/Arduino/libraries` folder.
-3. Rename extracted folder `ShiftDisplay-master` to `ShiftDisplay`.
-4. Restart the Arduino IDE.
+2. Extract to `Documents/Arduino/libraries` folder
+3. Rename extracted folder to `ShiftDisplay`
+4. Restart the Arduino IDE
 
 
 ## Wiring

@@ -87,8 +87,9 @@ Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 
   `led`: is a variable of type ShiftDisplay.
 
   `time`: is the time in milliseconds for the value to be shown on the display;
+  has to be >= 10;
   optional; if not defined, the value is shown for a single iteration;
-  exact time running will be an aproximation.
+  exact time showing will be an aproximation.
 
 * __print()__
   * led.print(time, value)
@@ -101,7 +102,8 @@ Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 
   `led`: is a variable of type ShiftDisplay.
 
   `time`: is the time in milliseconds for the value to be shown on the display;
-  exact time running will be an aproximation.
+  has to be >= 10;
+  exact time showing will be an aproximation.
 
   `value`: is the value to save and show;
   can be a number (int, long, float, double) or text (char, char array, String object);

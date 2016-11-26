@@ -129,7 +129,7 @@ int ShiftDisplay::formatCharacters(const char input[], int size, char output[], 
 
 
 // Encode array of characters to array of bytes read by the display
-void ShiftDisplay::encodeCharacters(const char input[]) {
+void ShiftDisplay::encodeCharacters(const char input[], int pointIndex = NULL) {
 	for (int i = 0; i < _displaySize; i++) { // input length = _displaySize
 		char c = input[i];
 		
@@ -157,12 +157,9 @@ void ShiftDisplay::encodeCharacters(const char input[]) {
 		
 		_buffer[i] = _displayType ? code : ~code;
 	}
-}
 
-
-// Insert point at index in encoded buffer
-void ShiftDisplay::encodePoint(int index) {
-	_buffer[index] +=  _displayType ? POINT : -POINT;
+	if (pointIndex != NULL)
+		_buffer[pointIndex] +=  _displayType ? POINT : -POINT;
 }
 
 
@@ -232,8 +229,7 @@ void ShiftDisplay::set(double value, int decimalPlaces, char alignment) {
 	getCharacters(newValue, originalCharacters, size);
 	char formattedCharacters[_displaySize];
 	int pointIndex = formatCharacters(originalCharacters, size, formattedCharacters, alignment, decimalPlaces);
-	encodeCharacters(formattedCharacters);
-	encodePoint(pointIndex);
+	encodeCharacters(formattedCharacters, pointIndex);
 }
 
 

@@ -149,6 +149,8 @@ void loop() {
 
 ## Changelog
 
+- 3.2.3 (26/11/2016)
+  - Bugfix: decimal point not showing in common anode displays
 - 3.2.2 (25/11/2016)
   - Documentation: website
 - 3.2.1 (24/11/2016)

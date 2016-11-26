@@ -53,7 +53,6 @@ class ShiftDisplay {
 		ShiftDisplay(int displayType, int displaySize);
 		ShiftDisplay(int latchPin, int clockPin, int dataPin, int displayType, int displaySize);
 
-		//void begin(int displayType, int displaySize);
 		void set(int value, char alignment = DEFAULT_ALIGN_NUMBER);
 		void set(long value, char alignment = DEFAULT_ALIGN_NUMBER);
 		void set(double value, int decimalPlaces = DEFAULT_DECIMAL_PLACES, char alignment = DEFAULT_ALIGN_NUMBER);

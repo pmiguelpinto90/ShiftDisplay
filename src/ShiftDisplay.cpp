@@ -194,17 +194,6 @@ void ShiftDisplay::showDisplay() {
 
 // PUBLIC FUNCTIONS
 
-/*
-// Set up the library with display information
-// displayType is COMMON_CATHODE or COMMON_ANODE constant
-// displaySize is the quantity of digits of all displays together, maximum of 8
-void ShiftDisplay::begin(int displayType, int displaySize) {
-	_displayType = displayType;
-	_displaySize = min(displaySize, 8);
-	_povIndexTime = POV_TOTAL_TIME / _displaySize;
-	_buffer[_displaySize];
-}
-*/
 
 // Save to buffer an int value
 void ShiftDisplay::set(int value, char alignment) {

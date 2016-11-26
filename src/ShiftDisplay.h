@@ -45,7 +45,8 @@ class ShiftDisplay {
 		int countCharacters(double number);
 		void getCharacters(long input, char output[], int size);
 		int formatCharacters(const char input[], int size, char output[], char alignment, int decimalPlaces);
-		void encodeCharacters(const char input[], int pointPosition);
+		void encodeCharacters(const char input[]);
+		void encodePoint(int index);
 		void clearDisplay();
 		void showDisplay();
 

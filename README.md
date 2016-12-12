@@ -78,6 +78,15 @@ Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 
   optional and only available if the value is a float or double number;
   if not defined, the default is 2.
 
+* __setPoint()__
+  * led.setPoint(index)
+  * led.setPoint(index, show)
+
+  `index`: is the digit position on the display, starting at 0 for the leftmost.
+
+  `show`: is a boolean value setting to show or hide the point;
+  optional; if not defined, the point is shown.
+
 * __show()__
   * led.show()
   * led.show(time)
@@ -149,6 +158,8 @@ void loop() {
 
 ## Changelog
 
+- x.x.x (x/x/x)
+  - Feature: setPoint() function
 - 3.2.3 (26/11/2016)
   - Bugfix: decimal point not showing in common anode displays
 - 3.2.2 (25/11/2016)

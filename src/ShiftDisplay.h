@@ -60,6 +60,7 @@ class ShiftDisplay {
 		void set(char value, char alignment = DEFAULT_ALIGN_TEXT);
 		void set(const char value[], char alignment = DEFAULT_ALIGN_TEXT);
 		void set(const String &value, char alignment = DEFAULT_ALIGN_TEXT);
+		void setPoint(int index, bool show = true);
 		void show();
 		void show(long time);
 		void print(long time, int value, char alignment = DEFAULT_ALIGN_NUMBER);

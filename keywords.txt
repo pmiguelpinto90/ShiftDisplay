@@ -1,6 +1,7 @@
 ShiftDisplay	KEYWORD1
 
 set	KEYWORD2
+setPoint    KEYWORD2
 show	KEYWORD2
 print	KEYWORD2
 

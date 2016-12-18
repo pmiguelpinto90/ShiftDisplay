@@ -55,12 +55,7 @@ const byte LETTERS[] = {
 	 B11011010 // z
 };
 
-const byte EXCLAMATION = B01000001;
-const byte INTERROGATION = B11000001;
-const byte POINT = B00000001;
 const byte MINUS = B00000010;
-const byte UNDERSCORE = B00010000;
-const byte QUOTATION = B01000100;
 const byte BLANK = B00000000;
 
 

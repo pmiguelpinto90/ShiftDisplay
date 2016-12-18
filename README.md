@@ -68,7 +68,7 @@ Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 
 
   `value`: is the value to save;
   can be a number (int, long, float, double) or text (char, char array, String object);
-  for text, valid characters are 0-9 a-z A-Z - _ . ! ? " ' space.
+  for text, valid characters are 0-9 a-z A-Z - space.
 
   `alignment`: is the alignment of the value on the display;
   optional, constant `ALIGN_LEFT`, `ALIGN_RIGHT` or `ALIGN_CENTER`;
@@ -78,14 +78,19 @@ Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 
   optional and only available if the value is a float or double number;
   if not defined, the default is 2.
 
-* __setPoint()__
-  * led.setPoint(index)
-  * led.setPoint(index, show)
+* __insertPoint()__
+  * led.insertPoint(index)
+
+  bla bla
 
   `index`: is the digit position on the display, starting at 0 for the leftmost.
 
-  `show`: is a boolean value setting to show or hide the point;
-  optional; if not defined, the point is shown.
+* __removePoint()__
+  * led.removePoint(index)
+
+  bla bla
+
+  `index`: is the digit position on the display, starting at 0 for the leftmost.
 
 * __show()__
   * led.show()
@@ -116,7 +121,7 @@ Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 
 
   `value`: is the value to save and show;
   can be a number (int, long, float, double) or text (char, char array, String object);
-  for text, valid characters are 0-9 a-z A-Z - _ . ! ? " ' space.
+  for text, valid characters are 0-9 a-z A-Z - space.
 
   `alignment`: is the alignment of the value on the display;
   optional, constant `ALIGN_LEFT`, `ALIGN_RIGHT` or `ALIGN_CENTER`;
@@ -159,7 +164,9 @@ void loop() {
 ## Changelog
 
 - x.x.x (x/x/x)
-  - Feature: setPoint() function
+  - Feature: insertPoint() function
+  - Feature: removePoint() function
+  - Change: removed punctuation characters
 - 3.2.3 (26/11/2016)
   - Bugfix: decimal point not showing in common anode displays
 - 3.2.2 (25/11/2016)

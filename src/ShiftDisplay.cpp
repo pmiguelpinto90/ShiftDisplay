@@ -142,16 +142,6 @@ void ShiftDisplay::encodeCharacters(const char input[], int pointIndex = NULL) {
 			code = LETTERS[c - 'A'];
 		else if (c == '-')
 			code = MINUS;
-		else if (c == '!')
-			code = EXCLAMATION;
-		else if (c == '?')
-			code = INTERROGATION;
-		else if (c == '.')
-			code = POINT;
-		else if (c == '_')
-			code = UNDERSCORE;
-		else if (c == '"' || c == '\'')
-			code = QUOTATION;
 		else // space or invalid
 			code = BLANK;
 		
@@ -159,7 +149,18 @@ void ShiftDisplay::encodeCharacters(const char input[], int pointIndex = NULL) {
 	}
 
 	if (pointIndex != NULL)
-		_buffer[pointIndex] +=  _displayType ? POINT : -POINT;
+		encodePoint(pointIndex, true);
+}
+
+
+// Encode point in index
+void ShiftDisplay::encodePoint(int index, bool show) {
+	int bit;
+	if (show)
+		bit = _displayType ? 1 : 0;
+	else
+		bit = _displayType ? 0 : 1;
+	bitWrite(_buffer[index], 0, bit);
 }
 
 
@@ -263,16 +264,17 @@ void ShiftDisplay::set(const String &value, char alignment) {
 }
 
 
-// Modify buffer at index with or without a point
-void ShiftDisplay::setPoint(int index, bool show) {
-	if (index >= 0 && index < _displaySize) {
-		int bit;
-		if (show)
-			bit = _displayType ? 1 : 0;
-		else
-			bit = _displayType ? 0 : 1;
-		bitWrite(_buffer[index], 0, bit);
-	}
+// Modify buffer, insert point at index
+void ShiftDisplay::insertPoint(int index) {
+	if (index >= 0 && index < _displaySize)
+		encodePoint(index, true);
+}
+
+
+// Modify buffer, remove point at index
+void ShiftDisplay::removePoint(int index) {
+	if (index >= 0 && index < _displaySize)
+		encodePoint(index, false);
 }
 
 

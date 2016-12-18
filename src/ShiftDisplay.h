@@ -46,6 +46,7 @@ class ShiftDisplay {
 		void getCharacters(long input, char output[], int size);
 		int formatCharacters(const char input[], int size, char output[], char alignment, int decimalPlaces);
 		void encodeCharacters(const char input[], int pointIndex);
+		void encodePoint(int index, bool show);
 		void clearDisplay();
 		void showDisplay();
 
@@ -60,7 +61,8 @@ class ShiftDisplay {
 		void set(char value, char alignment = DEFAULT_ALIGN_TEXT);
 		void set(const char value[], char alignment = DEFAULT_ALIGN_TEXT);
 		void set(const String &value, char alignment = DEFAULT_ALIGN_TEXT);
-		void setPoint(int index, bool show = true);
+		void insertPoint(int index);
+		void removePoint(int index);
 		void show();
 		void show(long time);
 		void print(long time, int value, char alignment = DEFAULT_ALIGN_NUMBER);

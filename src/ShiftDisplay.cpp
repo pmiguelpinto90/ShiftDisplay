@@ -153,7 +153,7 @@ void ShiftDisplay::encodeCharacters(const char input[], int pointIndex = NULL) {
 }
 
 
-// Encode point in index
+// Encode point to show or hide at index
 void ShiftDisplay::encodePoint(int index, bool show) {
 	int bit;
 	if (show)

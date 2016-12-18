@@ -81,16 +81,16 @@ Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 
 * __insertPoint()__
   * led.insertPoint(index)
 
-  bla bla
+  Insert point in buffer.
 
-  `index`: is the digit position on the display, starting at 0 for the leftmost.
+  `index`: is the position on the display to insert point, starting at 0 for the leftmost.
 
 * __removePoint()__
   * led.removePoint(index)
 
-  bla bla
+  Remove point from buffer.
 
-  `index`: is the digit position on the display, starting at 0 for the leftmost.
+  `index`: is the position on the display to remove point, starting at 0 for the leftmost.
 
 * __show()__
   * led.show()

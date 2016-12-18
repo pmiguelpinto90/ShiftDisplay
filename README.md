@@ -166,6 +166,8 @@ void loop() {
 
 ## Changelog
 
+- x.x.x (x/x/2016)
+  - Bugfix: Countdown example
 - 3.3.0 (18/12/2016)
   - Feature: insertPoint() function
   - Feature: removePoint() function

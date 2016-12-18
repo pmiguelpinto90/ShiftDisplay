@@ -1,2 +1,4 @@
+markdown: kramdown
 theme: jekyll-theme-cayman
-site.title: "porra"
+site.title: "ShiftDisplay"
+title: "ShiftDisplay"

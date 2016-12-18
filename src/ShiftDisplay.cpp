@@ -264,14 +264,14 @@ void ShiftDisplay::set(const String &value, char alignment) {
 
 
 // Modify buffer at index with or without a point
-void Shiftdisplay::setPoint(int index, bool show) {
+void ShiftDisplay::setPoint(int index, bool show) {
 	if (index >= 0 && index < _displaySize) {
 		int bit;
 		if (show)
 			bit = _displayType ? 1 : 0;
 		else
 			bit = _displayType ? 0 : 1;
-		bitWrite(_buffer[pointIndex], 0, bit);
+		bitWrite(_buffer[index], 0, bit);
 	}
 }
 

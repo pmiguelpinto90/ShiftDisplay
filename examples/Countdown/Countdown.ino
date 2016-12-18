@@ -12,11 +12,14 @@ http://pynto.me/ShiftDisplay/
 ShiftDisplay led(6, 7, 5, COMMON_CATHODE, 3);
 
 void setup() {
-	for (int i = 3; i > 0; i--)
-		led.print(800, i, ALIGN_CENTER); // save number and show it for 800ms
-	led.set("GO!"); // save "GO!" to buffer
+	for (int i = 3; i > 0; i--) {
+		led.print(400, i, ALIGN_CENTER); // save number and show it for 400ms
+		led.insertPoint(1); // add dot to saved number
+		led.show(400); // show number with dot for 400ms
+	}
+	led.set("GO"); // save "GO" to buffer
 }
 
 void loop() {
-	led.show(); // show "GO!" while in loop
+	led.show(); // show "GO." while in loop
 }

@@ -163,7 +163,7 @@ void loop() {
 
 ## Changelog
 
-- x.x.x (x/x/x)
+- 3.3.0 (18/12/2016)
   - Feature: insertPoint() function
   - Feature: removePoint() function
   - Change: removed punctuation characters

@@ -26,8 +26,6 @@ const int DEFAULT_DECIMAL_PLACES = 2;
 const char DEFAULT_ALIGN_TEXT = ALIGN_LEFT;
 const char DEFAULT_ALIGN_NUMBER = ALIGN_RIGHT;
 
-const int POV_TOTAL_TIME = 10; // time (in milliseconds) to complete one display iteration, achieving persistence of vision
-
 
 class ShiftDisplay {
 
@@ -37,7 +35,6 @@ class ShiftDisplay {
 		int _dataPin;
 		int _displayType;
 		int _displaySize;
-		int _povIndexTime;
 		byte _buffer[8]; // value set, encoded to print
 
 		void construct(int latchPin, int clockPin, int dataPin, int displayType, int displaySize);

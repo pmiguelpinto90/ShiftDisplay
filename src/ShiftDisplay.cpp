@@ -39,7 +39,6 @@ void ShiftDisplay::construct(int latchPin, int clockPin, int dataPin, int displa
 	_dataPin = dataPin;
 	_displayType = displayType;
 	_displaySize = min(displaySize, 8); // displaySize max value is 8
-	_povIndexTime = POV_TOTAL_TIME / displaySize; // time spent in each index, achieving pov
 	byte initial = displayType ? BLANK : ~BLANK; // initial character for every display index
 	memset(_buffer, initial, 8); // fill buffer with initial character
 }
@@ -173,7 +172,7 @@ void ShiftDisplay::clearDisplay() {
 }
 
 
-// Iterate buffer value on display
+// Iterate buffer value on display, achieving persistence of vision
 void ShiftDisplay::showDisplay() {
 	for (int i = 0; i < _displaySize; i++) {
 		digitalWrite(_latchPin, LOW);
@@ -187,7 +186,7 @@ void ShiftDisplay::showDisplay() {
 
 		digitalWrite(_latchPin, HIGH);
 
-		delay(_povIndexTime); // time showing a single character
+		delay(1); // time showing a single character
 	}
 }
 
@@ -287,7 +286,7 @@ void ShiftDisplay::show() {
 
 // Show buffer value for the specified time
 void ShiftDisplay::show(long time) {
-	long end = millis() + time - POV_TOTAL_TIME; // start + total duration - last iteration (so it doesnt exceed time requested)
+	long end = millis() + time - (1*_displaySize); // start + total duration - last iteration (so it doesnt exceed time requested)
 	while ((long)millis() <= end)
 		showDisplay();
 	clearDisplay();

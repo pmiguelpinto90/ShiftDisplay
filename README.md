@@ -168,6 +168,7 @@ void loop() {
 
 - x.x.x (x/x/x)
   - Change: faster show() function
+  - Bugfix: better non-Arduino support (eg. attiny)
 - 3.3.1 (18/12/2016)
   - Bugfix: Countdown example
 - 3.3.0 (18/12/2016)

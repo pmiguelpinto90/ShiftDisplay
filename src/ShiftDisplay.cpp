@@ -257,9 +257,21 @@ void ShiftDisplay::set(const char value[], char alignment) {
 }
 
 
-// Save to buffer a string object value
+// Save to buffer an Arduino String value, manual processing for better support
 void ShiftDisplay::set(const String &value, char alignment) {
-	set(value.c_str(), alignment); // call char array function
+
+	// get String size
+	int size = 0;
+	while (value[size] != '\0')
+		size++;
+	
+	// convert String to char array
+	char str[size + 1];
+	for (int i = 0; i < size; i++)
+		str[i] = value[i];
+	str[size] = '\0';
+
+	set(str, alignment); // call char array function
 }
 
 
@@ -335,7 +347,7 @@ void ShiftDisplay::print(long time, const char value[], char alignment) {
 }
 
 
-// Save to buffer and show a string object value for the specified time
+// Save to buffer and show an Arduino String value for the specified time
 void ShiftDisplay::print(long time, const String &value, char alignment) {
 	set(value, alignment);
 	show(time);

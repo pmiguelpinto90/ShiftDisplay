@@ -166,7 +166,7 @@ void loop() {
 
 ## Changelog
 
-- x.x.x (x/x/x)
+- 3.3.2 (6/1/2017)
   - Change: faster show() function
   - Bugfix: better non-Arduino support (eg. attiny)
 - 3.3.1 (18/12/2016)

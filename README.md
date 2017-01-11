@@ -214,7 +214,7 @@ void loop() {
 
 ## TODO
 
-- [ ] Feature: displays with more than 8 digits
+- [x] All done
 
 
 --------------------------------------------------------------------------------

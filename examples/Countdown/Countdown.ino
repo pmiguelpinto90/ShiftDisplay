@@ -1,8 +1,8 @@
 /*
 ShiftDisplay example
-by Miguel Pynto
+by MiguelPynto
 Race countdown: 3.. 2.. 1.. GO!
-http://pynto.me/ShiftDisplay/
+https://miguelpynto.github.io/ShiftDisplay/
 */
 
 #include <ShiftDisplay.h>

@@ -1,8 +1,8 @@
 /*
 ShiftDisplay example
-by Miguel Pynto
+by MiguelPynto
 Count minutes passing by
-http://pynto.me/ShiftDisplay/
+https://miguelpynto.github.io/ShiftDisplay/
 */
 
 #include <ShiftDisplay.h>

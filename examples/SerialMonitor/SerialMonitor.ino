@@ -1,8 +1,8 @@
 /*
 ShiftDisplay example
-by Miguel Pynto
+by MiguelPynto
 Print strings from Serial Monitor (250000 baud) on display
-http://pynto.me/ShiftDisplay/
+https://miguelpynto.github.io/ShiftDisplay/
 */
 
 #include <ShiftDisplay.h>

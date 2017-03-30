@@ -20,10 +20,10 @@ Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 
 
 ## Install
 
-1. Download library from https://github.com/MiguelPynto/ShiftDisplay/archive/master.zip
-2. Extract to `Documents/Arduino/libraries` folder
-3. Rename extracted folder to `ShiftDisplay`
-4. Restart the Arduino IDE
+1. Start the Arduino IDE
+1. Open Library Manager (Menu > Sketch > Include Library > Manage Libraries)
+2. Search for ShiftDisplay library (Filter your search > shiftdisplay)
+3. Select it and click install
 
 
 ## Wiring
@@ -217,5 +217,8 @@ void loop() {
 - [x] All done
 
 
---------------------------------------------------------------------------------
+## Contacts
+
+miguelpynto@outlook.com
+
 https://miguelpynto.github.io/ShiftDisplay/

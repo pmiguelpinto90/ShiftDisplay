@@ -1,5 +1,5 @@
 # ShiftDisplay
-_by Miguel Pynto_
+_by MiguelPynto_
 
 Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 shift registers
 
@@ -218,4 +218,4 @@ void loop() {
 
 
 --------------------------------------------------------------------------------
-http://pynto.me/ShiftDisplay/
+https://miguelpynto.github.io/ShiftDisplay/

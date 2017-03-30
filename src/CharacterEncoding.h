@@ -1,14 +1,12 @@
 /*
 ShiftDisplay
-by Miguel Pynto
+by MiguelPynto
 Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 shift registers
-http://pynto.me/ShiftDisplay/
+https://miguelpynto.github.io/ShiftDisplay/
 */
-
 
 #ifndef CharacterEncoding_h
 #define CharacterEncoding_h
-
 
 // encoding for characters segments (common cathode with LSBFIRST)
 const byte NUMBERS[] = {
@@ -58,7 +56,6 @@ const byte LETTERS[] = {
 const byte MINUS = B00000010;
 const byte BLANK = B00000000;
 
-
 // encoding for each index in display (common anode with LSBFIRST)
 const byte INDEXES[] = {
 	B10000000,
@@ -70,6 +67,5 @@ const byte INDEXES[] = {
 	B00000010,
 	B00000001
 };
-
 
 #endif

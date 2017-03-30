@@ -1,31 +1,25 @@
 /*
 ShiftDisplay
-by Miguel Pynto
+by MiguelPynto
 Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 shift registers
-http://pynto.me/ShiftDisplay/
+https://miguelpynto.github.io/ShiftDisplay/
 */
-
 
 #ifndef ShiftDisplay_h
 #define ShiftDisplay_h
 #include "Arduino.h"
 
-
 const char ALIGN_LEFT = 'L';
 const char ALIGN_RIGHT = 'R';
 const char ALIGN_CENTER = 'C';
-
 const int COMMON_ANODE = 0;
 const int COMMON_CATHODE = 1;
-
 const int DEFAULT_LATCH_PIN = 6;
 const int DEFAULT_CLOCK_PIN = 7;
 const int DEFAULT_DATA_PIN = 5;
-
 const int DEFAULT_DECIMAL_PLACES = 2;
 const char DEFAULT_ALIGN_TEXT = ALIGN_LEFT;
 const char DEFAULT_ALIGN_NUMBER = ALIGN_RIGHT;
-
 
 class ShiftDisplay {
 
@@ -70,6 +64,5 @@ class ShiftDisplay {
 		void print(long time, const char value[], char alignment = DEFAULT_ALIGN_TEXT);
 		void print(long time, const String &value, char alignment = DEFAULT_ALIGN_TEXT);
 };
-
 
 #endif

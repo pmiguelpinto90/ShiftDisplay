@@ -21,5 +21,5 @@ void setup() {
 }
 
 void loop() {
-	led.show(); // show "GO." while in loop
+	led.show(); // show "GO" while in loop
 }

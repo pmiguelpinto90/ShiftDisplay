@@ -5,9 +5,10 @@ Send pre-formatted data over I2C
 https://miguelpynto.github.io/ShiftDisplay/
 */
 
-#include <ShiftDisplay.h>
 #include <Wire.h>
-// connect pin A4 to other Arduino pin A4, and pin A5 to other Arduino pin A5
+// connect pin A4 to other Arduino pin A4, pin A5 to other Arduino pin A5, and GND to other Arduino GND
+
+const int DISPLAY_ADDRESS = 8;
 
 char getSomething() {
 	char c = 'A' + random(26); // random letter between A and Z
@@ -20,19 +21,25 @@ int getSomethingMore() {
 	return n;
 }
 
+void format(char letter, int num, byte str[]) {
+	str[0] = letter;
+	str[1] = '0' + num / 100;
+	str[2] = '0' + (num / 10) % 10;
+	str[3] = '0' + num % 10;
+	str[4] = '\0';
+}
+
 void setup() {
 	Wire.begin(); // this is master
 }
 
 void loop() {
 	char letter = getSomething();
-	int n = getSomethingMore();
-	char number[4];
-	itoa(n, number, DEC);
+	int num = getSomethingMore();
+	byte str[5];
+	format(letter, num, str);
 
-	Wire.beginTransmission(8);
-	Wire.write(letter); // first byte sent as char
-	Wire.write(number); // three bytes sent as char array, \0 is not sent
-	Wire.write(ALIGN_RIGHT); // last byte sent as alignment
+	Wire.beginTransmission(DISPLAY_ADDRESS);
+	Wire.write(str); // send 5 bytes as char array (string)
 	Wire.endTransmission();
 }

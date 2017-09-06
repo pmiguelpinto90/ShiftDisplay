@@ -21,11 +21,11 @@ int getSomethingMore() {
 	return n;
 }
 
-void format(char letter, int num, byte str[]) {
+void format(char letter, int num, char str[]) {
 	str[0] = letter;
-	str[1] = '0' + num / 100;
-	str[2] = '0' + (num / 10) % 10;
-	str[3] = '0' + num % 10;
+	str[1] = '0' + (num / 100);
+	str[2] = '0' + (num / 10 % 10);
+	str[3] = '0' + (num % 10);
 	str[4] = '\0';
 }
 
@@ -36,7 +36,7 @@ void setup() {
 void loop() {
 	char letter = getSomething();
 	int num = getSomethingMore();
-	byte str[5];
+	char str[5];
 	format(letter, num, str);
 
 	Wire.beginTransmission(DISPLAY_ADDRESS);

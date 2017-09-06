@@ -9,21 +9,19 @@ https://miguelpynto.github.io/ShiftDisplay/
 
 // Arduino pin 6 connected to shift register latch, pin 7 to clock and pin 5 to data
 // common anode display with 2 digits
-ShiftDisplay led(6, 7, 5, COMMON_ANODE, 2);
+ShiftDisplay sd(6, 7, 5, COMMON_ANODE, 2);
 
-int m;
-
-void setup() {
-	m = 0;
-}
+void setup() {}
 
 void loop() {
-	led.set(m, ALIGN_RIGHT);
+	static int m = 0;
+	sd.set(m, ALIGN_LEFT);
 	for (int i = 0; i < 60; i++) {
-		led.insertPoint(1);
-		led.show(500);
-		led.removePoint(1);
-		led.show(500);
+		int pos = m < 10 ? 0 : 1;
+		sd.insertDot(pos);
+		sd.show(500);
+		sd.removeDot(pos);
+		sd.show(500);
 	}
 	m++;
 }

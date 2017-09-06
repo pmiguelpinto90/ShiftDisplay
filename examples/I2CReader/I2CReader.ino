@@ -16,13 +16,13 @@ const int DATA_PIN = 5;
 const int DISPLAY_TYPE = COMMON_CATHODE; // COMMON_CATHODE or COMMON_ANODE
 const int DISPLAY_SIZE = 4; // number of digits on display
 
-ShiftDisplay led(LATCH_PIN, CLOCK_PIN, DATA_PIN, DISPLAY_TYPE, DISPLAY_SIZE);
+ShiftDisplay sd(LATCH_PIN, CLOCK_PIN, DATA_PIN, DISPLAY_TYPE, DISPLAY_SIZE);
 
 void receiveEvent(int numBytes) {
 	char str[numBytes];
 	for (int i = 0; i < numBytes; i++)
 		str[i] = Wire.read();
-	led.set(str); // save to buffer
+	sd.set(str); // save to buffer
 }
 
 void setup() {
@@ -31,5 +31,5 @@ void setup() {
 }
 
 void loop() {
-	led.show(); // show what is on buffer forever
+	sd.show(); // show what is on buffer forever
 }

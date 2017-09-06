@@ -13,10 +13,10 @@ const int BUTTON_PIN = 2; // connect one end of button to pin 2 and other to gro
 
 volatile bool buttonPressed;
 
-ShiftDisplay led(DISPLAY_TYPE, DISPLAY_SIZE);
+ShiftDisplay sd(DISPLAY_TYPE, DISPLAY_SIZE);
 
 void debounce() {
-	led.show(100); // execution will delay for 100ms
+	sd.show(100); // execution will delay for 100ms
 }
 
 void buttonPressInterrupt() {
@@ -41,19 +41,19 @@ void loop() {
 			debounce();
 			buttonPressed = false;
 			while (!buttonPressed)
-				led.show(); // show previous value (that was on display when button was pressed)
+				sd.show(); // show previous value (that was on display when button was pressed)
 
 			// unpause
 			debounce();
 			buttonPressed = false;
 		}
-		led.print(100, n, 1); // float with one decimal place
+		sd.show(n, 100, 1); // float with one decimal place
 	}
 
 	// finished
-	led.set("end");
+	sd.set("end");
 	while (!buttonPressed)
-		led.show(); // show end while button isnt pressed
+		sd.show(); // show end while button isnt pressed
 
 	// restart
 	debounce();

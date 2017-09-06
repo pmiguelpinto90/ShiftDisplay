@@ -40,12 +40,12 @@ Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 
 ### Constructors
 
 * __ShiftDisplay()__
-  * ShiftDisplay led(displayType, displaySize)
-  * ShiftDisplay led(latchPin, clockPin, dataPin, displayType, displaySize)
+  * ShiftDisplay sd(displayType, displaySize)
+  * ShiftDisplay sd(latchPin, clockPin, dataPin, displayType, displaySize)
 
-  Creates ShiftDisplay object, initializes the library with the interface pins, and sets up with the display properties.
+  Creates a ShiftDisplay object, initializes the library with the interface pins, and sets up with the display properties.
 
-  `led`: is a variable of type ShiftDisplay.
+  `sd`: is an object of type ShiftDisplay.
 
   `latchPin`, `clockPin`, `dataPin`: are the number of the Arduino digital pins connected to the shift registers latch, clock and data pins;
   optional; if not defined, the default pins are 6, 7 and 5 respectively.
@@ -57,14 +57,14 @@ Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 
 ### Functions
 
 * __set()__
-  * led.set(value)
-  * led.set(value, alignment)
-  * led.set(value, decimalPlaces)
-  * led.set(value, decimalPlaces, alignment)
+  * sd.set(value)
+  * sd.set(value, alignment)
+  * sd.set(value, decimalPlaces)
+  * sd.set(value, decimalPlaces, alignment)
 
-  Saves a value to buffer for printing latter.
+  Save a value to buffer for showing latter.
 
-  `led`: is a variable of type ShiftDisplay.
+  `sd`: is an object of type ShiftDisplay.
 
   `value`: is the value to save;
   can be a number (int, long, float, double) or text (char, char array, String object);
@@ -78,50 +78,52 @@ Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 
   optional and only available if the value is a float or double number;
   if not defined, the default is 2.
 
-* __insertPoint()__
-  * led.insertPoint(index)
+* __insertDot()__
+  * sd.insertDot(index)
 
-  Insert point in buffer.
+  Insert dot in buffer.
 
-  `index`: is the position on the display to insert point, starting at 0 for the leftmost.
+  `index`: is the position on the display to insert dot, starting at 0 for the leftmost;
+  if is invalid, does not have any effect.
 
-* __removePoint()__
-  * led.removePoint(index)
+* __removeDot()__
+  * sd.removeDot(index)
 
-  Remove point from buffer.
+  Remove dot from buffer.
 
-  `index`: is the position on the display to remove point, starting at 0 for the leftmost.
+  `index`: is the position on the display to remove dot, starting at 0 for the leftmost;
+  if is invalid, does not have any effect.
 
 * __show()__
-  * led.show()
-  * led.show(time)
+  * sd.show()
+  * sd.show(time)
 
-  Shows buffer value on the display.
+  Show buffer value on the display.
 
-  `led`: is a variable of type ShiftDisplay.
+  `sd`: is an object of type ShiftDisplay.
 
   `time`: is the time in milliseconds for the value to be shown on the display;
   has to be >= 10;
   optional; if not defined, the value is shown for a single iteration;
   exact time showing will be an aproximation.
 
-* __print()__
-  * led.print(time, value)
-  * led.print(time, value, alignment)
-  * led.print(time, value, decimalPlaces)
-  * led.print(time, value, decimalPlaces, alignment)
+* __show()__
+  * sd.show(value, time)
+  * sd.show(value, time, alignment)
+  * sd.show(value, time, decimalPlaces)
+  * sd.show(value, time, decimalPlaces, alignment)
 
-  Saves a value to buffer and shows it on the display.
+  Save a value to buffer and show it on the display.
 
-  `led`: is a variable of type ShiftDisplay.
-
-  `time`: is the time in milliseconds for the value to be shown on the display;
-  has to be >= 10;
-  exact time showing will be an aproximation.
+  `sd`: is an object of type ShiftDisplay.
 
   `value`: is the value to save and show;
   can be a number (int, long, float, double) or text (char, char array, String object);
   for text, valid characters are 0-9 a-z A-Z - space.
+
+  `time`: is the time in milliseconds for the value to be shown on the display;
+  has to be >= 10;
+  exact time showing will be an aproximation.
 
   `alignment`: is the alignment of the value on the display;
   optional, constant `ALIGN_LEFT`, `ALIGN_RIGHT` or `ALIGN_CENTER`;
@@ -147,25 +149,29 @@ Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 
 
 // Arduino pin 6 connected to shift register latch, pin 7 to clock and pin 5 to data
 // common cathode display with 3 digits
-ShiftDisplay led(6, 7, 5, COMMON_CATHODE, 3);
+ShiftDisplay sd(6, 7, 5, COMMON_CATHODE, 3);
 
 void setup() {
 	for (int i = 3; i > 0; i--) {
-		led.print(400, i, ALIGN_CENTER); // save number and show it for 400ms
-		led.insertPoint(1); // add dot to saved number
-		led.show(400); // show number with dot for 400ms
+		sd.show(i, 400, ALIGN_CENTER); // save number and show it for 400ms
+		sd.insertDot(1); // add dot to saved number
+		sd.show(400); // show number with dot for 400ms
 	}
-	led.set("GO"); // save "GO" to buffer
+	sd.set("GO"); // save "GO" to buffer
 }
 
 void loop() {
-	led.show(); // show "GO." while in loop
+	sd.show(); // show "GO" while in loop
 }
 ```
 
 
 ## Changelog
 
+- a.b.c (x/y/z)
+  - Change: print(time, value) updated to show(value, time)
+  - Change: insertPoint() and removePoint() updated to insertDot() and removeDot()
+  - Documentation: small fixes
 - 3.3.3 (30/3/2017)
   - Change: updated contact details
 - 3.3.2 (6/1/2017)
@@ -216,7 +222,9 @@ void loop() {
 
 ## TODO
 
-- [x] All done
+- [ ] Custom characters
+- [ ] Dots bool array in set() and print()
+- [ ] Multiple logical displays?
 
 
 ## Contacts

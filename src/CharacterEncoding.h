@@ -58,14 +58,14 @@ const byte BLANK = B00000000;
 
 // encoding for each index in display (common anode with LSBFIRST)
 const byte INDEXES[] = {
-	B10000000,
-	B01000000,
-	B00100000,
-	B00010000,
-	B00001000,
-	B00000100,
-	B00000010,
-	B00000001
+	B10000000, // 0
+	B01000000, // 1
+	B00100000, // 2
+	B00010000, // 3
+	B00001000, // 4
+	B00000100, // 5
+	B00000010, // 6
+	B00000001 // 7
 };
 
 #endif

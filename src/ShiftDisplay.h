@@ -20,6 +20,7 @@ const int DEFAULT_DATA_PIN = 5;
 const int DEFAULT_DECIMAL_PLACES = 2;
 const char DEFAULT_ALIGN_TEXT = ALIGN_LEFT;
 const char DEFAULT_ALIGN_NUMBER = ALIGN_RIGHT;
+const int MAX_DISPLAY_SIZE = 8;
 
 class ShiftDisplay {
 
@@ -29,17 +30,17 @@ class ShiftDisplay {
 		int _dataPin;
 		int _displayType;
 		int _displaySize;
-		byte _buffer[8]; // value set, encoded to print
+		byte _buffer[MAX_DISPLAY_SIZE]; // value set, encoded to print
 
 		void construct(int latchPin, int clockPin, int dataPin, int displayType, int displaySize);
 		int countCharacters(long number);
 		int countCharacters(double number);
 		void getCharacters(long input, char output[], int size);
 		int formatCharacters(const char input[], int size, char output[], char alignment, int decimalPlaces);
-		void encodeCharacters(const char input[], int pointIndex);
-		void encodePoint(int index, bool show);
+		void encodeCharacters(const char input[], int dotIndex);
+		void encodeDot(int index, bool show);
 		void clearDisplay();
-		void showDisplay();
+		void printDisplay();
 
 	public:
 		ShiftDisplay(int displayType, int displaySize);
@@ -52,17 +53,29 @@ class ShiftDisplay {
 		void set(char value, char alignment = DEFAULT_ALIGN_TEXT);
 		void set(const char value[], char alignment = DEFAULT_ALIGN_TEXT);
 		void set(const String &value, char alignment = DEFAULT_ALIGN_TEXT);
-		void insertPoint(int index);
-		void removePoint(int index);
+		void insertDot(int index);
+		void removeDot(int index);
 		void show();
-		void show(long time);
-		void print(long time, int value, char alignment = DEFAULT_ALIGN_NUMBER);
-		void print(long time, long value, char alignment = DEFAULT_ALIGN_NUMBER);
-		void print(long time, double value, int decimalPlaces = DEFAULT_DECIMAL_PLACES, char alignment = DEFAULT_ALIGN_NUMBER);
-		void print(long time, double value, char alignment); // for overriding decimalPlaces obligation with alignment
-		void print(long time, char value, char alignment = DEFAULT_ALIGN_TEXT);
-		void print(long time, const char value[], char alignment = DEFAULT_ALIGN_TEXT);
-		void print(long time, const String &value, char alignment = DEFAULT_ALIGN_TEXT);
+		void show(unsigned long time);
+		void show(int value, unsigned long time, char alignment = DEFAULT_ALIGN_NUMBER);
+		void show(long value, unsigned long time, char alignment = DEFAULT_ALIGN_NUMBER);
+		void show(double value, unsigned long time, int decimalPlaces = DEFAULT_DECIMAL_PLACES, char alignment = DEFAULT_ALIGN_NUMBER);
+		void show(double value, unsigned long time, char alignment); // for overriding decimalPlaces obligation in above function
+		void show(char value, unsigned long time, char alignment = DEFAULT_ALIGN_TEXT);
+		void show(const char value[], unsigned long time, char alignment = DEFAULT_ALIGN_TEXT);
+		void show(const String &value, unsigned long time, char alignment = DEFAULT_ALIGN_TEXT);
+
+	// compatibility:
+		void insertPoint(int index); // insertDot
+		void removePoint(int index); // removeDot
+		void print(long time, int value, char alignment = DEFAULT_ALIGN_NUMBER); // show
+		void print(long time, long value, char alignment = DEFAULT_ALIGN_NUMBER); // show
+		void print(long time, double value, int decimalPlaces = DEFAULT_DECIMAL_PLACES, char alignment = DEFAULT_ALIGN_NUMBER); // show
+		void print(long time, double value, char alignment); // show
+		void print(long time, char value, char alignment = DEFAULT_ALIGN_TEXT); // show
+		void print(long time, const char value[], char alignment = DEFAULT_ALIGN_TEXT); // show
+		void print(long time, const String &value, char alignment = DEFAULT_ALIGN_TEXT); // show
+
 };
 
 #endif

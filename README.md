@@ -175,7 +175,7 @@ void loop() {
 
 ## Changelog
 
-- next ()
+- 3.4.0 (6/9/2017)
   - Feature: loadDots() function
   - Change: print(time, value) updated to show(value, time)
   - Change: insertPoint() and removePoint() updated to insertDot() and removeDot()
@@ -231,7 +231,6 @@ void loop() {
 ## TODO
 
 - [ ] Custom characters
-- [ ] Dots bool array in set() and print()
 - [ ] Multiple logical displays?
 
 

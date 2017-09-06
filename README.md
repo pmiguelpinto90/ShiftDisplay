@@ -94,6 +94,13 @@ Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 
   `index`: is the position on the display to remove the dot, starting at 0 for the leftmost;
   if is invalid, does not have any effect.
 
+* __loadDots()__
+  * sd.loadDots(values[])
+
+  Modify dots in buffer.
+
+  `values`: is the array defining if a dot is shown (true) or hide (false) for every position on the display (as the array index), starting at 0 for the leftmost.
+
 * __show()__
   * sd.show()
   * sd.show(time)
@@ -105,7 +112,7 @@ Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 
   `time`: is the time in milliseconds for the value to be shown on the display;
   has to be >= 10;
   optional; if not defined, the value is shown for a single iteration;
-  exact time showing will be an aproximation.
+  exact time showing will be an under aproximation.
 
 * __show()__
   * sd.show(value, time)
@@ -123,7 +130,7 @@ Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 
 
   `time`: is the time in milliseconds for the value to be shown on the display;
   has to be >= 10;
-  exact time showing will be an aproximation.
+  exact time showing will be an under aproximation.
 
   `alignment`: is the alignment of the value on the display;
   optional, constant `ALIGN_LEFT`, `ALIGN_RIGHT` or `ALIGN_CENTER`;
@@ -169,6 +176,7 @@ void loop() {
 ## Changelog
 
 - next ()
+  - Feature: loadDots() function
   - Change: print(time, value) updated to show(value, time)
   - Change: insertPoint() and removePoint() updated to insertDot() and removeDot()
   - Documentation: small fixes

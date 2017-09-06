@@ -268,6 +268,12 @@ void ShiftDisplay::removeDot(int index) {
 		encodeDot(index, false);
 }
 
+// Modify buffer, set dots from values array, true shows dot, false hides dot
+void ShiftDisplay::loadDots(bool values[]) {
+	for (int i = 0; i < _displaySize; i++)
+		encodeDot(i, values[i]);
+}
+
 // Show buffer value for one iteration
 void ShiftDisplay::show() {
 	printDisplay();

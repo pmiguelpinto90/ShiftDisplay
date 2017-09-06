@@ -3,6 +3,7 @@ ShiftDisplay	KEYWORD1
 set	KEYWORD2
 insertDot	KEYWORD2
 removeDot	KEYWORD2
+loadDots	KEYWORD2
 show	KEYWORD2
 
 ALIGN_LEFT	LITERAL1

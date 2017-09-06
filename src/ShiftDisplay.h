@@ -55,6 +55,7 @@ class ShiftDisplay {
 		void set(const String &value, char alignment = DEFAULT_ALIGN_TEXT);
 		void insertDot(int index);
 		void removeDot(int index);
+		void loadDots(bool values[]);
 		void show();
 		void show(unsigned long time);
 		void show(int value, unsigned long time, char alignment = DEFAULT_ALIGN_NUMBER);

@@ -256,8 +256,8 @@ void ShiftDisplay::set(const String &value, char alignment) {
 	set(str, alignment); // call char array function
 }
 
-// Modify buffer, add dot at index
-void ShiftDisplay::addDot(int index) {
+// Modify buffer, insert dot at index
+void ShiftDisplay::insertDot(int index) {
 	if (index >= 0 && index < _displaySize)
 		encodeDot(index, true);
 }
@@ -325,7 +325,7 @@ void ShiftDisplay::show(const String &value, unsigned long time, char alignment)
 }
 
 // Duplicates to retain compatibility with old versions
-void ShiftDisplay::insertPoint(int index) { addDot(index); }
+void ShiftDisplay::insertPoint(int index) { insertDot(index); }
 void ShiftDisplay::removePoint(int index) { removeDot(index); }
 void ShiftDisplay::print(long time, int value, char alignment) { show(value, time, alignment); }
 void ShiftDisplay::print(long time, long value, char alignment) { show(value, time, alignment); }

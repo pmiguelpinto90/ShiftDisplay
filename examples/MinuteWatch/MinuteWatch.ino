@@ -18,7 +18,7 @@ void loop() {
 	sd.set(m, ALIGN_LEFT);
 	for (int i = 0; i < 60; i++) {
 		int pos = m < 10 ? 0 : 1;
-		sd.insertDot(pos);
+		sd.addDot(pos);
 		sd.show(500);
 		sd.removeDot(pos);
 		sd.show(500);

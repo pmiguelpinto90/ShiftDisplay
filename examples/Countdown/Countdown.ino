@@ -14,7 +14,7 @@ ShiftDisplay sd(6, 7, 5, COMMON_CATHODE, 3);
 void setup() {
 	for (int i = 3; i > 0; i--) {
 		sd.show(i, 400, ALIGN_CENTER); // save number and show it for 400ms
-		sd.insertDot(1); // add dot to saved number
+		sd.addDot(1); // add dot to saved number
 		sd.show(400); // show number with dot for 400ms
 	}
 	sd.set("GO"); // save "GO" to buffer

@@ -78,12 +78,12 @@ Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 
   optional and only available if the value is a float or double number;
   if not defined, the default is 2.
 
-* __insertDot()__
-  * sd.insertDot(index)
+* __addDot()__
+  * sd.addDot(index)
 
-  Insert dot in buffer.
+  Add dot to buffer.
 
-  `index`: is the position on the display to insert dot, starting at 0 for the leftmost;
+  `index`: is the position on the display to add the dot, starting at 0 for the leftmost;
   if is invalid, does not have any effect.
 
 * __removeDot()__
@@ -91,7 +91,7 @@ Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 
 
   Remove dot from buffer.
 
-  `index`: is the position on the display to remove dot, starting at 0 for the leftmost;
+  `index`: is the position on the display to remove the dot, starting at 0 for the leftmost;
   if is invalid, does not have any effect.
 
 * __show()__
@@ -154,7 +154,7 @@ ShiftDisplay sd(6, 7, 5, COMMON_CATHODE, 3);
 void setup() {
 	for (int i = 3; i > 0; i--) {
 		sd.show(i, 400, ALIGN_CENTER); // save number and show it for 400ms
-		sd.insertDot(1); // add dot to saved number
+		sd.addDot(1); // add dot to saved number
 		sd.show(400); // show number with dot for 400ms
 	}
 	sd.set("GO"); // save "GO" to buffer
@@ -168,9 +168,9 @@ void loop() {
 
 ## Changelog
 
-- a.b.c (x/y/z)
+- next ()
   - Change: print(time, value) updated to show(value, time)
-  - Change: insertPoint() and removePoint() updated to insertDot() and removeDot()
+  - Change: insertPoint() and removePoint() updated to addDot() and removeDot()
   - Documentation: small fixes
 - 3.3.3 (30/3/2017)
   - Change: updated contact details

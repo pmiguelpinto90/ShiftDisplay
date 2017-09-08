@@ -196,8 +196,9 @@ void loop() {
 
 ## Changelog
 
-- next ()
-  - Feature: custom characters
+- 3.5.0 (8/9/2017)
+  - Feature: set/show characters array with dot array
+  - Feature: set/show custom characters
 - 3.4.0 (6/9/2017)
   - Feature: loadDots() function
   - Change: print(time, value) updated to show(value, time)
@@ -253,7 +254,6 @@ void loop() {
 
 ## TODO
 
-- [x] Custom characters
 - [ ] Multiple logical displays?
 
 

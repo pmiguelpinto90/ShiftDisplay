@@ -257,7 +257,7 @@ void ShiftDisplay::set(const String &value, char alignment) {
 }
 
 // Save to buffer a custom character array
-void Shiftdisplay::set(byte code[]) {
+void ShiftDisplay::set(const byte code[]) {
 	for (int i = 0; i < _displaySize; i++)
 		_buffer[i] = _displayType ? code[i] : ~code[i];
 }
@@ -337,7 +337,7 @@ void ShiftDisplay::show(const String &value, unsigned long time, char alignment)
 }
 
 // Save to buffer and show a custom character array for the specified time
-void ShiftDisplay::show(byte code[], unsigned long time) {
+void ShiftDisplay::show(const byte code[], unsigned long time) {
 	set(code);
 	show(time);
 }

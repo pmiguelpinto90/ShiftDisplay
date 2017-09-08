@@ -254,7 +254,8 @@ void loop() {
 
 ## TODO
 
-- [ ] Multiple logical displays?
+- [ ] Multiple logical displays
+- [ ] Other types of displays
 
 
 ## Contacts

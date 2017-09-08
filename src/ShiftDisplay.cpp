@@ -256,6 +256,12 @@ void ShiftDisplay::set(const String &value, char alignment) {
 	set(str, alignment); // call char array function
 }
 
+// Save to buffer a custom character array
+void Shiftdisplay::set(byte code[]) {
+	for (int i = 0; i < _displaySize; i++)
+		_buffer[i] = _displayType ? code[i] : ~code[i];
+}
+
 // Modify buffer, insert dot at index
 void ShiftDisplay::insertDot(int index) {
 	if (index >= 0 && index < _displaySize)
@@ -327,6 +333,12 @@ void ShiftDisplay::show(const char value[], unsigned long time, char alignment) 
 // Save to buffer and show an Arduino String value for the specified time
 void ShiftDisplay::show(const String &value, unsigned long time, char alignment) {
 	set(value, alignment);
+	show(time);
+}
+
+// Save to buffer and show a custom character array for the specified time
+void ShiftDisplay::show(byte code[], unsigned long time) {
+	set(code);
 	show(time);
 }
 

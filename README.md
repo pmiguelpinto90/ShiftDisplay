@@ -61,6 +61,7 @@ Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 
   * sd.set(value, alignment)
   * sd.set(value, decimalPlaces)
   * sd.set(value, decimalPlaces, alignment)
+  * sd.set(code[])
 
   Save a value to buffer for showing latter.
 
@@ -77,6 +78,9 @@ Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 
   `decimalPlaces`: is the number of digits following the decimal point;
   optional and only available if the value is a float or double number;
   if not defined, the default is 2.
+
+  `code`: is an array of custom characters, each encoded as a byte where segment A is MSB and DP is LSB;
+  array length must match display size.
 
 * __insertDot()__
   * sd.insertDot(index)
@@ -119,6 +123,7 @@ Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 
   * sd.show(value, time, alignment)
   * sd.show(value, time, decimalPlaces)
   * sd.show(value, time, decimalPlaces, alignment)
+  * sd.show(code[], time)
 
   Save a value to buffer and show it on the display.
 
@@ -139,6 +144,9 @@ Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 
   `decimalPlaces`: is the number of digits following the decimal point;
   optional and only available if the value is a float or double number;
   if not defined, the default is 2.
+
+  `code`: is an array of custom characters, each encoded as a byte where segment A is MSB and DP is LSB.
+  array length must match display size.
 
 ### Constants
 
@@ -175,6 +183,8 @@ void loop() {
 
 ## Changelog
 
+- next ()
+  - Feature: custom characters
 - 3.4.0 (6/9/2017)
   - Feature: loadDots() function
   - Change: print(time, value) updated to show(value, time)
@@ -230,7 +240,7 @@ void loop() {
 
 ## TODO
 
-- [ ] Custom characters
+- [x] Custom characters
 - [ ] Multiple logical displays?
 
 

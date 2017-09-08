@@ -61,7 +61,8 @@ Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 
   * sd.set(value, alignment)
   * sd.set(value, decimalPlaces)
   * sd.set(value, decimalPlaces, alignment)
-  * sd.set(code[])
+  * sd.set(codes[])
+  * sd.set(characters[], dots[])
 
   Save a value to buffer for showing latter.
 
@@ -69,7 +70,7 @@ Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 
 
   `value`: is the value to save;
   can be a number (int, long, float, double) or text (char, char array, String object);
-  for text, valid characters are 0-9 a-z A-Z - space.
+  for text, valid characters are 0-9 a-z A-Z -, everything else will be converted to a space.
 
   `alignment`: is the alignment of the value on the display;
   optional, constant `ALIGN_LEFT`, `ALIGN_RIGHT` or `ALIGN_CENTER`;
@@ -79,7 +80,16 @@ Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 
   optional and only available if the value is a float or double number;
   if not defined, the default is 2.
 
-  `code`: is an array of custom characters, each encoded as a byte where segment A is MSB and DP is LSB;
+  `codes`: is a byte array specifying custom characters, each representing a character on the display, from left to right;
+  a custom character is encooded as a byte where segment A is MSB and DP is LSB;
+  array length must match display size.
+
+  `characters`: is a char array, each representing a character on the display, from left to right;
+  valid characters are 0-9 a-z A-Z -, everything else will be converted to a space;
+  array length must match display size.
+
+  `dots`: is a bool array, each representing a dot on the display, from left to right;
+  if set as NULL, no dots will be placed;
   array length must match display size.
 
 * __insertDot()__
@@ -97,13 +107,6 @@ Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 
 
   `index`: is the position on the display to remove the dot, starting at 0 for the leftmost;
   if is invalid, does not have any effect.
-
-* __loadDots()__
-  * sd.loadDots(values[])
-
-  Modify dots in buffer.
-
-  `values`: is the array defining if a dot is shown (true) or hide (false) for every position on the display (as the array index), starting at 0 for the leftmost.
 
 * __show()__
   * sd.show()
@@ -123,7 +126,8 @@ Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 
   * sd.show(value, time, alignment)
   * sd.show(value, time, decimalPlaces)
   * sd.show(value, time, decimalPlaces, alignment)
-  * sd.show(code[], time)
+  * sd.show(codes[], time)
+  * sd.show(characters[], dots[], time)
 
   Save a value to buffer and show it on the display.
 
@@ -131,7 +135,7 @@ Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 
 
   `value`: is the value to save and show;
   can be a number (int, long, float, double) or text (char, char array, String object);
-  for text, valid characters are 0-9 a-z A-Z - space.
+  for text, valid characters are 0-9 a-z A-Z -, everything else will be converted to a space.
 
   `time`: is the time in milliseconds for the value to be shown on the display;
   has to be >= 10;
@@ -145,7 +149,16 @@ Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 
   optional and only available if the value is a float or double number;
   if not defined, the default is 2.
 
-  `code`: is an array of custom characters, each encoded as a byte where segment A is MSB and DP is LSB.
+  `codes`: is a byte array specifying custom characters, each representing a character on the display, from left to right;
+  a custom character is encooded as a byte where segment A is MSB and DP is LSB;
+  array length must match display size.
+
+  `characters`: is a char array, each representing a character on the display, from left to right;
+  valid characters are 0-9 a-z A-Z -, everything else will be converted to a space;
+  array length must match display size.
+
+  `dots`: is a bool array, each representing a dot on the display, from left to right;
+  if set as NULL, no dots will be placed;
   array length must match display size.
 
 ### Constants

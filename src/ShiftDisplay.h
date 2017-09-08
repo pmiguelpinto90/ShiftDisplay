@@ -53,10 +53,10 @@ class ShiftDisplay {
 		void set(char value, char alignment = DEFAULT_ALIGN_TEXT);
 		void set(const char value[], char alignment = DEFAULT_ALIGN_TEXT);
 		void set(const String &value, char alignment = DEFAULT_ALIGN_TEXT);
-		void set(const byte code[]);
+		void set(const byte codes[]);
+		void set(const char characters[], bool dots[]);
 		void insertDot(int index);
 		void removeDot(int index);
-		void loadDots(bool values[]);
 		void show();
 		void show(unsigned long time);
 		void show(int value, unsigned long time, char alignment = DEFAULT_ALIGN_NUMBER);
@@ -66,7 +66,8 @@ class ShiftDisplay {
 		void show(char value, unsigned long time, char alignment = DEFAULT_ALIGN_TEXT);
 		void show(const char value[], unsigned long time, char alignment = DEFAULT_ALIGN_TEXT);
 		void show(const String &value, unsigned long time, char alignment = DEFAULT_ALIGN_TEXT);
-		void show(const byte code[], unsigned long time);
+		void show(const byte codes[], unsigned long time);
+		void show(const char characters[], bool dots[], unsigned long time);
 
 	// compatibility:
 		void insertPoint(int index); // insertDot

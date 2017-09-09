@@ -12,29 +12,73 @@ https://miguelpynto.github.io/ShiftDisplay/
 // *****************************************************************************
 // CONSTRUCTORS
 
-// Initializes the library with the display information and use default pin numbers
+// Initializes the library with the single display information and use default pin numbers
 ShiftDisplay::ShiftDisplay(int displayType, int displaySize) {
-	construct(DEFAULT_LATCH_PIN, DEFAULT_CLOCK_PIN, DEFAULT_DATA_PIN, displayType, displaySize);
+	constructSingle(DEFAULT_LATCH_PIN, DEFAULT_CLOCK_PIN, DEFAULT_DATA_PIN, displayType, displaySize);
 }
 
-// Initializes the library with the display information and pin numbers
+// Initializes the library with the single display information and pin numbers
 ShiftDisplay::ShiftDisplay(int latchPin, int clockPin, int dataPin, int displayType, int displaySize) {
-	construct(latchPin, clockPin, dataPin, displayType, displaySize);
+	constructSingle(latchPin, clockPin, dataPin, displayType, displaySize);
+}
+
+// Initializes the library with the multiple displays information and use default pin numbers
+ShiftDisplay::ShiftDisplay(int displayType, int displayQuantity, int displaySizes[]) {
+	constructMultiple(DEFAULT_LATCH_PIN, DEFAULT_CLOCK_PIN, DEFAULT_DATA_PIN, displayType, displayQuantity, displaySizes);
+}
+
+// Initializes the library with the multiple displays information and pin numbers
+ShiftDisplay::ShiftDisplay(int latchPin, int clockPin, int dataPin, int displayType, int displayQuantity, int displaySizes[]) {
+	constructMultiple(latchPin, clockPin, dataPin, displayType, displayQuantity, displaySizes);
 }
 
 // *****************************************************************************
 // PRIVATE FUNCTIONS
 
-// Function with common instructions to be called by constructors
-void ShiftDisplay::construct(int latchPin, int clockPin, int dataPin, int displayType, int displaySize) {
+// Function with common instructions to be called by single display constructors
+void ShiftDisplay::constructSingle(int latchPin, int clockPin, int dataPin, int displayType, int displaySize) {
 	pinMode(latchPin, OUTPUT);
 	pinMode(clockPin, OUTPUT);
 	pinMode(dataPin, OUTPUT);
 	_latchPin = latchPin;
 	_clockPin = clockPin;
 	_dataPin = dataPin;
+
+	displaySize = min(displaySize, MAX_DISPLAY_SIZE); // override if displaySize is too big
 	_displayType = displayType;
-	_displaySize = min(displaySize, MAX_DISPLAY_SIZE); // override if displaySize is too big
+	_displayQuantity = 1;
+	_displaySizes[0] = displaySize;
+	_displaySize = displaySize;
+
+	byte initial = displayType ? BLANK : ~BLANK; // initial character for every display index
+	memset(_buffer, initial, MAX_DISPLAY_SIZE); // fill buffer with initial character
+}
+
+// Function with common instructions to be called by multiple display constructors
+void ShiftDisplay::constructMultiple(int latchPin, int clockPin, int dataPin, int displayType, int displayQuantity, int displaySizes[]) {
+	pinMode(latchPin, OUTPUT);
+	pinMode(clockPin, OUTPUT);
+	pinMode(dataPin, OUTPUT);
+	_latchPin = latchPin;
+	_clockPin = clockPin;
+	_dataPin = dataPin;
+
+	int i = 0;
+	int displaySize = 0;
+	for (; i < displayQuantity && displaySize < MAX_DISPLAY_SIZE && i < MAX_DISPLAY_SIZE; i++) {
+		int preSize = displaySize + displaySizes[i]; // preview new size
+		if (preSize <= MAX_DISPLAY_SIZE) { // size is ok
+			_displaySizes[i] = displaySizes[i];
+			displaySize = preSize;
+		} else { // size is out of bounds
+			_displaySizes[i] = MAX_DISPLAY_SIZE - displaySize; // override last size to until max
+			displaySize = MAX_DISPLAY_SIZE; // override size to max
+		}
+	}
+	_displayQuantity = i;
+	_displaySize = displaySize;
+	_displayType = displayType;
+	
 	byte initial = displayType ? BLANK : ~BLANK; // initial character for every display index
 	memset(_buffer, initial, MAX_DISPLAY_SIZE); // fill buffer with initial character
 }
@@ -150,6 +194,7 @@ void ShiftDisplay::encodeDot(int index, bool show) {
 		bit = _displayType ? 1 : 0;
 	else
 		bit = _displayType ? 0 : 1;
+	//int bit = (show == (bool)_displayType) TODO
 	bitWrite(_buffer[index], 0, bit);
 }
 

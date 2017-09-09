@@ -29,10 +29,13 @@ class ShiftDisplay {
 		int _clockPin;
 		int _dataPin;
 		int _displayType;
+		int _displayQuantity;
+		int _displaySizes[MAX_DISPLAY_SIZE];
 		int _displaySize;
 		byte _buffer[MAX_DISPLAY_SIZE]; // value set, encoded to print
 
-		void construct(int latchPin, int clockPin, int dataPin, int displayType, int displaySize);
+		void constructSingle(int latchPin, int clockPin, int dataPin, int displayType, int displaySize);
+		void constructMultiple(int latchPin, int clockPin, int dataPin, int displaysType, int displaysQuantity, int displaysSizes[]);
 		int countCharacters(long number);
 		int countCharacters(double number);
 		void getCharacters(long input, char output[], int size);
@@ -45,7 +48,8 @@ class ShiftDisplay {
 	public:
 		ShiftDisplay(int displayType, int displaySize);
 		ShiftDisplay(int latchPin, int clockPin, int dataPin, int displayType, int displaySize);
-
+		ShiftDisplay(int displayType, int displayQuantity, int displaySizes[]);
+		ShiftDisplay(int latchPin, int clockPin, int dataPin, int displayType, int displayQuantity, int displaySizes[]);
 		void set(int value, char alignment = DEFAULT_ALIGN_NUMBER);
 		void set(long value, char alignment = DEFAULT_ALIGN_NUMBER);
 		void set(double value, int decimalPlaces = DEFAULT_DECIMAL_PLACES, char alignment = DEFAULT_ALIGN_NUMBER);

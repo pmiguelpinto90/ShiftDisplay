@@ -48,6 +48,7 @@ void ShiftDisplay::constructSingle(int latchPin, int clockPin, int dataPin, int 
 	_displayType = displayType;
 	_displayQuantity = 1;
 	_displaySizes[0] = displaySize;
+	_displayStarts[0] = 0;
 	_displaySize = displaySize;
 
 	byte initial = displayType ? BLANK : ~BLANK; // initial character for every display index
@@ -69,16 +70,18 @@ void ShiftDisplay::constructMultiple(int latchPin, int clockPin, int dataPin, in
 		int preSize = displaySize + displaySizes[i]; // preview new size
 		if (preSize <= MAX_DISPLAY_SIZE) { // size is ok
 			_displaySizes[i] = displaySizes[i];
+			_displayStarts[i] = displaySize;
 			displaySize = preSize;
 		} else { // size is out of bounds
 			_displaySizes[i] = MAX_DISPLAY_SIZE - displaySize; // override last size to until max
+			_displayStarts[i] = displaySize;
 			displaySize = MAX_DISPLAY_SIZE; // override size to max
 		}
 	}
 	_displayQuantity = i;
 	_displaySize = displaySize;
 	_displayType = displayType;
-	
+
 	byte initial = displayType ? BLANK : ~BLANK; // initial character for every display index
 	memset(_buffer, initial, MAX_DISPLAY_SIZE); // fill buffer with initial character
 }
@@ -100,7 +103,7 @@ int ShiftDisplay::countCharacters(double number) {
 }
 
 // Convert an integer number to an array of characters
-void ShiftDisplay::getCharacters(long input, char output[], int size) {
+void ShiftDisplay::getCharacters(long input, int size, char output[]) {
 
 	// invert negative
 	bool negative = false;
@@ -124,25 +127,25 @@ void ShiftDisplay::getCharacters(long input, char output[], int size) {
 
 // Arrange characters for display format over specified alignment
 // Return dot index on display or NULL if none
-int ShiftDisplay::formatCharacters(const char input[], int size, char output[], char alignment, int decimalPlaces = NULL) {
+int ShiftDisplay::formatCharacters(int inSize, const char input[], int outSize, char output[], char alignment, int decimalPlaces = NULL) {
 	
 	// index of character virtual borders
 	int left; // lowest index
 	int right; // highest index
 
 	int minimum = 0; // minimum display index possible
-	int maximum = _displaySize - 1; // maximum display index possible
+	int maximum = outSize - 1; // maximum display index possible
 
 	// calculate borders according to alignment
 	if (alignment == ALIGN_LEFT) {
 		left = minimum;
-		right = size - 1;
+		right = inSize - 1;
 	} else if (alignment == ALIGN_RIGHT) {
-		left = _displaySize - size;
+		left = outSize - inSize;
 		right = maximum;
 	} else { // ALIGN_CENTER:
-		left = (_displaySize - size) / 2;
-		right = left + size - 1;
+		left = (outSize - inSize) / 2;
+		right = left + inSize - 1;
 	}
 	
 	// fill output array with empty space or characters
@@ -151,7 +154,7 @@ int ShiftDisplay::formatCharacters(const char input[], int size, char output[], 
 	for (int i = left, j = 0; i <= right; i++, j++) // characters
 		if (i >= minimum && i <= maximum) // not out of bounds on display
 			output[i] = input[j];
-	for (int i = right+1; i < _displaySize; i++) // after characters
+	for (int i = right+1; i < outSize; i++) // after characters
 		output[i] = ' ';
 
 	// calculate dot index and return it or NULL if none
@@ -164,31 +167,28 @@ int ShiftDisplay::formatCharacters(const char input[], int size, char output[], 
 }
 
 // Encode array of characters to array of bytes read by the display
-void ShiftDisplay::encodeCharacters(const char input[], int dotIndex = NULL) {
-	for (int i = 0; i < _displaySize; i++) { // input length = _displaySize
+void ShiftDisplay::encodeCharacters(int size, const char input[], byte output[], int dotIndex = NULL) {
+	for (int i = 0; i < size; i++) {
 		char c = input[i];
 		
-		byte code;
 		if (c >= '0' && c <= '9')
-			code = NUMBERS[c - '0'];
+			output[i] = NUMBERS[c - '0'];
 		else if (c >= 'a' && c <= 'z')
-			code = LETTERS[c - 'a'];
+			output[i] = LETTERS[c - 'a'];
 		else if (c >= 'A' && c <= 'Z')
-			code = LETTERS[c - 'A'];
+			output[i] = LETTERS[c - 'A'];
 		else if (c == '-')
-			code = MINUS;
+			output[i] = MINUS;
 		else // space or invalid
-			code = BLANK;
-		
-		_buffer[i] = _displayType ? code : ~code;
+			output[i] = BLANK;
 	}
 
 	if (dotIndex != NULL)
-		encodeDot(dotIndex, true);
+		bitWrite(output[dotIndex], 0, 1);
 }
 
-// Encode dot to show or hide at index
-void ShiftDisplay::encodeDot(int index, bool show) {
+// Modify buffer, add or remove a dot at index
+void ShiftDisplay::setBufferDot(int index, bool show) {
 	int bit;
 	if (show)
 		bit = _displayType ? 1 : 0;
@@ -196,6 +196,12 @@ void ShiftDisplay::encodeDot(int index, bool show) {
 		bit = _displayType ? 0 : 1;
 	//int bit = (show == (bool)_displayType) TODO
 	bitWrite(_buffer[index], 0, bit);
+}
+
+// Save data to buffer, ready to be read by display
+void ShiftDisplay::setBuffer(int start, int size, byte input[]) {
+	for (int i = 0; i < size; i++)
+		_buffer[i+start] = _displayType ? input[i] : ~input[i];
 }
 
 // Clear display
@@ -236,10 +242,12 @@ void ShiftDisplay::set(int value, char alignment) {
 void ShiftDisplay::set(long value, char alignment) {
 	int size = countCharacters(value);
 	char originalCharacters[size];
-	getCharacters(value, originalCharacters, size);
+	getCharacters(value, size, originalCharacters);
 	char formattedCharacters[_displaySize];
-	formatCharacters(originalCharacters, size, formattedCharacters, alignment);
-	encodeCharacters(formattedCharacters);
+	formatCharacters(size, originalCharacters, _displaySize, formattedCharacters, alignment);
+	byte encodedCharacters[_displaySize];
+	encodeCharacters(_displaySize, formattedCharacters, encodedCharacters);
+	setBuffer(0, _displaySize, encodedCharacters);
 }
 
 // Save to buffer a double value
@@ -257,10 +265,12 @@ void ShiftDisplay::set(double value, int decimalPlaces, char alignment) {
 
 	int size = countCharacters(value) + decimalPlaces;
 	char originalCharacters[size];
-	getCharacters(newValue, originalCharacters, size);
+	getCharacters(newValue, size, originalCharacters);
 	char formattedCharacters[_displaySize];
-	int dotIndex = formatCharacters(originalCharacters, size, formattedCharacters, alignment, decimalPlaces);
-	encodeCharacters(formattedCharacters, dotIndex);
+	int dotIndex = formatCharacters(size, originalCharacters, _displaySize, formattedCharacters, alignment, decimalPlaces);
+	byte encodedCharacters[_displaySize];
+	encodeCharacters(_displaySize, formattedCharacters, encodedCharacters, dotIndex);
+	setBuffer(0, _displaySize, encodedCharacters);
 }
 
 // Save to buffer a double value with default number of decimal places
@@ -272,16 +282,20 @@ void ShiftDisplay::set(double value, char alignment) {
 void ShiftDisplay::set(char value, char alignment) {
 	char originalCharacters[] = {value};
 	char formattedCharacters[_displaySize];
-	formatCharacters(originalCharacters, 1, formattedCharacters, alignment);
-	encodeCharacters(formattedCharacters);
+	formatCharacters(1, originalCharacters, _displaySize, formattedCharacters, alignment);
+	byte encodedCharacters[_displaySize];
+	encodeCharacters(_displaySize, formattedCharacters, encodedCharacters);
+	setBuffer(0, _displaySize, encodedCharacters);
 }
 
 // Save to buffer a char array value
 void ShiftDisplay::set(const char value[], char alignment) {
 	int size = strlen(value);
 	char formattedCharacters[_displaySize];
-	formatCharacters(value, size, formattedCharacters, alignment);
-	encodeCharacters(formattedCharacters);
+	formatCharacters(size, value, _displaySize, formattedCharacters, alignment);
+	byte encodedCharacters[_displaySize];
+	encodeCharacters(_displaySize, formattedCharacters, encodedCharacters);
+	setBuffer(0, _displaySize, encodedCharacters);
 }
 
 // Save to buffer an Arduino String value, manual processing for better support between Arduino cores
@@ -303,28 +317,49 @@ void ShiftDisplay::set(const String &value, char alignment) {
 
 // Save to buffer a formatted segments array
 void ShiftDisplay::set(const byte codes[]) {
-	for (int i = 0; i < _displaySize; i++)
-		_buffer[i] = _displayType ? codes[i] : ~codes[i];
+	setBuffer(0, _displaySize, codes);
 }
 
 // Save to buffer a formatted characters array and a dots array
 void ShiftDisplay::set(const char characters[], bool dots[]) {
-	encodeCharacters(characters);
+	byte encodedCharacters[_displaySize];
+	encodeCharacters(_displaySize, characters, encodedCharacters);
+	setBuffer(0, _displaySize, encodedCharacters);
 	if (dots != NULL)
 		for (int i = 0; i < _displaySize; i++)
-			encodeDot(i, dots[i]);
+			setBufferDot(i, dots[i]);
+}
+
+// Save to a section of buffer an int value
+void ShiftDisplay::setAt(int displayId, int value, char alignment) {
+	setAt(displayId, (long) value, alignment); // call long function
+}
+
+// Save to a section of buffer a long value
+void ShiftDisplay::setAt(int displayId, long value, char alignment) {
+	if (displayId >= 0 && displayId < _displayQuantity) { // valid displayId
+		int valueSize = countCharacters(value);
+		char originalCharacters[valueSize];
+		getCharacters(value, valueSize, originalCharacters);
+		int displaySize = _displaySizes[displayId];
+		char formattedCharacters[displaySize];
+		formatCharacters(valueSize, originalCharacters, displaySize, formattedCharacters, alignment);
+		byte encodedCharacters[displaySize];
+		encodeCharacters(displaySize, formattedCharacters, encodedCharacters);
+		setBuffer(_displayStarts[displayId], displaySize, encodedCharacters);
+	}
 }
 
 // Modify buffer, insert dot at index
 void ShiftDisplay::insertDot(int index) {
 	if (index >= 0 && index < _displaySize)
-		encodeDot(index, true);
+		setBufferDot(index, true);
 }
 
 // Modify buffer, remove dot at index
 void ShiftDisplay::removeDot(int index) {
 	if (index >= 0 && index < _displaySize)
-		encodeDot(index, false);
+		setBufferDot(index, false);
 }
 
 // Show buffer value for one iteration
@@ -335,8 +370,8 @@ void ShiftDisplay::show() {
 
 // Show buffer value for the specified time
 void ShiftDisplay::show(unsigned long time) {
-	long end = millis() + time - (1*_displaySize); // start + total duration - last iteration (so it doesnt exceed time requested)
-	while ((long)millis() <= end)
+	unsigned long end = millis() + time - (1*_displaySize); // start + total duration - last iteration (so it doesnt exceed time requested)
+	while (millis() <= end)
 		printDisplay();
 	clearDisplay();
 }

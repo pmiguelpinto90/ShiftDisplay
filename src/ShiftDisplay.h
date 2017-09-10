@@ -32,16 +32,18 @@ class ShiftDisplay {
 		int _displayQuantity;
 		int _displaySizes[MAX_DISPLAY_SIZE];
 		int _displaySize;
-		byte _buffer[MAX_DISPLAY_SIZE]; // value set, encoded to print
+		int _displayStarts[MAX_DISPLAY_SIZE];
+		byte _buffer[MAX_DISPLAY_SIZE]; // value encoded to print
 
 		void constructSingle(int latchPin, int clockPin, int dataPin, int displayType, int displaySize);
-		void constructMultiple(int latchPin, int clockPin, int dataPin, int displaysType, int displaysQuantity, int displaysSizes[]);
+		void constructMultiple(int latchPin, int clockPin, int dataPin, int displayType, int displayQuantity, int displaySizes[]);
 		int countCharacters(long number);
 		int countCharacters(double number);
-		void getCharacters(long input, char output[], int size);
-		int formatCharacters(const char input[], int size, char output[], char alignment, int decimalPlaces);
-		void encodeCharacters(const char input[], int dotIndex);
-		void encodeDot(int index, bool show);
+		void getCharacters(long input, int size, char output[]);
+		int formatCharacters(int inSize, const char input[], int outSize, char output[], char alignment, int decimalPlaces);
+		void encodeCharacters(int size, const char input[], byte output[], int dotIndex);
+		void setBufferDot(int index, bool show);
+		void setBuffer(int start, int size, byte input[]);
 		void clearDisplay();
 		void printDisplay();
 
@@ -59,6 +61,8 @@ class ShiftDisplay {
 		void set(const String &value, char alignment = DEFAULT_ALIGN_TEXT);
 		void set(const byte codes[]);
 		void set(const char characters[], bool dots[]);
+		void setAt(int displayId, int value, char alignment = DEFAULT_ALIGN_NUMBER);
+		void setAt(int displayId, long value, char alignment = DEFAULT_ALIGN_NUMBER);
 		void insertDot(int index);
 		void removeDot(int index);
 		void show();

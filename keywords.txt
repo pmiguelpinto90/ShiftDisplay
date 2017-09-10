@@ -1,6 +1,7 @@
 ShiftDisplay	KEYWORD1
 
 set	KEYWORD2
+setAt	KEYWORD2
 insertDot	KEYWORD2
 removeDot	KEYWORD2
 show	KEYWORD2

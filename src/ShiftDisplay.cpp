@@ -350,6 +350,41 @@ void ShiftDisplay::setAt(int displayId, long value, char alignment) {
 	}
 }
 
+//
+void ShiftDisplay::setAt(int displayId, double value, int decimalPlaces, char alignment) {
+
+}
+
+//
+void ShiftDisplay::setAt(int displayId, double value, char alignment) {
+
+}
+
+//
+void ShiftDisplay::setAt(int displayId, char value, char alignment) {
+
+}
+
+//
+void ShiftDisplay::setAt(int displayId, const char value[], char alignment) {
+
+}
+
+//
+void ShiftDisplay::setAt(int displayId, const String &value, char alignment) {
+
+}
+
+//
+void ShiftDisplay::setAt(int displayId, const byte codes[]) {
+
+}
+
+//
+void ShiftDisplay::setAt(int displayId, const char characters[], bool dots[]) {
+
+}
+
 // Modify buffer, insert dot at index
 void ShiftDisplay::insertDot(int index) {
 	if (index >= 0 && index < _displaySize)

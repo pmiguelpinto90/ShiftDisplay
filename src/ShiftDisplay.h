@@ -55,7 +55,7 @@ class ShiftDisplay {
 		void set(int value, char alignment = DEFAULT_ALIGN_NUMBER);
 		void set(long value, char alignment = DEFAULT_ALIGN_NUMBER);
 		void set(double value, int decimalPlaces = DEFAULT_DECIMAL_PLACES, char alignment = DEFAULT_ALIGN_NUMBER);
-		void set(double value, char alignment); // for overriding decimalPlaces obligation with alignment
+		void set(double value, char alignment); // for overriding decimalPlaces obligation in above function
 		void set(char value, char alignment = DEFAULT_ALIGN_TEXT);
 		void set(const char value[], char alignment = DEFAULT_ALIGN_TEXT);
 		void set(const String &value, char alignment = DEFAULT_ALIGN_TEXT);
@@ -63,6 +63,13 @@ class ShiftDisplay {
 		void set(const char characters[], bool dots[]);
 		void setAt(int displayId, int value, char alignment = DEFAULT_ALIGN_NUMBER);
 		void setAt(int displayId, long value, char alignment = DEFAULT_ALIGN_NUMBER);
+		void setAt(int displayId, double value, int decimalPlaces = DEFAULT_DECIMAL_PLACES, char alignment = DEFAULT_ALIGN_NUMBER);
+		void setAt(int displayId, double value, char alignment);
+		void setAt(int displayId, char value, char alignment = DEFAULT_ALIGN_TEXT);
+		void setAt(int displayId, const char value[], char alignment = DEFAULT_ALIGN_TEXT);
+		void setAt(int displayId, const String &value, char alignment = DEFAULT_ALIGN_TEXT);
+		void setAt(int displayId, const byte codes[]);
+		void setAt(int displayId, const char characters[], bool dots[]);
 		void insertDot(int index);
 		void removeDot(int index);
 		void show();
@@ -70,7 +77,7 @@ class ShiftDisplay {
 		void show(int value, unsigned long time, char alignment = DEFAULT_ALIGN_NUMBER);
 		void show(long value, unsigned long time, char alignment = DEFAULT_ALIGN_NUMBER);
 		void show(double value, unsigned long time, int decimalPlaces = DEFAULT_DECIMAL_PLACES, char alignment = DEFAULT_ALIGN_NUMBER);
-		void show(double value, unsigned long time, char alignment); // for overriding decimalPlaces obligation in above function
+		void show(double value, unsigned long time, char alignment);
 		void show(char value, unsigned long time, char alignment = DEFAULT_ALIGN_TEXT);
 		void show(const char value[], unsigned long time, char alignment = DEFAULT_ALIGN_TEXT);
 		void show(const String &value, unsigned long time, char alignment = DEFAULT_ALIGN_TEXT);

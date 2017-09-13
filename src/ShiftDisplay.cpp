@@ -27,13 +27,14 @@ ShiftDisplay::ShiftDisplay(int latchPin, int clockPin, int dataPin, int displayT
 	constructMultiple(latchPin, clockPin, dataPin, displayType, displayQuantity, displaySizes);
 }
 
-void ShiftDisplay::constructSingle(int latchPin, int clockPin, int dataPin, int displayType, int displaySize) {
-	pinMode(latchPin, OUTPUT);
-	pinMode(clockPin, OUTPUT);
-	pinMode(dataPin, OUTPUT);
+void ShiftDisplay::constructSingle(int latchPin, int clockPin, int dataPin, int displayType, int displaySize) { // TODO test removing this
 	_latchPin = latchPin;
 	_clockPin = clockPin;
 	_dataPin = dataPin;
+	pinMode(_latchPin, OUTPUT);
+	pinMode(_clockPin, OUTPUT);
+	pinMode(_dataPin, OUTPUT);
+	clearDisplay(); // clear asap so junk doesnt show while init
 
 	displaySize = min(displaySize, MAX_DISPLAY_SIZE); // override if displaySize is too big
 	_displayType = displayType;
@@ -47,12 +48,13 @@ void ShiftDisplay::constructSingle(int latchPin, int clockPin, int dataPin, int 
 }
 
 void ShiftDisplay::constructMultiple(int latchPin, int clockPin, int dataPin, int displayType, int displayQuantity, int displaySizes[]) {
-	pinMode(latchPin, OUTPUT);
-	pinMode(clockPin, OUTPUT);
-	pinMode(dataPin, OUTPUT);
 	_latchPin = latchPin;
 	_clockPin = clockPin;
 	_dataPin = dataPin;
+	pinMode(_latchPin, OUTPUT);
+	pinMode(_clockPin, OUTPUT);
+	pinMode(_dataPin, OUTPUT);
+	clearDisplay(); // clear asap so junk doesnt show while init
 
 	int i = 0;
 	int displaySize = 0;
@@ -215,91 +217,39 @@ int ShiftDisplay::countCharacters(double number) {
 // PUBLIC FUNCTIONS ************************************************************
 
 void ShiftDisplay::set(int value, char alignment) {
-	set((long) value, alignment); // call long function
+	setAt(0, value, alignment);
 }
 
 void ShiftDisplay::set(long value, char alignment) {
-	int size = countCharacters(value);
-	char originalCharacters[size];
-	getCharacters(value, size, originalCharacters);
-	char formattedCharacters[_displaySize];
-	formatCharacters(size, originalCharacters, _displaySize, formattedCharacters, alignment);
-	byte encodedCharacters[_displaySize];
-	encodeCharacters(_displaySize, formattedCharacters, encodedCharacters);
-	setBuffer(0, _displaySize, encodedCharacters);
+	setAt(0, value, alignment);
 }
 
 void ShiftDisplay::set(double value, int decimalPlaces, char alignment) {
-
-	// if no decimal places, call integer function instead
-	if (decimalPlaces == 0) {
-		long newValue = round(value);
-		set(newValue, alignment);
-		return;
-	}
-
- 	// calculate value with specified decimal places as integer (eg 1.236, 2 = 124)
-	long newValue = round(value * pow(10, decimalPlaces));
-
-	int size = countCharacters(value) + decimalPlaces;
-	char originalCharacters[size];
-	getCharacters(newValue, size, originalCharacters);
-	char formattedCharacters[_displaySize];
-	int dotIndex = formatCharacters(size, originalCharacters, _displaySize, formattedCharacters, alignment, decimalPlaces);
-	byte encodedCharacters[_displaySize];
-	encodeCharacters(_displaySize, formattedCharacters, encodedCharacters, dotIndex);
-	setBuffer(0, _displaySize, encodedCharacters);
+	setAt(0, value, decimalPlaces, alignment);
 }
 
 void ShiftDisplay::set(double value, char alignment) {
-	set(value, DEFAULT_DECIMAL_PLACES, alignment);
+	setAt(0, value, alignment);
 }
 
 void ShiftDisplay::set(char value, char alignment) {
-	char originalCharacters[] = {value};
-	char formattedCharacters[_displaySize];
-	formatCharacters(1, originalCharacters, _displaySize, formattedCharacters, alignment);
-	byte encodedCharacters[_displaySize];
-	encodeCharacters(_displaySize, formattedCharacters, encodedCharacters);
-	setBuffer(0, _displaySize, encodedCharacters);
+	setAt(0, value, alignment);
 }
 
 void ShiftDisplay::set(const char value[], char alignment) {
-	int size = strlen(value);
-	char formattedCharacters[_displaySize];
-	formatCharacters(size, value, _displaySize, formattedCharacters, alignment);
-	byte encodedCharacters[_displaySize];
-	encodeCharacters(_displaySize, formattedCharacters, encodedCharacters);
-	setBuffer(0, _displaySize, encodedCharacters);
+	setAt(0, value, alignment);
 }
 
 void ShiftDisplay::set(const String &value, char alignment) {
-
-	// get String size
-	int size = 0;
-	while (value[size] != '\0')
-		size++;
-	
-	// convert String to char array
-	char str[size + 1];
-	for (int i = 0; i < size; i++)
-		str[i] = value[i];
-	str[size] = '\0';
-
-	set(str, alignment); // call char array function
+	setAt(0, value, alignment);
 }
 
 void ShiftDisplay::set(const byte codes[]) {
-	setBuffer(0, _displaySize, codes);
+	setAt(0, codes);
 }
 
 void ShiftDisplay::set(const char characters[], bool dots[]) {
-	byte encodedCharacters[_displaySize];
-	encodeCharacters(_displaySize, characters, encodedCharacters);
-	setBuffer(0, _displaySize, encodedCharacters);
-	if (dots != NULL)
-		for (int i = 0; i < _displaySize; i++)
-			setBufferDot(i, dots[i]);
+	setAt(0, characters, dots);
 }
 
 void ShiftDisplay::setAt(int displayId, int value, char alignment) {
@@ -321,31 +271,91 @@ void ShiftDisplay::setAt(int displayId, long value, char alignment) {
 }
 
 void ShiftDisplay::setAt(int displayId, double value, int decimalPlaces, char alignment) {
-	// TODO
+	if (displayId >= 0 && displayId < _displayQuantity) { // valid displayId
+		
+		// if no decimal places, call integer function instead
+		if (decimalPlaces == 0) {
+			long newValue = round(value);
+			setAt(displayId, newValue, alignment);
+			return;
+		}
+	
+		 // calculate value with specified decimal places as integer (eg 1.236, 2 = 124)
+		long newValue = round(value * pow(10, decimalPlaces));
+	
+		int valueSize = countCharacters(value) + decimalPlaces;
+		char originalCharacters[valueSize];
+		getCharacters(newValue, valueSize, originalCharacters);
+		int displaySize = _displaySizes[displayId];
+		char formattedCharacters[displaySize];
+		int dotIndex = formatCharacters(valueSize, originalCharacters, displaySize, formattedCharacters, alignment, decimalPlaces);
+		byte encodedCharacters[displaySize];
+		encodeCharacters(displaySize, formattedCharacters, encodedCharacters, dotIndex);
+		setBuffer(_displayStarts[displayId], displaySize, encodedCharacters);
+	}
 }
 
 void ShiftDisplay::setAt(int displayId, double value, char alignment) {
-	// TODO
+	setAt(displayId, value, DEFAULT_DECIMAL_PLACES, alignment); // call other double function
 }
 
 void ShiftDisplay::setAt(int displayId, char value, char alignment) {
-	// TODO
+	if (displayId >= 0 && displayId < _displayQuantity) { // valid displayId
+		char originalCharacters[] = {value};
+		int displaySize = _displaySizes[displayId];
+		char formattedCharacters[displaySize];
+		formatCharacters(1, originalCharacters, displaySize, formattedCharacters, alignment);
+		byte encodedCharacters[displaySize];
+		encodeCharacters(displaySize, formattedCharacters, encodedCharacters);
+		setBuffer(_displayStarts[displayId], displaySize, encodedCharacters);
+	}
 }
 
 void ShiftDisplay::setAt(int displayId, const char value[], char alignment) {
-	// TODO
+	if (displayId >= 0 && displayId < _displayQuantity) { // valid displayId
+		int valueSize = strlen(value);
+		int displaySize = _displaySizes[displayId];
+		char formattedCharacters[displaySize];
+		formatCharacters(valueSize, value, displaySize, formattedCharacters, alignment);
+		byte encodedCharacters[displaySize];
+		encodeCharacters(displaySize, formattedCharacters, encodedCharacters);
+		setBuffer(_displayStarts[displayId], displaySize, encodedCharacters);
+	}
 }
 
 void ShiftDisplay::setAt(int displayId, const String &value, char alignment) {
-	// TODO
+	if (displayId >= 0 && displayId < _displayQuantity) { // valid displayId
+	
+		// convert String to char array manually for better support between Arduino cores
+		int size = 0;
+		while (value[size] != '\0')
+			size++;
+		char str[size + 1];
+		for (int i = 0; i < size; i++)
+			str[i] = value[i];
+		str[size] = '\0';
+	
+		setAt(displayId, str, alignment); // call char array function
+	}
 }
 
 void ShiftDisplay::setAt(int displayId, const byte codes[]) {
-	// TODO
+	if (displayId >= 0 && displayId < _displayQuantity) { // valid displayId
+		int displaySize = _displaySizes[displayId];
+		setBuffer(_displayStarts[displayId], displaySize, codes);
+	}
 }
 
 void ShiftDisplay::setAt(int displayId, const char characters[], bool dots[]) {
-	// TODO
+	if (displayId >= 0 && displayId < _displayQuantity) { // valid displayId
+		int displaySize = _displaySizes[displayId];
+		byte encodedCharacters[displaySize];
+		encodeCharacters(displaySize, characters, encodedCharacters);
+		setBuffer(_displayStarts[displayId], displaySize, encodedCharacters);
+		if (dots != NULL)
+			for (int i = 0; i < displaySize; i++)
+				setBufferDot(i+_displayStarts[displayId], dots[i]);
+	}
 }
 
 void ShiftDisplay::insertDot(int index) {
@@ -386,7 +396,7 @@ void ShiftDisplay::show(double value, unsigned long time, int decimalPlaces, cha
 }
 
 void ShiftDisplay::show(double value, unsigned long time, char alignment) {
-	set(value, DEFAULT_DECIMAL_PLACES, alignment);
+	set(value, alignment);
 	show(time);
 }
 

@@ -33,8 +33,8 @@ class ShiftDisplay {
 		int _displayType;
 		int _displayQuantity;
 		int _displaySizes[MAX_DISPLAY_SIZE];
-		int _displaySize;
-		int _displayStarts[MAX_DISPLAY_SIZE];
+		int _displaySize; // TODO does it need this?
+		int _displayStarts[MAX_DISPLAY_SIZE]; // index where each display begins
 		byte _buffer[MAX_DISPLAY_SIZE]; // value encoded to print
 
 		void constructSingle(int latchPin, int clockPin, int dataPin, int displayType, int displaySize); // Function with common instructions to be called by single display constructors
@@ -60,21 +60,21 @@ class ShiftDisplay {
 		void set(int value, char alignment = DEFAULT_ALIGN_NUMBER); // Save to buffer an int value
 		void set(long value, char alignment = DEFAULT_ALIGN_NUMBER); // Save to buffer a long value
 		void set(double value, int decimalPlaces = DEFAULT_DECIMAL_PLACES, char alignment = DEFAULT_ALIGN_NUMBER); // Save to buffer a double value
-		void set(double value, char alignment); // Save to buffer a double value with default number of decimal places //  for overriding decimalPlaces obligation in above function
+		void set(double value, char alignment); // needed for overriding decimalPlaces obligation in above function
 		void set(char value, char alignment = DEFAULT_ALIGN_TEXT); // Save to buffer a single char value
 		void set(const char value[], char alignment = DEFAULT_ALIGN_TEXT); // Save to buffer a char array value
-		void set(const String &value, char alignment = DEFAULT_ALIGN_TEXT); // Save to buffer an Arduino String value, manual processing for better support between Arduino cores
+		void set(const String &value, char alignment = DEFAULT_ALIGN_TEXT); // Save to buffer an Arduino String value
 		void set(const byte codes[]); // Save to buffer a formatted segments array
 		void set(const char characters[], bool dots[]); // Save to buffer a formatted characters array and a dots array
 		void setAt(int displayId, int value, char alignment = DEFAULT_ALIGN_NUMBER); // Save to a section of buffer an int value
 		void setAt(int displayId, long value, char alignment = DEFAULT_ALIGN_NUMBER); // Save to a section of buffer a long value
-		void setAt(int displayId, double value, int decimalPlaces = DEFAULT_DECIMAL_PLACES, char alignment = DEFAULT_ALIGN_NUMBER); //
-		void setAt(int displayId, double value, char alignment); //
-		void setAt(int displayId, char value, char alignment = DEFAULT_ALIGN_TEXT); //
-		void setAt(int displayId, const char value[], char alignment = DEFAULT_ALIGN_TEXT); //
-		void setAt(int displayId, const String &value, char alignment = DEFAULT_ALIGN_TEXT); //
-		void setAt(int displayId, const byte codes[]); //
-		void setAt(int displayId, const char characters[], bool dots[]); //
+		void setAt(int displayId, double value, int decimalPlaces = DEFAULT_DECIMAL_PLACES, char alignment = DEFAULT_ALIGN_NUMBER); //Save to a section of buffer a double value
+		void setAt(int displayId, double value, char alignment); // needed for overriding decimalPlaces obligation in above function
+		void setAt(int displayId, char value, char alignment = DEFAULT_ALIGN_TEXT); // Save to a section of buffer a single char value
+		void setAt(int displayId, const char value[], char alignment = DEFAULT_ALIGN_TEXT); // Save to a section of buffer a char array value
+		void setAt(int displayId, const String &value, char alignment = DEFAULT_ALIGN_TEXT); // Save to a section of buffer an Arduino String value
+		void setAt(int displayId, const byte codes[]); // Save to a section of buffer a formatted segments array
+		void setAt(int displayId, const char characters[], bool dots[]); // Save to a section of buffer a formatted characters array and a dots array
 		void insertDot(int index); // Modify buffer, insert dot at index
 		void removeDot(int index); // Modify buffer, remove dot at index
 		void show(); // Show buffer value for one iteration
@@ -90,16 +90,15 @@ class ShiftDisplay {
 		void show(const char characters[], bool dots[], unsigned long time); // Save to buffer and show a formatted characters array and a dots array for the specified time
 
 	// compatibility:
-		void insertPoint(int index); // insertDot
-		void removePoint(int index); // removeDot
-		void print(long time, int value, char alignment = DEFAULT_ALIGN_NUMBER); // show
-		void print(long time, long value, char alignment = DEFAULT_ALIGN_NUMBER); // show
-		void print(long time, double value, int decimalPlaces = DEFAULT_DECIMAL_PLACES, char alignment = DEFAULT_ALIGN_NUMBER); // show
-		void print(long time, double value, char alignment); // show
-		void print(long time, char value, char alignment = DEFAULT_ALIGN_TEXT); // show
-		void print(long time, const char value[], char alignment = DEFAULT_ALIGN_TEXT); // show
-		void print(long time, const String &value, char alignment = DEFAULT_ALIGN_TEXT); // show
-
+		void insertPoint(int index); // deprecated by insertDot(...)
+		void removePoint(int index); // deprecated by removeDot(...)
+		void print(long time, int value, char alignment = DEFAULT_ALIGN_NUMBER); // deprecated by show(...)
+		void print(long time, long value, char alignment = DEFAULT_ALIGN_NUMBER); // deprecated by show(...)
+		void print(long time, double value, int decimalPlaces = DEFAULT_DECIMAL_PLACES, char alignment = DEFAULT_ALIGN_NUMBER); // deprecated by show(...)
+		void print(long time, double value, char alignment); // deprecated by show(...)
+		void print(long time, char value, char alignment = DEFAULT_ALIGN_TEXT); // deprecated by show(...)
+		void print(long time, const char value[], char alignment = DEFAULT_ALIGN_TEXT); // deprecated by show(...)
+		void print(long time, const String &value, char alignment = DEFAULT_ALIGN_TEXT); // deprecated by show(...)
 };
 
 #endif

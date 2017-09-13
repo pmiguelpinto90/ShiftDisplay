@@ -75,8 +75,8 @@ class ShiftDisplay {
 		void setAt(int displayId, const String &value, char alignment = DEFAULT_ALIGN_TEXT); // Save to a section of buffer an Arduino String value
 		void setAt(int displayId, const byte codes[]); // Save to a section of buffer a formatted segments array
 		void setAt(int displayId, const char characters[], bool dots[]); // Save to a section of buffer a formatted characters array and a dots array
-		void insertDot(int index); // Modify buffer, insert dot at index
-		void removeDot(int index); // Modify buffer, remove dot at index
+		void setDot(int index, bool dot); // Modify buffer, insert or remove dot at index
+		void setDotAt(int displayId, int relativeIndex, bool dot); // Modify buffer, insert or remove dot at relative index
 		void show(); // Show buffer value for one iteration
 		void show(unsigned long time); // Show buffer value for the specified time
 		void show(int value, unsigned long time, char alignment = DEFAULT_ALIGN_NUMBER); // Save to buffer and show an int value for the specified time
@@ -90,15 +90,15 @@ class ShiftDisplay {
 		void show(const char characters[], bool dots[], unsigned long time); // Save to buffer and show a formatted characters array and a dots array for the specified time
 
 	// compatibility:
-		void insertPoint(int index); // deprecated by insertDot(...)
-		void removePoint(int index); // deprecated by removeDot(...)
-		void print(long time, int value, char alignment = DEFAULT_ALIGN_NUMBER); // deprecated by show(...)
-		void print(long time, long value, char alignment = DEFAULT_ALIGN_NUMBER); // deprecated by show(...)
-		void print(long time, double value, int decimalPlaces = DEFAULT_DECIMAL_PLACES, char alignment = DEFAULT_ALIGN_NUMBER); // deprecated by show(...)
-		void print(long time, double value, char alignment); // deprecated by show(...)
-		void print(long time, char value, char alignment = DEFAULT_ALIGN_TEXT); // deprecated by show(...)
-		void print(long time, const char value[], char alignment = DEFAULT_ALIGN_TEXT); // deprecated by show(...)
-		void print(long time, const String &value, char alignment = DEFAULT_ALIGN_TEXT); // deprecated by show(...)
+		void insertPoint(int index); // deprecated by setDot()
+		void removePoint(int index); // deprecated by setDot()
+		void print(long time, int value, char alignment = DEFAULT_ALIGN_NUMBER); // deprecated by show()
+		void print(long time, long value, char alignment = DEFAULT_ALIGN_NUMBER); // deprecated by show()
+		void print(long time, double value, int decimalPlaces = DEFAULT_DECIMAL_PLACES, char alignment = DEFAULT_ALIGN_NUMBER); // deprecated by show()
+		void print(long time, double value, char alignment); // deprecated by show()
+		void print(long time, char value, char alignment = DEFAULT_ALIGN_TEXT); // deprecated by show()
+		void print(long time, const char value[], char alignment = DEFAULT_ALIGN_TEXT); // deprecated by show()
+		void print(long time, const String &value, char alignment = DEFAULT_ALIGN_TEXT); // deprecated by show()
 };
 
 #endif

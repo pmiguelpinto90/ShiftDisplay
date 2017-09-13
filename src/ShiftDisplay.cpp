@@ -41,7 +41,7 @@ void ShiftDisplay::constructSingle(int latchPin, int clockPin, int dataPin, int 
 	_displayQuantity = 1;
 	_displaySizes[0] = displaySize;
 	_displayStarts[0] = 0;
-	_displaySize = displaySize;
+	_displayTotalSize = displaySize;
 
 	byte initial = displayType ? BLANK : ~BLANK; // initial character for every display index
 	memset(_buffer, initial, MAX_DISPLAY_SIZE); // fill buffer with initial character
@@ -71,7 +71,7 @@ void ShiftDisplay::constructMultiple(int latchPin, int clockPin, int dataPin, in
 		}
 	}
 	_displayQuantity = i;
-	_displaySize = displaySize;
+	_displayTotalSize = displaySize;
 	_displayType = displayType;
 
 	byte initial = displayType ? BLANK : ~BLANK; // initial character for every display index
@@ -81,7 +81,7 @@ void ShiftDisplay::constructMultiple(int latchPin, int clockPin, int dataPin, in
 // PRIVATE FUNCTIONS ***********************************************************
 
 void ShiftDisplay::showDisplay() {
-	for (int i = 0; i < _displaySize; i++) {
+	for (int i = 0; i < _displayTotalSize; i++) {
 		digitalWrite(_latchPin, LOW);
 
 		// data for last shift register
@@ -104,18 +104,22 @@ void ShiftDisplay::clearDisplay() {
 	digitalWrite(_latchPin, HIGH);
 }
 
-void ShiftDisplay::setBuffer(int start, int size, byte input[]) {
-	for (int i = 0; i < size; i++)
-		_buffer[i+start] = _displayType ? input[i] : ~input[i];
+void ShiftDisplay::modifyBuffer(int index, byte code) {
+	_buffer[index] = _displayType ? code[i] : ~code[i];
 }
 
-void ShiftDisplay::setBufferDot(int index, bool show) {
+void ShiftDisplay::modifyBuffer(int startIndex, int size, byte codes[]) {
+	for (int i = 0; i < size; i++)
+		_buffer[i+startIndex] = _displayType ? codes[i] : ~codes[i];
+}
+
+void ShiftDisplay::modifyBufferDot(int index, bool dot) {
 	int bit;
-	if (show)
+	if (dot)
 		bit = _displayType ? 1 : 0;
 	else
 		bit = _displayType ? 0 : 1;
-	//int bit = (show == (bool)_displayType) TODO
+	//int bit = (dot == (bool)_displayType) TODO
 	bitWrite(_buffer[index], 0, bit);
 }
 
@@ -256,6 +260,10 @@ void ShiftDisplay::setDot(int index, bool dot) {
 	setDotAt(0, index, dot);
 }
 
+void ShiftDisplay::setCustom(int index, byte code) {
+	setCustomAt(0, index, code);
+}
+
 void ShiftDisplay::setAt(int displayId, int value, char alignment) {
 	setAt(displayId, (long) value, alignment); // call long function
 }
@@ -270,7 +278,7 @@ void ShiftDisplay::setAt(int displayId, long value, char alignment) {
 		formatCharacters(valueSize, originalCharacters, displaySize, formattedCharacters, alignment);
 		byte encodedCharacters[displaySize];
 		encodeCharacters(displaySize, formattedCharacters, encodedCharacters);
-		setBuffer(_displayStarts[displayId], displaySize, encodedCharacters);
+		modifyBuffer(_displayStarts[displayId], displaySize, encodedCharacters);
 	}
 }
 
@@ -295,7 +303,7 @@ void ShiftDisplay::setAt(int displayId, double value, int decimalPlaces, char al
 		int dotIndex = formatCharacters(valueSize, originalCharacters, displaySize, formattedCharacters, alignment, decimalPlaces);
 		byte encodedCharacters[displaySize];
 		encodeCharacters(displaySize, formattedCharacters, encodedCharacters, dotIndex);
-		setBuffer(_displayStarts[displayId], displaySize, encodedCharacters);
+		modifyBuffer(_displayStarts[displayId], displaySize, encodedCharacters);
 	}
 }
 
@@ -311,7 +319,7 @@ void ShiftDisplay::setAt(int displayId, char value, char alignment) {
 		formatCharacters(1, originalCharacters, displaySize, formattedCharacters, alignment);
 		byte encodedCharacters[displaySize];
 		encodeCharacters(displaySize, formattedCharacters, encodedCharacters);
-		setBuffer(_displayStarts[displayId], displaySize, encodedCharacters);
+		modifyBuffer(_displayStarts[displayId], displaySize, encodedCharacters);
 	}
 }
 
@@ -323,7 +331,7 @@ void ShiftDisplay::setAt(int displayId, const char value[], char alignment) {
 		formatCharacters(valueSize, value, displaySize, formattedCharacters, alignment);
 		byte encodedCharacters[displaySize];
 		encodeCharacters(displaySize, formattedCharacters, encodedCharacters);
-		setBuffer(_displayStarts[displayId], displaySize, encodedCharacters);
+		modifyBuffer(_displayStarts[displayId], displaySize, encodedCharacters);
 	}
 }
 
@@ -346,7 +354,7 @@ void ShiftDisplay::setAt(int displayId, const String &value, char alignment) {
 void ShiftDisplay::setAt(int displayId, const byte codes[]) {
 	if (displayId >= 0 && displayId < _displayQuantity) { // valid displayId
 		int displaySize = _displaySizes[displayId];
-		setBuffer(_displayStarts[displayId], displaySize, codes);
+		modifyBuffer(_displayStarts[displayId], displaySize, codes);
 	}
 }
 
@@ -355,10 +363,10 @@ void ShiftDisplay::setAt(int displayId, const char characters[], bool dots[]) {
 		int displaySize = _displaySizes[displayId];
 		byte encodedCharacters[displaySize];
 		encodeCharacters(displaySize, characters, encodedCharacters);
-		setBuffer(_displayStarts[displayId], displaySize, encodedCharacters);
+		modifyBuffer(_displayStarts[displayId], displaySize, encodedCharacters);
 		if (dots != NULL)
 			for (int i = 0; i < displaySize; i++)
-				setBufferDot(i+_displayStarts[displayId], dots[i]);
+				modifyBufferDot(i+_displayStarts[displayId], dots[i]);
 	}
 }
 
@@ -366,7 +374,16 @@ void ShiftDisplay::setDotAt(int displayId, int relativeIndex, bool dot) {
 	if (displayId >= 0 && displayId < _displayQuantity) { // valid displayId
 		if (relativeIndex >= 0 && relativeIndex < _displaySizes[displayId]) { // valid index in display
 			int index = _displayStarts[displayId] + relativeIndex;
-			setBufferDot(index, dot);
+			modifyBufferDot(index, dot);
+		}
+	}
+}
+
+void ShiftDisplay::setCustomAt(int displayId, int relativeIndex, byte code) {
+	if (displayId >= 0 && displayId < _displayQuantity) { // valid displayId
+		if (relativeIndex >= 0 && relativeIndex < _displaySizes[displayId]) { // valid index in display
+			int index = _displayStarts[displayId] + relativeIndex;
+			modifyBuffer(index, code);
 		}
 	}
 }
@@ -377,7 +394,7 @@ void ShiftDisplay::show() {
 }
 
 void ShiftDisplay::show(unsigned long time) {
-	unsigned long end = millis() + time - (POV*_displaySize); // start + total duration - last iteration (so it doesnt exceed time requested)
+	unsigned long end = millis() + time - (POV * _displayTotalSize); // start + total duration - last iteration (so it doesnt exceed time requested)
 	while (millis() <= end)
 		showDisplay();
 	clearDisplay();

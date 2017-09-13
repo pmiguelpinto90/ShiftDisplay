@@ -66,6 +66,8 @@ class ShiftDisplay {
 		void set(const String &value, char alignment = DEFAULT_ALIGN_TEXT); // Save to buffer an Arduino String value
 		void set(const byte codes[]); // Save to buffer a formatted segments array
 		void set(const char characters[], bool dots[]); // Save to buffer a formatted characters array and a dots array
+		void setDot(int index, bool dot); // Modify buffer, insert or remove dot at index
+		
 		void setAt(int displayId, int value, char alignment = DEFAULT_ALIGN_NUMBER); // Save to a section of buffer an int value
 		void setAt(int displayId, long value, char alignment = DEFAULT_ALIGN_NUMBER); // Save to a section of buffer a long value
 		void setAt(int displayId, double value, int decimalPlaces = DEFAULT_DECIMAL_PLACES, char alignment = DEFAULT_ALIGN_NUMBER); //Save to a section of buffer a double value
@@ -75,8 +77,8 @@ class ShiftDisplay {
 		void setAt(int displayId, const String &value, char alignment = DEFAULT_ALIGN_TEXT); // Save to a section of buffer an Arduino String value
 		void setAt(int displayId, const byte codes[]); // Save to a section of buffer a formatted segments array
 		void setAt(int displayId, const char characters[], bool dots[]); // Save to a section of buffer a formatted characters array and a dots array
-		void setDot(int index, bool dot); // Modify buffer, insert or remove dot at index
 		void setDotAt(int displayId, int relativeIndex, bool dot); // Modify buffer, insert or remove dot at relative index
+
 		void show(); // Show buffer value for one iteration
 		void show(unsigned long time); // Show buffer value for the specified time
 		void show(int value, unsigned long time, char alignment = DEFAULT_ALIGN_NUMBER); // Save to buffer and show an int value for the specified time

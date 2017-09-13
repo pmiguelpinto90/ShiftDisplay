@@ -252,6 +252,10 @@ void ShiftDisplay::set(const char characters[], bool dots[]) {
 	setAt(0, characters, dots);
 }
 
+void ShiftDisplay::setDot(int index, bool dot) {
+	setDotAt(0, index, dot);
+}
+
 void ShiftDisplay::setAt(int displayId, int value, char alignment) {
 	setAt(displayId, (long) value, alignment); // call long function
 }
@@ -356,11 +360,6 @@ void ShiftDisplay::setAt(int displayId, const char characters[], bool dots[]) {
 			for (int i = 0; i < displaySize; i++)
 				setBufferDot(i+_displayStarts[displayId], dots[i]);
 	}
-}
-
-void ShiftDisplay::setDot(int index, bool dot) {
-	if (index >= 0 && index < _displaySize) // valid index
-		setBufferDot(index, dot);
 }
 
 void ShiftDisplay::setDotAt(int displayId, int relativeIndex, bool dot) {

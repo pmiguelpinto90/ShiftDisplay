@@ -390,7 +390,7 @@ void ShiftDisplay::show() {
 }
 
 void ShiftDisplay::show(unsigned long time) {
-	unsigned long end = millis() + time - (POV * _displayTotalSize); // start + total duration - last iteration (so it doesnt exceed time requested)
+	unsigned long end = millis() + time - (POV * _displayTotalSize); // start + total - last iteration
 	while (millis() <= end)
 		showDisplay();
 	clearDisplay();

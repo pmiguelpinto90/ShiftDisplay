@@ -19,12 +19,12 @@ ShiftDisplay::ShiftDisplay(int latchPin, int clockPin, int dataPin, int displayT
 	constructSingleDisplay(latchPin, clockPin, dataPin, displayType, displaySize);
 }
 
-ShiftDisplay::ShiftDisplay(int displayType, int displayQuantity, int displaySizes[]) {
-	constructMultipleDisplay(DEFAULT_LATCH_PIN, DEFAULT_CLOCK_PIN, DEFAULT_DATA_PIN, displayType, displayQuantity, displaySizes);
+ShiftDisplay::ShiftDisplay(int displayType, int sectionCount, int sectionSizes[]) {
+	constructSectionedDisplay(DEFAULT_LATCH_PIN, DEFAULT_CLOCK_PIN, DEFAULT_DATA_PIN, displayType, sectionCount, sectionSizes);
 }
 
-ShiftDisplay::ShiftDisplay(int latchPin, int clockPin, int dataPin, int displayType, int displayQuantity, int displaySizes[]) {
-	constructMultipleDisplay(latchPin, clockPin, dataPin, displayType, displayQuantity, displaySizes);
+ShiftDisplay::ShiftDisplay(int latchPin, int clockPin, int dataPin, int displayType, int sectionCount, int sectionSizes[]) {
+	constructSectionedDisplay(latchPin, clockPin, dataPin, displayType, sectionCount, sectionSizes);
 }
 
 void ShiftDisplay::initPins(int latchPin, int clockPin, int dataPin) {
@@ -34,7 +34,7 @@ void ShiftDisplay::initPins(int latchPin, int clockPin, int dataPin) {
 	pinMode(_latchPin, OUTPUT);
 	pinMode(_clockPin, OUTPUT);
 	pinMode(_dataPin, OUTPUT);
-	clearDisplay(); // clear asap so junk doesnt show while init
+	clearDisplay(); // clear asap so junk doesnt show while initiating
 }
 
 void ShiftDisplay::constructSingleDisplay(int latchPin, int clockPin, int dataPin, int displayType, int displaySize) {
@@ -44,40 +44,40 @@ void ShiftDisplay::constructSingleDisplay(int latchPin, int clockPin, int dataPi
 
 	displaySize = min(displaySize, MAX_DISPLAY_SIZE); // override if displaySize is too big
 	_displayType = displayType;
-	_displayQuantity = 1;
-	_displaySizes[0] = displaySize;
-	_displayStarts[0] = 0;
-	_displayTotalSize = displaySize;
+	_displaySize = displaySize;
+	_sectionCount = 1;
+	_sectionSizes[0] = displaySize;
+	_sectionBegins[0] = 0;
 }
 
-void ShiftDisplay::constructMultipleDisplay(int latchPin, int clockPin, int dataPin, int displayType, int displayQuantity, int displaySizes[]) {
+void ShiftDisplay::constructSectionedDisplay(int latchPin, int clockPin, int dataPin, int displayType, int sectionCount, int sectionSizes[]) {
 	initPins(latchPin, clockPin, dataPin);
 	byte initial = displayType ? BLANK : ~BLANK;
 	memset(_buffer, initial, MAX_DISPLAY_SIZE); // fill buffer with blank character
 
 	_displayType = displayType;
 	int i = 0;
-	int displayTotalSize = 0;
-	for (; i < displayQuantity && displayTotalSize < MAX_DISPLAY_SIZE && i < MAX_DISPLAY_SIZE; i++) {
-		int preTotalSize = displayTotalSize + displaySizes[i]; // preview new size
+	int displaySize = 0;
+	for (; i < sectionCount && displaySize < MAX_DISPLAY_SIZE && i < MAX_DISPLAY_SIZE; i++) {
+		int preTotalSize = displaySize + sectionSizes[i]; // preview new size
 		if (preTotalSize <= MAX_DISPLAY_SIZE) { // size is ok
-			_displaySizes[i] = displaySizes[i];
-			_displayStarts[i] = displayTotalSize;
-			displayTotalSize = preTotalSize;
+			_sectionSizes[i] = sectionSizes[i];
+			_sectionBegins[i] = displaySize;
+			displaySize = preTotalSize;
 		} else { // size is out of bounds
-			_displaySizes[i] = MAX_DISPLAY_SIZE - displayTotalSize; // override last size to until max
-			_displayStarts[i] = displayTotalSize;
-			displayTotalSize = MAX_DISPLAY_SIZE; // override size to max
+			_sectionSizes[i] = MAX_DISPLAY_SIZE - displaySize; // override last size to until max
+			_sectionBegins[i] = displaySize;
+			displaySize = MAX_DISPLAY_SIZE; // override size to max
 		}
 	}
-	_displayQuantity = i;
-	_displayTotalSize = displayTotalSize;
+	_sectionCount = i;
+	_displaySize = displaySize;
 }
 
 // PRIVATE FUNCTIONS ***********************************************************
 
 void ShiftDisplay::showDisplay() {
-	for (int i = 0; i < _displayTotalSize; i++) {
+	for (int i = 0; i < _displaySize; i++) {
 		digitalWrite(_latchPin, LOW);
 
 		// data for last shift register
@@ -260,31 +260,31 @@ void ShiftDisplay::setCustom(int index, byte custom) {
 	setCustomAt(0, index, custom);
 }
 
-void ShiftDisplay::setAt(int displayId, int value, char alignment) {
-	setAt(displayId, (long) value, alignment); // call long function
+void ShiftDisplay::setAt(int section, int value, char alignment) {
+	setAt(section, (long) value, alignment); // call long function
 }
 
-void ShiftDisplay::setAt(int displayId, long value, char alignment) {
-	if (displayId >= 0 && displayId < _displayQuantity) { // valid displayId
+void ShiftDisplay::setAt(int section, long value, char alignment) {
+	if (section >= 0 && section < _sectionCount) { // valid section
 		int valueSize = countCharacters(value);
 		char originalCharacters[valueSize];
 		getCharacters(value, valueSize, originalCharacters);
-		int displaySize = _displaySizes[displayId];
-		char formattedCharacters[displaySize];
-		formatCharacters(valueSize, originalCharacters, displaySize, formattedCharacters, alignment);
-		byte encodedCharacters[displaySize];
-		encodeCharacters(displaySize, formattedCharacters, encodedCharacters);
-		modifyBuffer(_displayStarts[displayId], displaySize, encodedCharacters);
+		int sectionSize = _sectionSizes[section];
+		char formattedCharacters[sectionSize];
+		formatCharacters(valueSize, originalCharacters, sectionSize, formattedCharacters, alignment);
+		byte encodedCharacters[sectionSize];
+		encodeCharacters(sectionSize, formattedCharacters, encodedCharacters);
+		modifyBuffer(_sectionBegins[section], sectionSize, encodedCharacters);
 	}
 }
 
-void ShiftDisplay::setAt(int displayId, double value, int decimalPlaces, char alignment) {
-	if (displayId >= 0 && displayId < _displayQuantity) { // valid displayId
+void ShiftDisplay::setAt(int section, double value, int decimalPlaces, char alignment) {
+	if (section >= 0 && section < _sectionCount) { // valid section
 		
 		// if no decimal places, call integer function instead
 		if (decimalPlaces == 0) {
 			long newValue = round(value);
-			setAt(displayId, newValue, alignment);
+			setAt(section, newValue, alignment);
 			return;
 		}
 	
@@ -294,45 +294,45 @@ void ShiftDisplay::setAt(int displayId, double value, int decimalPlaces, char al
 		int valueSize = countCharacters(value) + decimalPlaces;
 		char originalCharacters[valueSize];
 		getCharacters(newValue, valueSize, originalCharacters);
-		int displaySize = _displaySizes[displayId];
-		char formattedCharacters[displaySize];
-		int dotIndex = formatCharacters(valueSize, originalCharacters, displaySize, formattedCharacters, alignment, decimalPlaces);
-		byte encodedCharacters[displaySize];
-		encodeCharacters(displaySize, formattedCharacters, encodedCharacters, dotIndex);
-		modifyBuffer(_displayStarts[displayId], displaySize, encodedCharacters);
+		int sectionSize = _sectionSizes[section];
+		char formattedCharacters[sectionSize];
+		int dotIndex = formatCharacters(valueSize, originalCharacters, sectionSize, formattedCharacters, alignment, decimalPlaces);
+		byte encodedCharacters[sectionSize];
+		encodeCharacters(sectionSize, formattedCharacters, encodedCharacters, dotIndex);
+		modifyBuffer(_sectionBegins[section], sectionSize, encodedCharacters);
 	}
 }
 
-void ShiftDisplay::setAt(int displayId, double value, char alignment) {
-	setAt(displayId, value, DEFAULT_DECIMAL_PLACES, alignment); // call other double function
+void ShiftDisplay::setAt(int section, double value, char alignment) {
+	setAt(section, value, DEFAULT_DECIMAL_PLACES, alignment); // call other double function
 }
 
-void ShiftDisplay::setAt(int displayId, char value, char alignment) {
-	if (displayId >= 0 && displayId < _displayQuantity) { // valid displayId
+void ShiftDisplay::setAt(int section, char value, char alignment) {
+	if (section >= 0 && section < _sectionCount) { // valid section
 		char originalCharacters[] = {value};
-		int displaySize = _displaySizes[displayId];
-		char formattedCharacters[displaySize];
-		formatCharacters(1, originalCharacters, displaySize, formattedCharacters, alignment);
-		byte encodedCharacters[displaySize];
-		encodeCharacters(displaySize, formattedCharacters, encodedCharacters);
-		modifyBuffer(_displayStarts[displayId], displaySize, encodedCharacters);
+		int sectionSize = _sectionSizes[section];
+		char formattedCharacters[sectionSize];
+		formatCharacters(1, originalCharacters, sectionSize, formattedCharacters, alignment);
+		byte encodedCharacters[sectionSize];
+		encodeCharacters(sectionSize, formattedCharacters, encodedCharacters);
+		modifyBuffer(_sectionBegins[section], sectionSize, encodedCharacters);
 	}
 }
 
-void ShiftDisplay::setAt(int displayId, const char value[], char alignment) {
-	if (displayId >= 0 && displayId < _displayQuantity) { // valid displayId
+void ShiftDisplay::setAt(int section, const char value[], char alignment) {
+	if (section >= 0 && section < _sectionCount) { // valid section
 		int valueSize = strlen(value);
-		int displaySize = _displaySizes[displayId];
-		char formattedCharacters[displaySize];
-		formatCharacters(valueSize, value, displaySize, formattedCharacters, alignment);
-		byte encodedCharacters[displaySize];
-		encodeCharacters(displaySize, formattedCharacters, encodedCharacters);
-		modifyBuffer(_displayStarts[displayId], displaySize, encodedCharacters);
+		int sectionSize = _sectionSizes[section];
+		char formattedCharacters[sectionSize];
+		formatCharacters(valueSize, value, sectionSize, formattedCharacters, alignment);
+		byte encodedCharacters[sectionSize];
+		encodeCharacters(sectionSize, formattedCharacters, encodedCharacters);
+		modifyBuffer(_sectionBegins[section], sectionSize, encodedCharacters);
 	}
 }
 
-void ShiftDisplay::setAt(int displayId, const String &value, char alignment) {
-	if (displayId >= 0 && displayId < _displayQuantity) { // valid displayId
+void ShiftDisplay::setAt(int section, const String &value, char alignment) {
+	if (section >= 0 && section < _sectionCount) { // valid section
 	
 		// convert String to char array manually for better support between Arduino cores
 		int size = 0;
@@ -343,42 +343,42 @@ void ShiftDisplay::setAt(int displayId, const String &value, char alignment) {
 			str[i] = value[i];
 		str[size] = '\0';
 	
-		setAt(displayId, str, alignment); // call char array function
+		setAt(section, str, alignment); // call char array function
 	}
 }
 
-void ShiftDisplay::setAt(int displayId, const byte customs[]) {
-	if (displayId >= 0 && displayId < _displayQuantity) { // valid displayId
-		int displaySize = _displaySizes[displayId];
-		modifyBuffer(_displayStarts[displayId], displaySize, customs);
+void ShiftDisplay::setAt(int section, const byte customs[]) {
+	if (section >= 0 && section < _sectionCount) { // valid section
+		int sectionSize = _sectionSizes[section];
+		modifyBuffer(_sectionBegins[section], sectionSize, customs);
 	}
 }
 
-void ShiftDisplay::setAt(int displayId, const char characters[], bool dots[]) {
-	if (displayId >= 0 && displayId < _displayQuantity) { // valid displayId
-		int displaySize = _displaySizes[displayId];
-		byte encodedCharacters[displaySize];
-		encodeCharacters(displaySize, characters, encodedCharacters);
-		modifyBuffer(_displayStarts[displayId], displaySize, encodedCharacters);
+void ShiftDisplay::setAt(int section, const char characters[], bool dots[]) {
+	if (section >= 0 && section < _sectionCount) { // valid section
+		int sectionSize = _sectionSizes[section];
+		byte encodedCharacters[sectionSize];
+		encodeCharacters(sectionSize, characters, encodedCharacters);
+		modifyBuffer(_sectionBegins[section], sectionSize, encodedCharacters);
 		if (dots != NULL)
-			for (int i = 0; i < displaySize; i++)
-				modifyBufferDot(i+_displayStarts[displayId], dots[i]);
+			for (int i = 0; i < sectionSize; i++)
+				modifyBufferDot(i+_sectionBegins[section], dots[i]);
 	}
 }
 
-void ShiftDisplay::setDotAt(int displayId, int relativeIndex, bool dot) {
-	if (displayId >= 0 && displayId < _displayQuantity) { // valid displayId
-		if (relativeIndex >= 0 && relativeIndex < _displaySizes[displayId]) { // valid index in display
-			int index = _displayStarts[displayId] + relativeIndex;
+void ShiftDisplay::setDotAt(int section, int relativeIndex, bool dot) {
+	if (section >= 0 && section < _sectionCount) { // valid section
+		if (relativeIndex >= 0 && relativeIndex < _sectionSizes[section]) { // valid index in display
+			int index = _sectionBegins[section] + relativeIndex;
 			modifyBufferDot(index, dot);
 		}
 	}
 }
 
-void ShiftDisplay::setCustomAt(int displayId, int relativeIndex, byte custom) {
-	if (displayId >= 0 && displayId < _displayQuantity) { // valid displayId
-		if (relativeIndex >= 0 && relativeIndex < _displaySizes[displayId]) { // valid index in display
-			int index = _displayStarts[displayId] + relativeIndex;
+void ShiftDisplay::setCustomAt(int section, int relativeIndex, byte custom) {
+	if (section >= 0 && section < _sectionCount) { // valid section
+		if (relativeIndex >= 0 && relativeIndex < _sectionSizes[section]) { // valid index in display
+			int index = _sectionBegins[section] + relativeIndex;
 			modifyBuffer(index, custom);
 		}
 	}
@@ -390,7 +390,7 @@ void ShiftDisplay::show() {
 }
 
 void ShiftDisplay::show(unsigned long time) {
-	unsigned long end = millis() + time - (POV * _displayTotalSize); // start + total - last iteration
+	unsigned long end = millis() + time - (POV * _displaySize); // start + total - last iteration
 	while (millis() <= end)
 		showDisplay();
 	clearDisplay();

@@ -37,8 +37,9 @@ class ShiftDisplay {
 		int _displayTotalSize;
 		byte _buffer[MAX_DISPLAY_SIZE]; // value encoded in 7segment format
 
-		void constructSingle(int latchPin, int clockPin, int dataPin, int displayType, int displaySize); // Function with common instructions to be called by single display constructors
-		void constructMultiple(int latchPin, int clockPin, int dataPin, int displayType, int displayQuantity, int displaySizes[]); // Function with common instructions to be called by multiple display constructors
+		void initPins(int latchPin, int clockPin, int dataPin);
+		void constructSingleDisplay(int latchPin, int clockPin, int dataPin, int displayType, int displaySize); // Function with common instructions to be called by single display constructors
+		void constructMultipleDisplay(int latchPin, int clockPin, int dataPin, int displayType, int displayQuantity, int displaySizes[]); // Function with common instructions to be called by multiple display constructors
 
 		void showDisplay(); // Iterate buffer value on display, achieving persistence of vision
 		void clearDisplay(); // Clear shift registers

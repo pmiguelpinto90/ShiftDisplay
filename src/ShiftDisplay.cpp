@@ -12,22 +12,22 @@ https://miguelpynto.github.io/ShiftDisplay/
 // CONSTRUCTORS ****************************************************************
 
 ShiftDisplay::ShiftDisplay(int displayType, int displaySize) {
-	constructSingle(DEFAULT_LATCH_PIN, DEFAULT_CLOCK_PIN, DEFAULT_DATA_PIN, displayType, displaySize);
+	constructSingleDisplay(DEFAULT_LATCH_PIN, DEFAULT_CLOCK_PIN, DEFAULT_DATA_PIN, displayType, displaySize);
 }
 
 ShiftDisplay::ShiftDisplay(int latchPin, int clockPin, int dataPin, int displayType, int displaySize) {
-	constructSingle(latchPin, clockPin, dataPin, displayType, displaySize);
+	constructSingleDisplay(latchPin, clockPin, dataPin, displayType, displaySize);
 }
 
 ShiftDisplay::ShiftDisplay(int displayType, int displayQuantity, int displaySizes[]) {
-	constructMultiple(DEFAULT_LATCH_PIN, DEFAULT_CLOCK_PIN, DEFAULT_DATA_PIN, displayType, displayQuantity, displaySizes);
+	constructMultipleDisplay(DEFAULT_LATCH_PIN, DEFAULT_CLOCK_PIN, DEFAULT_DATA_PIN, displayType, displayQuantity, displaySizes);
 }
 
 ShiftDisplay::ShiftDisplay(int latchPin, int clockPin, int dataPin, int displayType, int displayQuantity, int displaySizes[]) {
-	constructMultiple(latchPin, clockPin, dataPin, displayType, displayQuantity, displaySizes);
+	constructMultipleDisplay(latchPin, clockPin, dataPin, displayType, displayQuantity, displaySizes);
 }
 
-void ShiftDisplay::constructSingle(int latchPin, int clockPin, int dataPin, int displayType, int displaySize) { // TODO test removing this
+void ShiftDisplay::initPins(int latchPin, int clockPin, int dataPin) {
 	_latchPin = latchPin;
 	_clockPin = clockPin;
 	_dataPin = dataPin;
@@ -35,6 +35,12 @@ void ShiftDisplay::constructSingle(int latchPin, int clockPin, int dataPin, int 
 	pinMode(_clockPin, OUTPUT);
 	pinMode(_dataPin, OUTPUT);
 	clearDisplay(); // clear asap so junk doesnt show while init
+}
+
+void ShiftDisplay::constructSingleDisplay(int latchPin, int clockPin, int dataPin, int displayType, int displaySize) {
+	initPins(latchPin, clockPin, dataPin);
+	byte initial = displayType ? BLANK : ~BLANK;
+	memset(_buffer, initial, MAX_DISPLAY_SIZE); // fill buffer with blank character
 
 	displaySize = min(displaySize, MAX_DISPLAY_SIZE); // override if displaySize is too big
 	_displayType = displayType;
@@ -42,40 +48,30 @@ void ShiftDisplay::constructSingle(int latchPin, int clockPin, int dataPin, int 
 	_displaySizes[0] = displaySize;
 	_displayStarts[0] = 0;
 	_displayTotalSize = displaySize;
-
-	byte initial = displayType ? BLANK : ~BLANK; // initial character for every display index
-	memset(_buffer, initial, MAX_DISPLAY_SIZE); // fill buffer with initial character
 }
 
-void ShiftDisplay::constructMultiple(int latchPin, int clockPin, int dataPin, int displayType, int displayQuantity, int displaySizes[]) {
-	_latchPin = latchPin;
-	_clockPin = clockPin;
-	_dataPin = dataPin;
-	pinMode(_latchPin, OUTPUT);
-	pinMode(_clockPin, OUTPUT);
-	pinMode(_dataPin, OUTPUT);
-	clearDisplay(); // clear asap so junk doesnt show while init
+void ShiftDisplay::constructMultipleDisplay(int latchPin, int clockPin, int dataPin, int displayType, int displayQuantity, int displaySizes[]) {
+	initPins(latchPin, clockPin, dataPin);
+	byte initial = displayType ? BLANK : ~BLANK;
+	memset(_buffer, initial, MAX_DISPLAY_SIZE); // fill buffer with blank character
 
+	_displayType = displayType;
 	int i = 0;
-	int displaySize = 0;
-	for (; i < displayQuantity && displaySize < MAX_DISPLAY_SIZE && i < MAX_DISPLAY_SIZE; i++) {
-		int preSize = displaySize + displaySizes[i]; // preview new size
-		if (preSize <= MAX_DISPLAY_SIZE) { // size is ok
+	int displayTotalSize = 0;
+	for (; i < displayQuantity && displayTotalSize < MAX_DISPLAY_SIZE && i < MAX_DISPLAY_SIZE; i++) {
+		int preTotalSize = displayTotalSize + displaySizes[i]; // preview new size
+		if (preTotalSize <= MAX_DISPLAY_SIZE) { // size is ok
 			_displaySizes[i] = displaySizes[i];
-			_displayStarts[i] = displaySize;
-			displaySize = preSize;
+			_displayStarts[i] = displayTotalSize;
+			displayTotalSize = preTotalSize;
 		} else { // size is out of bounds
-			_displaySizes[i] = MAX_DISPLAY_SIZE - displaySize; // override last size to until max
-			_displayStarts[i] = displaySize;
-			displaySize = MAX_DISPLAY_SIZE; // override size to max
+			_displaySizes[i] = MAX_DISPLAY_SIZE - displayTotalSize; // override last size to until max
+			_displayStarts[i] = displayTotalSize;
+			displayTotalSize = MAX_DISPLAY_SIZE; // override size to max
 		}
 	}
 	_displayQuantity = i;
-	_displayTotalSize = displaySize;
-	_displayType = displayType;
-
-	byte initial = displayType ? BLANK : ~BLANK; // initial character for every display index
-	memset(_buffer, initial, MAX_DISPLAY_SIZE); // fill buffer with initial character
+	_displayTotalSize = displayTotalSize;
 }
 
 // PRIVATE FUNCTIONS ***********************************************************
@@ -105,7 +101,7 @@ void ShiftDisplay::clearDisplay() {
 }
 
 void ShiftDisplay::modifyBuffer(int index, byte code) {
-	_buffer[index] = _displayType ? code[i] : ~code[i];
+	_buffer[index] = _displayType ? code : ~code;
 }
 
 void ShiftDisplay::modifyBuffer(int startIndex, int size, byte codes[]) {

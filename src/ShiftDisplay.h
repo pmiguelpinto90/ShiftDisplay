@@ -44,7 +44,7 @@ class ShiftDisplay {
 		void showDisplay(); // iterate buffer value on each display index, achieving persistence of vision
 		void clearDisplay(); // clear shift registers
 		void modifyBuffer(int index, byte code); // change buffer content in a single position
-		void modifyBuffer(int startIndex, int size, byte codes[]); // change buffer content in defined interval
+		void modifyBuffer(int beginIndex, int size, byte codes[]); // change buffer content in defined interval
 		void modifyBufferDot(int index, bool dot); // change buffer dot in a single position
 		void encodeCharacters(int size, const char input[], byte output[], int dotIndex); // encode array of chars to array of bytes in 7segment format
 		int formatCharacters(int inSize, const char input[], int outSize, char output[], char alignment, int decimalPlaces); // arrange array of chars for displaying in specified alignment, returns dot index on display or NULL if none

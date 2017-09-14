@@ -104,9 +104,9 @@ void ShiftDisplay::modifyBuffer(int index, byte code) {
 	_buffer[index] = _displayType ? code : ~code;
 }
 
-void ShiftDisplay::modifyBuffer(int startIndex, int size, byte codes[]) {
+void ShiftDisplay::modifyBuffer(int beginIndex, int size, byte codes[]) {
 	for (int i = 0; i < size; i++)
-		_buffer[i+startIndex] = _displayType ? codes[i] : ~codes[i];
+		_buffer[i+beginIndex] = _displayType ? codes[i] : ~codes[i];
 }
 
 void ShiftDisplay::modifyBufferDot(int index, bool dot) {
@@ -281,7 +281,7 @@ void ShiftDisplay::setAt(int section, long value, char alignment) {
 void ShiftDisplay::setAt(int section, double value, int decimalPlaces, char alignment) {
 	if (section >= 0 && section < _sectionCount) { // valid section
 		
-		// if no decimal places, call integer function instead
+		// if no decimal places, call long function instead
 		if (decimalPlaces == 0) {
 			long newValue = round(value);
 			setAt(section, newValue, alignment);
@@ -359,10 +359,10 @@ void ShiftDisplay::setAt(int section, const char characters[], bool dots[]) {
 		int sectionSize = _sectionSizes[section];
 		byte encodedCharacters[sectionSize];
 		encodeCharacters(sectionSize, characters, encodedCharacters);
-		modifyBuffer(_sectionBegins[section], sectionSize, encodedCharacters);
-		if (dots != NULL)
-			for (int i = 0; i < sectionSize; i++)
-				modifyBufferDot(i+_sectionBegins[section], dots[i]);
+		int begin = _sectionBegins[section];
+		modifyBuffer(begin, sectionSize, encodedCharacters);
+		for (int i = 0; i < sectionSize; i++)
+			modifyBufferDot(i+begin, dots[i]);
 	}
 }
 

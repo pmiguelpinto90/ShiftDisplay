@@ -13,7 +13,7 @@ const int DATA_PIN = 5;
 const int DISPLAY_TYPE = COMMON_ANODE; // COMMON_CATHODE or COMMON_ANODE
 const int DISPLAY_SIZE = 8; // number of digits on display
 
-ShiftDisplay sd(LATCH_PIN, CLOCK_PIN, DATA_PIN, DISPLAY_TYPE, DISPLAY_SIZE);
+ShiftDisplay display(LATCH_PIN, CLOCK_PIN, DATA_PIN, DISPLAY_TYPE, DISPLAY_SIZE);
 
 float getTemperature() {
 	delay(1000); // simulate processing
@@ -34,11 +34,11 @@ void loop() {
 	condition = "        " + condition; // prefix with spaces
 
 	// for 4 seconds, show temperature with one decimal, aligned to center of display
-	sd.show(temp, 4000, 1, ALIGN_CENTER);
+	display.show(temp, 4000, 1, ALIGN_CENTER);
 
 	// show condition with marquee effect
 	while (condition.length() > 0) {
-		sd.show(condition, 500, ALIGN_LEFT);
+		display.show(condition, 500, ALIGN_LEFT);
 		condition.remove(0,1);
 	}
 }

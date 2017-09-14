@@ -119,7 +119,7 @@ void ShiftDisplay::modifyBufferDot(int index, bool dot) {
 	bitWrite(_buffer[index], 0, bit);
 }
 
-void ShiftDisplay::encodeCharacters(int size, const char input[], byte output[], int dotIndex = NULL) {
+void ShiftDisplay::encodeCharacters(int size, const char input[], byte output[], int dotIndex = -1) {
 	for (int i = 0; i < size; i++) {
 		char c = input[i];
 		
@@ -134,12 +134,12 @@ void ShiftDisplay::encodeCharacters(int size, const char input[], byte output[],
 		else // space or invalid
 			output[i] = BLANK;
 	}
-
-	if (dotIndex != NULL)
+	
+	if (dotIndex != -1)
 		bitWrite(output[dotIndex], 0, 1);
 }
 
-int ShiftDisplay::formatCharacters(int inSize, const char input[], int outSize, char output[], char alignment, int decimalPlaces = NULL) {
+int ShiftDisplay::formatCharacters(int inSize, const char input[], int outSize, char output[], char alignment, int decimalPlaces = -1) {
 	
 	// index of character virtual borders
 	int left; // lowest index
@@ -169,12 +169,12 @@ int ShiftDisplay::formatCharacters(int inSize, const char input[], int outSize, 
 	for (int i = right+1; i < outSize; i++) // after characters
 		output[i] = ' ';
 
-	// calculate dot index and return it or NULL if none
-	if (decimalPlaces == NULL)
-		return NULL;
+	// calculate dot index and return it or -1 if none
+	if (decimalPlaces == -1)
+		return -1;
 	int dotIndex = right - decimalPlaces;
 	if (dotIndex < minimum || dotIndex > maximum) // out of bounds
-		return NULL;
+		return -1;
 	return dotIndex;
 }
 

@@ -47,7 +47,7 @@ class ShiftDisplay {
 		void modifyBuffer(int beginIndex, int size, byte codes[]); // change buffer content in defined interval
 		void modifyBufferDot(int index, bool dot); // change buffer dot in a single position
 		void encodeCharacters(int size, const char input[], byte output[], int dotIndex); // encode array of chars to array of bytes in 7segment format
-		int formatCharacters(int inSize, const char input[], int outSize, char output[], char alignment, int decimalPlaces); // arrange array of chars for displaying in specified alignment, returns dot index on display or NULL if none
+		int formatCharacters(int inSize, const char input[], int outSize, char output[], char alignment, int decimalPlaces); // arrange array of chars for displaying in specified alignment, returns dot index on display or -1 if none
 		void getCharacters(long input, int size, char output[]); // convert an integer number to an array of chars
 		int countCharacters(long number); // calculate the length of an array of chars for an integer number
 		int countCharacters(double number); // calculate the length of an array of chars for the integer part on a real number

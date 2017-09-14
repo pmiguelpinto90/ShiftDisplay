@@ -244,8 +244,8 @@ void ShiftDisplay::set(const String &value, char alignment) {
 	setAt(0, value, alignment);
 }
 
-void ShiftDisplay::set(const byte codes[]) {
-	setAt(0, codes);
+void ShiftDisplay::set(const byte customs[]) {
+	setAt(0, customs);
 }
 
 void ShiftDisplay::set(const char characters[], bool dots[]) {
@@ -256,8 +256,8 @@ void ShiftDisplay::setDot(int index, bool dot) {
 	setDotAt(0, index, dot);
 }
 
-void ShiftDisplay::setCustom(int index, byte code) {
-	setCustomAt(0, index, code);
+void ShiftDisplay::setCustom(int index, byte custom) {
+	setCustomAt(0, index, custom);
 }
 
 void ShiftDisplay::setAt(int displayId, int value, char alignment) {
@@ -347,10 +347,10 @@ void ShiftDisplay::setAt(int displayId, const String &value, char alignment) {
 	}
 }
 
-void ShiftDisplay::setAt(int displayId, const byte codes[]) {
+void ShiftDisplay::setAt(int displayId, const byte customs[]) {
 	if (displayId >= 0 && displayId < _displayQuantity) { // valid displayId
 		int displaySize = _displaySizes[displayId];
-		modifyBuffer(_displayStarts[displayId], displaySize, codes);
+		modifyBuffer(_displayStarts[displayId], displaySize, customs);
 	}
 }
 
@@ -375,11 +375,11 @@ void ShiftDisplay::setDotAt(int displayId, int relativeIndex, bool dot) {
 	}
 }
 
-void ShiftDisplay::setCustomAt(int displayId, int relativeIndex, byte code) {
+void ShiftDisplay::setCustomAt(int displayId, int relativeIndex, byte custom) {
 	if (displayId >= 0 && displayId < _displayQuantity) { // valid displayId
 		if (relativeIndex >= 0 && relativeIndex < _displaySizes[displayId]) { // valid index in display
 			int index = _displayStarts[displayId] + relativeIndex;
-			modifyBuffer(index, code);
+			modifyBuffer(index, custom);
 		}
 	}
 }
@@ -431,8 +431,8 @@ void ShiftDisplay::show(const String &value, unsigned long time, char alignment)
 	show(time);
 }
 
-void ShiftDisplay::show(const byte codes[], unsigned long time) {
-	set(codes);
+void ShiftDisplay::show(const byte customs[], unsigned long time) {
+	set(customs);
 	show(time);
 }
 
@@ -441,7 +441,6 @@ void ShiftDisplay::show(const char characters[], bool dots[], unsigned long time
 	show(time);
 }
 
-// duplicates to retain compatibility with old versions
 void ShiftDisplay::insertPoint(int index) { setDot(index, true); }
 void ShiftDisplay::removePoint(int index) { setDot(index, false); }
 void ShiftDisplay::print(long time, int value, char alignment) { show(value, time, alignment); }

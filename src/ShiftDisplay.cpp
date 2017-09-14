@@ -443,6 +443,8 @@ void ShiftDisplay::show(const char characters[], bool dots[], unsigned long time
 
 void ShiftDisplay::insertPoint(int index) { setDot(index, true); }
 void ShiftDisplay::removePoint(int index) { setDot(index, false); }
+void ShiftDisplay::insertDot(int index) { setDot(index, true); }
+void ShiftDisplay::removeDot(int index) { setDot(index, false); }
 void ShiftDisplay::print(long time, int value, char alignment) { show(value, time, alignment); }
 void ShiftDisplay::print(long time, long value, char alignment) { show(value, time, alignment); }
 void ShiftDisplay::print(long time, double value, int decimalPlaces, char alignment) { show(value, time, decimalPlaces, alignment); }

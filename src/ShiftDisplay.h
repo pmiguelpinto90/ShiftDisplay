@@ -108,6 +108,8 @@ class ShiftDisplay {
 		// duplicates to retain compatibility with old versions
 		void insertPoint(int index); // deprecated by setDot()
 		void removePoint(int index); // deprecated by setDot()
+		void insertDot(int index); // deprecated by setDot()
+		void removeDot(int index); // deprecated by setDot()
 		void print(long time, int value, char alignment = DEFAULT_ALIGN_NUMBER); // deprecated by show()
 		void print(long time, long value, char alignment = DEFAULT_ALIGN_NUMBER); // deprecated by show()
 		void print(long time, double value, int decimalPlaces = DEFAULT_DECIMAL_PLACES, char alignment = DEFAULT_ALIGN_NUMBER); // deprecated by show()

@@ -40,125 +40,220 @@ Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 
 ### Constructors
 
 * __ShiftDisplay()__
-  * ShiftDisplay sd(displayType, displaySize)
-  * ShiftDisplay sd(latchPin, clockPin, dataPin, displayType, displaySize)
 
-  Creates a ShiftDisplay object, initializes the library with the interface pins, and sets up with the display properties.
+  * ShiftDisplay display(displayType, displaySize)
+  * ShiftDisplay display(displayType, sectionCount, sectionSizes)
+  * ShiftDisplay display(latchPin, clockPin, dataPin, displayType, displaySize)
+  * ShiftDisplay display(latchPin, clockPin, dataPin, displayType, sectionCount, sectionSizes)
 
-  `sd`: is an object of type ShiftDisplay.
+  Create a ShiftDisplay object, initialize the library using the interface pins and display properties. TODO section
 
-  `latchPin`, `clockPin`, `dataPin`: are the number of the Arduino digital pins connected to the shift registers latch, clock and data pins;
-  optional; if not defined, the default pins are 6, 7 and 5 respectively.
+  `display`: newly created ShiftDisplay object.
 
-  `displayType`: is a constant `COMMON_CATHODE` or `COMMON_ANODE`, depending on the type of your display(s).
+  `displayType`: constant `COMMON_CATHODE` or `COMMON_ANODE`, defining the type of the display(s).
 
-  `displaySize`: is the quantity of digits on all displays combined.
+  `displaySize`: quantity of digits on the display(s).
+
+  `sectionCount`: TODO
+
+  `sectionSizes`: array TODO
+
+  `latchPin`, `clockPin`, `dataPin`: number of the Arduino digital pins connected to the latch, clock and data pins of the shift registers;
+  if not defined, the default pins are 6 for latch, 7 for clock, and 5 for data.
 
 ### Functions
 
 * __set()__
-  * sd.set(value)
-  * sd.set(value, alignment)
-  * sd.set(value, decimalPlaces)
-  * sd.set(value, decimalPlaces, alignment)
-  * sd.set(codes[])
-  * sd.set(characters[], dots[])
+
+  * display.set(value)
+  * display.set(value, alignment)
+  * display.set(valueReal)
+  * display.set(valueReal, alignment)
+  * display.set(valueReal, decimalPlaces)
+  * display.set(valueReal, decimalPlaces, alignment])
+  * display.set(customs)
+  * display.set(characters, dots)
 
   Save a value to buffer for showing latter.
 
-  `sd`: is an object of type ShiftDisplay.
+  `display`: object of type ShiftDisplay.
 
-  `value`: is the value to save;
-  can be a number (int, long, float, double) or text (char, char array, String object);
+  `value`: value to save;
+  can be a number (int, long) or text (char, char array, string object);
   for text, valid characters are 0-9 a-z A-Z -, everything else will be converted to a space.
+  
+  `valueReal`: float or double number value to save.
 
-  `alignment`: is the alignment of the value on the display;
-  optional, constant `ALIGN_LEFT`, `ALIGN_RIGHT` or `ALIGN_CENTER`;
+  `alignment`: alignment of the value on the display;
+  constant `ALIGN_LEFT`, `ALIGN_RIGHT` or `ALIGN_CENTER`;
   if not defined, the default is ALIGN_RIGHT for numbers and ALIGN_LEFT for text.
 
-  `decimalPlaces`: is the number of digits following the decimal point;
-  optional and only available if the value is a float or double number;
+  `decimalPlaces`: number of digits following the decimal point;
   if not defined, the default is 2.
 
-  `codes`: is a byte array specifying custom characters, each representing a character on the display, from left to right;
+  `customs`: array of bytes specifying custom characters, each representing a character on the display, from left to right;
   a custom character is encooded as a byte where segment A is MSB and DP is LSB;
   array length must match display size.
 
-  `characters`: is a char array, each representing a character on the display, from left to right;
+  `characters`: array of chars, each representing a character on the display, from left to right;
   valid characters are 0-9 a-z A-Z -, everything else will be converted to a space;
   array length must match display size.
 
-  `dots`: is a bool array, each representing a dot on the display, from left to right;
-  if set as NULL, no dots will be placed;
+  `dots`: array of bools, each representing a dot on the display, from left to right;
   array length must match display size.
 
-* __insertDot()__
-  * sd.insertDot(index)
+* __setDot()__
 
-  Add dot to buffer.
+  * display.setDot(index, dot)
 
-  `index`: is the position on the display to insert the dot, starting at 0 for the leftmost;
+  Show or hide dot from buffer.
+
+  `display`: object of type ShiftDisplay.
+
+  `index`: position on the display to set the dot, starting at 0 for the leftmost;
   if is invalid, does not have any effect.
 
-* __removeDot()__
-  * sd.removeDot(index)
+  `dot`: true to show, false to hide.
 
-  Remove dot from buffer.
+* __setCustom()__
 
-  `index`: is the position on the display to remove the dot, starting at 0 for the leftmost;
+  * display.setCustom(index, custom)
+
+  Replace with a custom character.
+
+  `display`: object of type ShiftDisplay.
+
+  `index`: position on the display to set the character, starting at 0 for the leftmost;
   if is invalid, does not have any effect.
+
+  `custom`: byte TODO
+
+* __setAt()__
+
+  * display.setAt(section, value)
+  * display.setAt(section, value, alignment)
+  * display.setAt(section, real)
+  * display.setAt(section, real, alignment)
+  * display.setAt(section, real, decimalPlaces)
+  * display.setAt(section, real, decimalPlaces, alignment)
+  * display.setAt(section, customs)
+  * display.setAt(section, characters, dots)
+
+  Save TODO
+
+  `display`: object of type ShiftDisplay.
+
+  `section`: TODO
+
+  `value`: value to save;
+  can be a number (int, long) or text (char, char array, string object);
+  for text, valid characters are 0-9 a-z A-Z -, everything else will be converted to a space.
+  
+  `valueReal`: float or double number value to save.
+
+  `alignment`: alignment of the value on the display;
+  constant `ALIGN_LEFT`, `ALIGN_RIGHT` or `ALIGN_CENTER`;
+  if not defined, the default is ALIGN_RIGHT for numbers and ALIGN_LEFT for text.
+
+  `decimalPlaces`: number of digits following the decimal point;
+  if not defined, the default is 2.
+
+  `customs`: array of bytes specifying custom characters, each representing a character on the display, from left to right;
+  a custom character is encooded as a byte where segment A is MSB and DP is LSB;
+  array length must match display size.
+
+  `characters`: array of chars, each representing a character on the display, from left to right;
+  valid characters are 0-9 a-z A-Z -, everything else will be converted to a space;
+  array length must match display size.
+
+  `dots`: array of bools, each representing a dot on the display, from left to right;
+  array length must match display size.
+
+* __setDotAt()__
+
+  * display.setDotAt(section, index, dot)
+
+  Show or hide dot TODO
+
+  `display`: object of type ShiftDisplay.
+
+  `section`: TODO
+
+  `index`: position on the display to set the dot, starting at 0 for the leftmost;
+  if is invalid, does not have any effect.
+
+  `dot`: true to show, false to hide.
+
+* __setCustomAt()__
+
+  * display.setCustomAt(section, index, custom)
+
+  Replace with a custom character. TODO
+
+  `display`: object of type ShiftDisplay.
+
+  `section`: TODO
+
+  `index`: position on the display to set the character, starting at 0 for the leftmost;
+  if is invalid, does not have any effect.
+
+  `custom`: byte TODO
 
 * __show()__
-  * sd.show()
-  * sd.show(time)
+
+  * display.show()
+  * display.show(time)
 
   Show buffer value on the display.
 
-  `sd`: is an object of type ShiftDisplay.
+  `display`: object of type ShiftDisplay.
 
-  `time`: is the time in milliseconds for the value to be shown on the display;
+  `time`: time in milliseconds for the value to be shown on the display;
   has to be >= 10;
-  optional; if not defined, the value is shown for a single iteration;
+  if not defined, the value is shown for a single iteration;
   exact time showing will be an under aproximation.
 
 * __show()__
-  * sd.show(value, time)
-  * sd.show(value, time, alignment)
-  * sd.show(value, time, decimalPlaces)
-  * sd.show(value, time, decimalPlaces, alignment)
-  * sd.show(codes[], time)
-  * sd.show(characters[], dots[], time)
+
+  * display.show(value, time)
+  * display.show(value, time, alignment)
+  * display.show(valueReal, time)
+  * display.show(valueReal, time, alignment)
+  * display.show(valueReal, time, decimalPlaces)
+  * display.show(valueReal, time, decimalPlaces, alignment)
+  * display.show(customs, time)
+  * display.show(characters, dots, time)
 
   Save a value to buffer and show it on the display.
 
-  `sd`: is an object of type ShiftDisplay.
+  `display`: an object of type ShiftDisplay.
 
-  `value`: is the value to save and show;
-  can be a number (int, long, float, double) or text (char, char array, String object);
+  `value`: value to save and show;
+  can be a number (int, long) or text (char, char array, String object);
   for text, valid characters are 0-9 a-z A-Z -, everything else will be converted to a space.
+  
+  `valueReal`: float or double number value to save.
 
-  `time`: is the time in milliseconds for the value to be shown on the display;
+  `time`: time in milliseconds for the value to be shown on the display;
   has to be >= 10;
   exact time showing will be an under aproximation.
 
-  `alignment`: is the alignment of the value on the display;
-  optional, constant `ALIGN_LEFT`, `ALIGN_RIGHT` or `ALIGN_CENTER`;
+  `alignment`: alignment of the value on the display;
+  constant `ALIGN_LEFT`, `ALIGN_RIGHT` or `ALIGN_CENTER`;
   if not defined, the default is ALIGN_RIGHT for numbers and ALIGN_LEFT for text.
 
   `decimalPlaces`: is the number of digits following the decimal point;
-  optional and only available if the value is a float or double number;
   if not defined, the default is 2.
 
-  `codes`: is a byte array specifying custom characters, each representing a character on the display, from left to right;
+  `customs`: byte array specifying custom characters, each representing a character on the display, from left to right;
   a custom character is encooded as a byte where segment A is MSB and DP is LSB;
   array length must match display size.
 
-  `characters`: is a char array, each representing a character on the display, from left to right;
+  `characters`: char array, each representing a character on the display, from left to right;
   valid characters are 0-9 a-z A-Z -, everything else will be converted to a space;
   array length must match display size.
 
-  `dots`: is a bool array, each representing a dot on the display, from left to right;
-  if set as NULL, no dots will be placed;
+  `dots`: bool array, each representing a dot on the display, from left to right;
   array length must match display size.
 
 ### Constants
@@ -177,25 +272,34 @@ Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 
 
 // Arduino pin 6 connected to shift register latch, pin 7 to clock and pin 5 to data
 // common cathode display with 3 digits
-ShiftDisplay sd(6, 7, 5, COMMON_CATHODE, 3);
+ShiftDisplay display(6, 7, 5, COMMON_CATHODE, 3);
 
 void setup() {
 	for (int i = 3; i > 0; i--) {
-		sd.show(i, 400, ALIGN_CENTER); // save number and show it for 400ms
-		sd.insertDot(1); // add dot to saved number
-		sd.show(400); // show number with dot for 400ms
+		display.show(i, 400, ALIGN_CENTER); // save number and show it for 400ms
+		display.setDot(1, true); // add dot to saved number
+		display.show(400); // show number with dot for 400ms
 	}
-	sd.set("GO"); // save "GO" to buffer
+	display.set("GO"); // save "GO" to buffer
 }
 
 void loop() {
-	sd.show(); // show "GO" while in loop
+	display.show(); // show "GO" while in loop
 }
 ```
 
 
 ## Changelog
 
+- 3.6.0 (15/9/2017)
+  - NEW: sectioned display feature
+  - NEW: setAt() function
+  - NEW: setDot() function
+  - NEW: setDotAt() function
+  - NEW: setCustom() function
+  - NEW: setCustomAt() function
+  - FIX: decimal point would not show in double value at display index 0
+  - DOC: reviewed code comments
 - 3.5.0 (8/9/2017)
   - Feature: set/show characters array with dot array
   - Feature: set/show custom characters
@@ -254,8 +358,11 @@ void loop() {
 
 ## TODO
 
-- [ ] Multiple logical displays
-- [ ] Other types of displays
+- [x] Sectioned display
+- [ ] Improve README
+- [ ] Example for sectioned display
+- [ ] Example for custom characters
+- [ ] INDIVIDUAL_CATHODE and INDIVIDUAL_ANODE display types
 
 
 ## Contacts

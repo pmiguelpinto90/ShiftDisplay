@@ -63,8 +63,8 @@ class ShiftDisplay {
 		// save a value to buffer
 		void set(int value, char alignment = DEFAULT_ALIGN_NUMBER);
 		void set(long value, char alignment = DEFAULT_ALIGN_NUMBER);
-		void set(double value, int decimalPlaces = DEFAULT_DECIMAL_PLACES, char alignment = DEFAULT_ALIGN_NUMBER);
-		void set(double value, char alignment); // override decimalPlaces obligation in function above
+		void set(double valueReal, int decimalPlaces = DEFAULT_DECIMAL_PLACES, char alignment = DEFAULT_ALIGN_NUMBER);
+		void set(double valueReal, char alignment); // override decimalPlaces obligation in function above
 		void set(char value, char alignment = DEFAULT_ALIGN_TEXT);
 		void set(const char value[], char alignment = DEFAULT_ALIGN_TEXT); // c string
 		void set(const String &value, char alignment = DEFAULT_ALIGN_TEXT); // Arduino string object
@@ -78,8 +78,8 @@ class ShiftDisplay {
 		// save a value to buffer in section indexes
 		void setAt(int section, int value, char alignment = DEFAULT_ALIGN_NUMBER);
 		void setAt(int section, long value, char alignment = DEFAULT_ALIGN_NUMBER);
-		void setAt(int section, double value, int decimalPlaces = DEFAULT_DECIMAL_PLACES, char alignment = DEFAULT_ALIGN_NUMBER);
-		void setAt(int section, double value, char alignment); // override decimalPlaces obligation in function above
+		void setAt(int section, double valueReal, int decimalPlaces = DEFAULT_DECIMAL_PLACES, char alignment = DEFAULT_ALIGN_NUMBER);
+		void setAt(int section, double valueReal, char alignment); // override decimalPlaces obligation in function above
 		void setAt(int section, char value, char alignment = DEFAULT_ALIGN_TEXT);
 		void setAt(int section, const char value[], char alignment = DEFAULT_ALIGN_TEXT); // c string
 		void setAt(int section, const String &value, char alignment = DEFAULT_ALIGN_TEXT); // Arduino string object
@@ -97,8 +97,8 @@ class ShiftDisplay {
 		// save a value to buffer and show it on display for the specified time (or less if would exceed it)
 		void show(int value, unsigned long time, char alignment = DEFAULT_ALIGN_NUMBER);
 		void show(long value, unsigned long time, char alignment = DEFAULT_ALIGN_NUMBER);
-		void show(double value, unsigned long time, int decimalPlaces = DEFAULT_DECIMAL_PLACES, char alignment = DEFAULT_ALIGN_NUMBER);
-		void show(double value, unsigned long time, char alignment); // override decimalPlaces obligation in function above
+		void show(double valueReal, unsigned long time, int decimalPlaces = DEFAULT_DECIMAL_PLACES, char alignment = DEFAULT_ALIGN_NUMBER);
+		void show(double valueReal, unsigned long time, char alignment); // override decimalPlaces obligation in function above
 		void show(char value, unsigned long time, char alignment = DEFAULT_ALIGN_TEXT);
 		void show(const char value[], unsigned long time, char alignment = DEFAULT_ALIGN_TEXT); // c string
 		void show(const String &value, unsigned long time, char alignment = DEFAULT_ALIGN_TEXT); // Arduino string object

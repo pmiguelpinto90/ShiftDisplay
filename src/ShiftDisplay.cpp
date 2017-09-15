@@ -224,12 +224,12 @@ void ShiftDisplay::set(long value, char alignment) {
 	setAt(0, value, alignment);
 }
 
-void ShiftDisplay::set(double value, int decimalPlaces, char alignment) {
-	setAt(0, value, decimalPlaces, alignment);
+void ShiftDisplay::set(double valueReal, int decimalPlaces, char alignment) {
+	setAt(0, valueReal, decimalPlaces, alignment);
 }
 
-void ShiftDisplay::set(double value, char alignment) {
-	setAt(0, value, alignment);
+void ShiftDisplay::set(double valueReal, char alignment) {
+	setAt(0, valueReal, alignment);
 }
 
 void ShiftDisplay::set(char value, char alignment) {
@@ -278,22 +278,22 @@ void ShiftDisplay::setAt(int section, long value, char alignment) {
 	}
 }
 
-void ShiftDisplay::setAt(int section, double value, int decimalPlaces, char alignment) {
+void ShiftDisplay::setAt(int section, double valueReal, int decimalPlaces, char alignment) {
 	if (section >= 0 && section < _sectionCount) { // valid section
 		
 		// if no decimal places, call long function instead
 		if (decimalPlaces == 0) {
-			long newValue = round(value);
-			setAt(section, newValue, alignment);
+			long value = round(valueReal);
+			setAt(section, value, alignment);
 			return;
 		}
 	
 		 // calculate value with specified decimal places as integer (eg 1.236, 2 = 124)
-		long newValue = round(value * pow(10, decimalPlaces));
+		long value = round(valueReal * pow(10, decimalPlaces));
 	
-		int valueSize = countCharacters(value) + decimalPlaces;
+		int valueSize = countCharacters(valueReal) + decimalPlaces;
 		char originalCharacters[valueSize];
-		getCharacters(newValue, valueSize, originalCharacters);
+		getCharacters(value, valueSize, originalCharacters);
 		int sectionSize = _sectionSizes[section];
 		char formattedCharacters[sectionSize];
 		int dotIndex = formatCharacters(valueSize, originalCharacters, sectionSize, formattedCharacters, alignment, decimalPlaces);
@@ -303,8 +303,8 @@ void ShiftDisplay::setAt(int section, double value, int decimalPlaces, char alig
 	}
 }
 
-void ShiftDisplay::setAt(int section, double value, char alignment) {
-	setAt(section, value, DEFAULT_DECIMAL_PLACES, alignment); // call other double function
+void ShiftDisplay::setAt(int section, double valueReal, char alignment) {
+	setAt(section, valueReal, DEFAULT_DECIMAL_PLACES, alignment); // call other double function
 }
 
 void ShiftDisplay::setAt(int section, char value, char alignment) {
@@ -406,13 +406,13 @@ void ShiftDisplay::show(long value, unsigned long time, char alignment) {
 	show(time);
 }
 
-void ShiftDisplay::show(double value, unsigned long time, int decimalPlaces, char alignment) {
-	set(value, decimalPlaces, alignment);
+void ShiftDisplay::show(double valueReal, unsigned long time, int decimalPlaces, char alignment) {
+	set(valueReal, decimalPlaces, alignment);
 	show(time);
 }
 
-void ShiftDisplay::show(double value, unsigned long time, char alignment) {
-	set(value, alignment);
+void ShiftDisplay::show(double valueReal, unsigned long time, char alignment) {
+	set(valueReal, alignment);
 	show(time);
 }
 

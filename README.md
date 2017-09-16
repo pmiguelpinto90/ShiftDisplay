@@ -46,17 +46,18 @@ Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 
   * ShiftDisplay display(latchPin, clockPin, dataPin, displayType, displaySize)
   * ShiftDisplay display(latchPin, clockPin, dataPin, displayType, sectionCount, sectionSizes)
 
-  Create a ShiftDisplay object, initialize the library using the interface pins and display properties. TODO section
+  Create a ShiftDisplay object, initialize the library using the interface pins and display properties.
+  A display can be set as a whole, or divided by sections. Sections can be a logical separation (for example hours and minutes on a 4 digit clock display), or a physical separation (for example timer and score on a scoreboard with multiple displays).
 
   `display`: newly created ShiftDisplay object.
 
-  `displayType`: constant `COMMON_CATHODE` or `COMMON_ANODE`, defining the type of the display(s).
+  `displayType`: constant `COMMON_CATHODE` or `COMMON_ANODE`, defining the type of the display.
 
-  `displaySize`: quantity of digits on the display(s).
+  `displaySize`: quantity of digits on the display.
 
-  `sectionCount`: TODO
+  `sectionCount`: quantity of sections on the display.
 
-  `sectionSizes`: array TODO
+  `sectionSizes`: array with quantity of digits on each section.
 
   `latchPin`, `clockPin`, `dataPin`: number of the Arduino digital pins connected to the latch, clock and data pins of the shift registers;
   if not defined, the default pins are 6 for latch, 7 for clock, and 5 for data.

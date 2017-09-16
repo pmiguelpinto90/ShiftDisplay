@@ -75,16 +75,16 @@ Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 
   * display.set(customs)
   * display.set(characters, dots)
 
-  Save and set a value to show next. Entire previous value is erased.
+  Store a value to show next. The entire previous value is cleared.
 
   `display`: object of type ShiftDisplay.
 
   `value`: value to set, can be a number (int, long) or text (char, char array, string object);
   for text, valid characters are 0-9 a-z A-Z -, others are converted to a space; null-terminated char array;
-  if is to big to fit in the display, it is trimmed according to alignment.
+  if too big to fit in the display, it is trimmed according to alignment.
   
   `valueReal`: value to set, a real number (float, double);
-  if is to big to fit in the display, it is trimmed according to alignment.
+  if too big to fit in the display, it is trimmed according to alignment.
 
   `alignment`: alignment of the value or valueReal on the display;
   constant `ALIGN_LEFT`, `ALIGN_RIGHT` or `ALIGN_CENTER`;
@@ -93,7 +93,7 @@ Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 
   `decimalPlaces`: number of digits following the decimal point;
   if not specified, the default is 2.
 
-  `customs`: array of bytes initialized with the custom characters to set, in 7seg format, each byte is a character on the display, from left to right;
+  `customs`: array of bytes initialized with the custom characters to set, encoded in 7segment format, each byte is a character on the display, from left to right;
   array length must match display size.
 
   `characters`: array of chars initialized with the characters to set, each char is a character on the display, from left to right;
@@ -101,34 +101,34 @@ Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 
   array length must match display size.
 
   `dots`: array of bools initialized with the dot values to set, each bool is a dot on the display, from left to right;
-  true shows dot, false hides dot;
+  bool value, true to show dot, false to hide dot;
   array length must match display size.
 
 * __setDot()__
 
   * display.setDot(index, dot)
 
-  Show or hide dot from buffer.
+  Modify the stored value at the specified index to show or hide a dot.
 
   `display`: object of type ShiftDisplay.
 
   `index`: position on the display to set the dot, starting at 0 for the leftmost;
-  if is invalid, does not have any effect.
+  if out of bounds, function does not have any effect.
 
-  `dot`: true to show, false to hide.
+  `dot`: bool value, true to show dot, false to hide dot.
 
 * __setCustom()__
 
   * display.setCustom(index, custom)
 
-  Replace with a custom character.
+  Modify the stored value at the specified index by replacing with a custom character.
 
   `display`: object of type ShiftDisplay.
 
-  `index`: position on the display to set the character, starting at 0 for the leftmost;
-  if is invalid, does not have any effect.
+  `index`: position on the display to set the dot, starting at 0 for the leftmost;
+  if out of bounds, function does not have any effect.
 
-  `custom`: byte TODO
+  `custom`: byte with the custom character to set, encoded in 7segment format. TODO explain 7segment format
 
 * __setAt()__
 

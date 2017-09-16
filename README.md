@@ -145,7 +145,8 @@ Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 
 
   `display`: object of type ShiftDisplay.
 
-  `section`: TODO
+  `section`: number of the section on the display to set the value, starting at 0 for the first;
+  if is invalid, function does not have any effect.
 
   `value`: value to set, can be a number (int, long) or text (char, char array, string object);
   for text, valid characters are 0-9 a-z A-Z -, others are converted to a space; null-terminated char array;
@@ -214,8 +215,8 @@ Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 
   `display`: object of type ShiftDisplay.
 
   `time`: duration in milliseconds to show the value;
-  if is not specified, the value is shown for a single iteration; // TODO explain
-  exact time showing will be an under aproximation.
+  if is not specified, the value is shown for a single iteration;
+  exact time showing will be an under aproximation. TODO explain iteration
 
 * __show()__
 

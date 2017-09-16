@@ -49,15 +49,15 @@ Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 
   Create a ShiftDisplay object, initialize the library using the interface pins and display properties.
   A display can be set as a whole, or divided by sections. Sections can be a logical separation (for example hours and minutes on a 4 digit clock display), or a physical separation (for example timer and score on a scoreboard with multiple displays).
 
-  `display`: newly created ShiftDisplay object.
+  `display`: newly created ShiftDisplay type object.
 
-  `displayType`: constant `COMMON_CATHODE` or `COMMON_ANODE`, defining the type of the display.
+  `displayType`: constant `COMMON_CATHODE` or `COMMON_ANODE`, defining the type of the display. TODO explain common cathode/anode
 
   `displaySize`: quantity of digits on the display.
 
   `sectionCount`: quantity of sections on the display.
 
-  `sectionSizes`: array with quantity of digits on each section.
+  `sectionSizes`: array of ints initialized with the quantities of digits for each section.
 
   `latchPin`, `clockPin`, `dataPin`: number of the Arduino digital pins connected to the latch, clock and data pins of the shift registers;
   if not defined, the default pins are 6 for latch, 7 for clock, and 5 for data.
@@ -75,32 +75,33 @@ Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 
   * display.set(customs)
   * display.set(characters, dots)
 
-  Save a value to buffer for showing latter.
+  Save and set a value to show next. Entire previous value is erased.
 
   `display`: object of type ShiftDisplay.
 
-  `value`: value to save;
-  can be a number (int, long) or text (char, char array, string object);
-  for text, valid characters are 0-9 a-z A-Z -, everything else will be converted to a space.
+  `value`: value to set, can be a number (int, long) or text (char, char array, string object);
+  for text, valid characters are 0-9 a-z A-Z -, others are converted to a space; null-terminated char array;
+  if is to big to fit in the display, it is trimmed according to alignment.
   
-  `valueReal`: float or double number value to save.
+  `valueReal`: value to set, a real number (float, double);
+  if is to big to fit in the display, it is trimmed according to alignment.
 
-  `alignment`: alignment of the value on the display;
+  `alignment`: alignment of the value or valueReal on the display;
   constant `ALIGN_LEFT`, `ALIGN_RIGHT` or `ALIGN_CENTER`;
   if not defined, the default is ALIGN_RIGHT for numbers and ALIGN_LEFT for text.
 
   `decimalPlaces`: number of digits following the decimal point;
   if not defined, the default is 2.
 
-  `customs`: array of bytes specifying custom characters, each representing a character on the display, from left to right;
-  a custom character is encooded as a byte where segment A is MSB and DP is LSB;
+  `customs`: array of bytes initialized with the custom characters to set, in 7seg format, each byte is a character on the display, from left to right;
   array length must match display size.
 
-  `characters`: array of chars, each representing a character on the display, from left to right;
-  valid characters are 0-9 a-z A-Z -, everything else will be converted to a space;
+  `characters`: array of chars initialized with the characters to set, each char is a character on the display, from left to right;
+  valid characters are 0-9 a-z A-Z -, others are converted to a space;
   array length must match display size.
 
-  `dots`: array of bools, each representing a dot on the display, from left to right;
+  `dots`: array of bools initialized with the dot values to set, each bool is a dot on the display, from left to right;
+  true shows dot, false hides dot;
   array length must match display size.
 
 * __setDot()__

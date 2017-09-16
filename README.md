@@ -60,7 +60,7 @@ Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 
   `sectionSizes`: array of ints initialized with the quantities of digits for each section.
 
   `latchPin`, `clockPin`, `dataPin`: number of the Arduino digital pins connected to the latch, clock and data pins of the shift registers;
-  if not defined, the default pins are 6 for latch, 7 for clock, and 5 for data.
+  if not specified, the default pins are 6 for latch, 7 for clock, and 5 for data.
 
 ### Functions
 
@@ -88,10 +88,10 @@ Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 
 
   `alignment`: alignment of the value or valueReal on the display;
   constant `ALIGN_LEFT`, `ALIGN_RIGHT` or `ALIGN_CENTER`;
-  if not defined, the default is ALIGN_RIGHT for numbers and ALIGN_LEFT for text.
+  if not specified, the default is ALIGN_RIGHT for numbers and ALIGN_LEFT for text.
 
   `decimalPlaces`: number of digits following the decimal point;
-  if not defined, the default is 2.
+  if not specified, the default is 2.
 
   `customs`: array of bytes initialized with the custom characters to set, in 7seg format, each byte is a character on the display, from left to right;
   array length must match display size.
@@ -155,10 +155,10 @@ Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 
 
   `alignment`: alignment of the value on the display;
   constant `ALIGN_LEFT`, `ALIGN_RIGHT` or `ALIGN_CENTER`;
-  if not defined, the default is ALIGN_RIGHT for numbers and ALIGN_LEFT for text.
+  if not specified, the default is ALIGN_RIGHT for numbers and ALIGN_LEFT for text.
 
   `decimalPlaces`: number of digits following the decimal point;
-  if not defined, the default is 2.
+  if not specified, the default is 2.
 
   `customs`: array of bytes specifying custom characters, each representing a character on the display, from left to right;
   a custom character is encooded as a byte where segment A is MSB and DP is LSB;
@@ -212,7 +212,7 @@ Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 
 
   `time`: time in milliseconds for the value to be shown on the display;
   has to be >= 10;
-  if not defined, the value is shown for a single iteration;
+  if not specified, the value is shown for a single iteration;
   exact time showing will be an under aproximation.
 
 * __show()__
@@ -242,10 +242,10 @@ Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 
 
   `alignment`: alignment of the value on the display;
   constant `ALIGN_LEFT`, `ALIGN_RIGHT` or `ALIGN_CENTER`;
-  if not defined, the default is ALIGN_RIGHT for numbers and ALIGN_LEFT for text.
+  if not specified, the default is ALIGN_RIGHT for numbers and ALIGN_LEFT for text.
 
   `decimalPlaces`: is the number of digits following the decimal point;
-  if not defined, the default is 2.
+  if not specified, the default is 2.
 
   `customs`: byte array specifying custom characters, each representing a character on the display, from left to right;
   a custom character is encooded as a byte where segment A is MSB and DP is LSB;

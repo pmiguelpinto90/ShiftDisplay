@@ -60,7 +60,7 @@ Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 
   `sectionSizes`: array of ints initialized with the quantities of digits for each section.
 
   `latchPin`, `clockPin`, `dataPin`: number of the Arduino digital pins connected to the latch, clock and data pins of the shift registers;
-  if not specified, the default pins are 6 for latch, 7 for clock, and 5 for data.
+  if is not specified, the default pins are 6 for latch, 7 for clock, and 5 for data.
 
 ### Functions
 
@@ -75,23 +75,23 @@ Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 
   * display.set(customs)
   * display.set(characters, dots)
 
-  Store a value to show next. The entire previous value is cleared.
+  Store a value to show next on the display. The entire previous value is cleared.
 
   `display`: object of type ShiftDisplay.
 
   `value`: value to set, can be a number (int, long) or text (char, char array, string object);
   for text, valid characters are 0-9 a-z A-Z -, others are converted to a space; null-terminated char array;
-  if too big to fit in the display, it is trimmed according to alignment.
+  if is too big to fit in the display, it is trimmed according to alignment.
   
   `valueReal`: value to set, a real number (float, double);
-  if too big to fit in the display, it is trimmed according to alignment.
+  if is too big to fit in the display, it is trimmed according to alignment.
 
   `alignment`: alignment of the value or valueReal on the display;
   constant `ALIGN_LEFT`, `ALIGN_RIGHT` or `ALIGN_CENTER`;
-  if not specified, the default is ALIGN_RIGHT for numbers and ALIGN_LEFT for text.
+  if is not specified, the default is ALIGN_RIGHT for numbers and ALIGN_LEFT for text.
 
   `decimalPlaces`: number of digits following the decimal point;
-  if not specified, the default is 2.
+  if is not specified, the default is 2.
 
   `customs`: array of bytes initialized with the custom characters to set, encoded in 7segment format, each byte is a character on the display, from left to right;
   array length must match display size.
@@ -108,12 +108,12 @@ Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 
 
   * display.setDot(index, dot)
 
-  Modify the stored value at the specified index to show or hide a dot.
+  Modify the stored value by showing or hiding a dot on the character of the specified index.
 
   `display`: object of type ShiftDisplay.
 
   `index`: position on the display to set the dot, starting at 0 for the leftmost;
-  if out of bounds, function does not have any effect.
+  if is out of display bounds, function does not have any effect.
 
   `dot`: bool value, true to show dot, false to hide dot.
 
@@ -121,12 +121,12 @@ Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 
 
   * display.setCustom(index, custom)
 
-  Modify the stored value at the specified index by replacing with a custom character.
+  Modify the stored value by replacing the character (and dot) at the specified index with a custom character.
 
   `display`: object of type ShiftDisplay.
 
-  `index`: position on the display to set the dot, starting at 0 for the leftmost;
-  if out of bounds, function does not have any effect.
+  `index`: position on the display to set the custom character, starting at 0 for the leftmost;
+  if is out of display bounds, function does not have any effect.
 
   `custom`: byte with the custom character to set, encoded in 7segment format. TODO explain 7segment format
 
@@ -141,65 +141,68 @@ Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 
   * display.setAt(section, customs)
   * display.setAt(section, characters, dots)
 
-  Save TODO
+  Store a value to show next on the specified section. The previous value set for this section is cleared.
 
   `display`: object of type ShiftDisplay.
 
   `section`: TODO
 
-  `value`: value to save;
-  can be a number (int, long) or text (char, char array, string object);
-  for text, valid characters are 0-9 a-z A-Z -, everything else will be converted to a space.
+  `value`: value to set, can be a number (int, long) or text (char, char array, string object);
+  for text, valid characters are 0-9 a-z A-Z -, others are converted to a space; null-terminated char array;
+  if is too big to fit in the section, it is trimmed according to alignment.
   
-  `valueReal`: float or double number value to save.
+  `valueReal`: value to set, a real number (float, double);
+  if is too big to fit in the section, it is trimmed according to alignment.
 
-  `alignment`: alignment of the value on the display;
+  `alignment`: alignment of the value or valueReal on the section;
   constant `ALIGN_LEFT`, `ALIGN_RIGHT` or `ALIGN_CENTER`;
-  if not specified, the default is ALIGN_RIGHT for numbers and ALIGN_LEFT for text.
+  if is not specified, the default is ALIGN_RIGHT for numbers and ALIGN_LEFT for text.
 
   `decimalPlaces`: number of digits following the decimal point;
-  if not specified, the default is 2.
+  if is not specified, the default is 2.
 
-  `customs`: array of bytes specifying custom characters, each representing a character on the display, from left to right;
-  a custom character is encooded as a byte where segment A is MSB and DP is LSB;
-  array length must match display size.
+  `customs`: array of bytes initialized with the custom characters to set, encoded in 7segment format, each byte is a character on the section, from left to right;
+  array length must match section size.
 
-  `characters`: array of chars, each representing a character on the display, from left to right;
-  valid characters are 0-9 a-z A-Z -, everything else will be converted to a space;
-  array length must match display size.
+  `characters`: array of chars initialized with the characters to set, each char is a character on the section, from left to right;
+  valid characters are 0-9 a-z A-Z -, others are converted to a space;
+  array length must match section size.
 
-  `dots`: array of bools, each representing a dot on the display, from left to right;
-  array length must match display size.
+  `dots`: array of bools initialized with the dot values to set, each bool is a dot on the section, from left to right;
+  bool value, true to show dot, false to hide dot;
+  array length must match section size.
 
 * __setDotAt()__
 
   * display.setDotAt(section, index, dot)
 
-  Show or hide dot TODO
+  Modify the stored value by showing or hiding a dot on the character of the specified index of section.
 
   `display`: object of type ShiftDisplay.
 
-  `section`: TODO
+  `section`: number of the section on the display to set the dot, starting at 0 for the first;
+  if is invalid, function does not have any effect.
 
-  `index`: position on the display to set the dot, starting at 0 for the leftmost;
-  if is invalid, does not have any effect.
+  `index`: position on the section to set the dot, starting at 0 for the leftmost;
+  if is out of section bounds, function does not have any effect.
 
-  `dot`: true to show, false to hide.
+  `dot`: bool value, true to show dot, false to hide dot.
 
 * __setCustomAt()__
 
   * display.setCustomAt(section, index, custom)
 
-  Replace with a custom character. TODO
+  Modify the stored value by replacing the character (and dot) at the specified index of section with a custom character.
 
   `display`: object of type ShiftDisplay.
 
-  `section`: TODO
+  `section`: number of the section on the display to set the dot, starting at 0 for the first;
+  if is invalid, function does not have any effect.
 
-  `index`: position on the display to set the character, starting at 0 for the leftmost;
-  if is invalid, does not have any effect.
+  `index`: position on the section to set the custom character, starting at 0 for the leftmost;
+  if is out of section bounds, function does not have any effect.
 
-  `custom`: byte TODO
+  `custom`: byte with the custom character to set, encoded in 7segment format.
 
 * __show()__
 
@@ -212,7 +215,7 @@ Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 
 
   `time`: time in milliseconds for the value to be shown on the display;
   has to be >= 10;
-  if not specified, the value is shown for a single iteration;
+  if is not specified, the value is shown for a single iteration;
   exact time showing will be an under aproximation.
 
 * __show()__
@@ -242,10 +245,10 @@ Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 
 
   `alignment`: alignment of the value on the display;
   constant `ALIGN_LEFT`, `ALIGN_RIGHT` or `ALIGN_CENTER`;
-  if not specified, the default is ALIGN_RIGHT for numbers and ALIGN_LEFT for text.
+  if is not specified, the default is ALIGN_RIGHT for numbers and ALIGN_LEFT for text.
 
   `decimalPlaces`: is the number of digits following the decimal point;
-  if not specified, the default is 2.
+  if is not specified, the default is 2.
 
   `customs`: byte array specifying custom characters, each representing a character on the display, from left to right;
   a custom character is encooded as a byte where segment A is MSB and DP is LSB;

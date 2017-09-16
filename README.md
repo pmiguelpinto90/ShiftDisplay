@@ -1,3 +1,5 @@
+https://miguelpynto.github.io/ShiftDisplay/
+
 # ShiftDisplay
 _by MiguelPynto_
 
@@ -18,6 +20,15 @@ Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 
 - 8x (per display) 220 Ohm resistor
 
 
+## Wiring
+
+1. Connect Arduino to shift registers:
+![input](https://raw.githubusercontent.com/MiguelPynto/ShiftDisplay/master/extras/input.png)
+
+2. Connect shift registers to display(s):
+![output](https://raw.githubusercontent.com/MiguelPynto/ShiftDisplay/master/extras/output.png)
+
+
 ## Install
 
 1. Start the Arduino IDE
@@ -26,13 +37,26 @@ Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 
 3. Select it and click install
 
 
-## Wiring
+## Example
 
-1. Connect Arduino to shift registers:
-![input](https://raw.githubusercontent.com/MiguelPynto/ShiftDisplay/master/extras/input.png)
+```c
+#include <ShiftDisplay.h>
 
-2. Connect shift registers to display(s):
-![output](https://raw.githubusercontent.com/MiguelPynto/ShiftDisplay/master/extras/output.png)
+ShiftDisplay display(COMMON_CATHODE, 3);
+
+void setup() {
+	for (int i = 3; i > 0; i--) {
+		display.show(i, 400, ALIGN_CENTER); // store number and show it for 400ms
+		display.setDot(1, true); // add dot to stored number
+		display.show(400); // show number with dot for 400ms
+	}
+	display.set("GO"); // store "GO"
+}
+
+void loop() {
+	display.show(); // show stored "GO" while in loop
+}
+```
 
 
 ## Reference
@@ -51,7 +75,7 @@ Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 
 
   `display`: newly created ShiftDisplay type object.
 
-  `displayType`: constant `COMMON_CATHODE` or `COMMON_ANODE`, defining the type of the display. TODO explain common cathode/anode
+  `displayType`: constant `COMMON_CATHODE` or `COMMON_ANODE`, defining the type of the display.
 
   `displaySize`: quantity of digits on the display.
 
@@ -128,7 +152,7 @@ Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 
   `index`: position on the display to set the custom character, starting at 0 for the leftmost;
   if is out of display bounds, function does not have any effect.
 
-  `custom`: byte with the custom character to set, encoded in 7segment format. TODO explain 7segment format
+  `custom`: byte with the custom character to set, encoded in 7segment format.
 
 * __setAt()__
 
@@ -269,29 +293,19 @@ Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 
 - COMMON_ANODE
 - COMMON_CATHODE
 
+## Notes
 
-## Example
+* __7segment format__
 
-```c
-#include <ShiftDisplay.h>
+TODO
 
-// Arduino pin 6 connected to shift register latch, pin 7 to clock and pin 5 to data
-// common cathode display with 3 digits
-ShiftDisplay display(6, 7, 5, COMMON_CATHODE, 3);
+* __common cathode / common anode__
 
-void setup() {
-	for (int i = 3; i > 0; i--) {
-		display.show(i, 400, ALIGN_CENTER); // save number and show it for 400ms
-		display.setDot(1, true); // add dot to saved number
-		display.show(400); // show number with dot for 400ms
-	}
-	display.set("GO"); // save "GO" to buffer
-}
+TODO
 
-void loop() {
-	display.show(); // show "GO" while in loop
-}
-```
+* __multiplex__
+
+TODO
 
 
 ## Changelog
@@ -372,6 +386,6 @@ void loop() {
 
 ## Contacts
 
-miguelpynto@outlook.com
-
-https://miguelpynto.github.io/ShiftDisplay/
+- https://github.com/MiguelPynto/ShiftDisplay/
+- https://twitter.com/MiguelPynto
+- miguelpynto@outlook.com

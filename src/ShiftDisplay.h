@@ -17,7 +17,7 @@ const int COMMON_CATHODE = 1;
 const int DEFAULT_LATCH_PIN = 6;
 const int DEFAULT_CLOCK_PIN = 7;
 const int DEFAULT_DATA_PIN = 5;
-const int DEFAULT_DECIMAL_PLACES = 2;
+const int DEFAULT_DECIMAL_PLACES = 1;
 const char DEFAULT_ALIGN_TEXT = ALIGN_LEFT;
 const char DEFAULT_ALIGN_NUMBER = ALIGN_RIGHT;
 const int MAX_DISPLAY_SIZE = 8;
@@ -41,7 +41,7 @@ class ShiftDisplay {
 		void constructSingleDisplay(int latchPin, int clockPin, int dataPin, int displayType, int displaySize); // common instructions to be called by single display constructors
 		void constructSectionedDisplay(int latchPin, int clockPin, int dataPin, int displayType, int sectionCount, int sectionSizes[]); // common instructions to be called by sectioned display constructors
 
-		void showDisplay(); // iterate stored value on each display index, achieving persistence of vision
+		void multiplexDisplay(); // iterate stored value on each display index, achieving persistence of vision
 		void clearDisplay(); // clear shift registers
 		void modifyStorage(int index, byte code); // replace a position of storage
 		void modifyStorage(int beginIndex, int size, byte codes[]); // replace interval of storage

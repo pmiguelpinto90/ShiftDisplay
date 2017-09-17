@@ -116,7 +116,7 @@ void loop() {
   if is not specified, the default is ALIGN_RIGHT for numbers and ALIGN_LEFT for text.
 
   `decimalPlaces`: number of digits following the decimal point;
-  if is not specified, the default is 2.
+  if is not specified, the default is 1.
 
   `customs`: array of bytes initialized with the custom characters to set, encoded in abcdefgp format, each byte is a character on the display, from left to right;
   array length must match display size.
@@ -185,7 +185,7 @@ void loop() {
   if is not specified, the default is ALIGN_RIGHT for numbers and ALIGN_LEFT for text.
 
   `decimalPlaces`: number of digits following the decimal point;
-  if is not specified, the default is 2.
+  if is not specified, the default is 1.
 
   `customs`: array of bytes initialized with the custom characters to set, encoded in abcdefgp format, each byte is a character on the section, from left to right;
   array length must match section size.
@@ -273,7 +273,7 @@ void loop() {
   if is not specified, the default is ALIGN_RIGHT for numbers and ALIGN_LEFT for text.
 
   `decimalPlaces`: number of digits following the decimal point;
-  if is not specified, the default is 2.
+  if is not specified, the default is 1.
 
   `customs`: array of bytes initialized with the custom characters to set and show, encoded in abcdefgp format, each byte is a character on the display, from left to right;
   array length must match display size.
@@ -315,6 +315,8 @@ TODO
 
 ## Changelog
 
+- 3.6.2 ()
+  - CHANGE: default decimal places = 1
 - 3.6.1 (17/9/2017)
   - DOC: improved README
 - 3.6.0 (15/9/2017)

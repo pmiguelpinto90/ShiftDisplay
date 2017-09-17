@@ -35,7 +35,7 @@ class ShiftDisplay {
 		int _sectionCount; // quantity of display sections
 		int _sectionSizes[MAX_DISPLAY_SIZE]; // length of each section
 		int _sectionBegins[MAX_DISPLAY_SIZE]; // index where each section begins on whole display
-		byte _buffer[MAX_DISPLAY_SIZE]; // value to show on display (encoded in 7segment format)
+		byte _buffer[MAX_DISPLAY_SIZE]; // value to show on display (encoded in abcdefgp format)
 
 		void initPins(int latchPin, int clockPin, int dataPin); // initialize shift register pins and clears it
 		void constructSingleDisplay(int latchPin, int clockPin, int dataPin, int displayType, int displaySize); // common instructions to be called by single display constructors
@@ -46,7 +46,7 @@ class ShiftDisplay {
 		void modifyBuffer(int index, byte code); // change buffer content in a single position
 		void modifyBuffer(int beginIndex, int size, byte codes[]); // change buffer content in defined interval
 		void modifyBufferDot(int index, bool dot); // change buffer dot in a single position
-		void encodeCharacters(int size, const char input[], byte output[], int dotIndex); // encode array of chars to array of bytes in 7segment format
+		void encodeCharacters(int size, const char input[], byte output[], int dotIndex); // encode array of chars to array of bytes in abcdefgp format
 		int formatCharacters(int inSize, const char input[], int outSize, char output[], char alignment, int decimalPlaces); // arrange array of chars for displaying in specified alignment, returns dot index on display or -1 if none
 		void getCharacters(long input, int size, char output[]); // convert an integer number to an array of chars
 		int countCharacters(long number); // calculate the length of an array of chars for an integer number
@@ -68,12 +68,12 @@ class ShiftDisplay {
 		void set(char value, char alignment = DEFAULT_ALIGN_TEXT);
 		void set(const char value[], char alignment = DEFAULT_ALIGN_TEXT); // c string
 		void set(const String &value, char alignment = DEFAULT_ALIGN_TEXT); // Arduino string object
-		void set(const byte customs[]); // custom characters (encoded in 7segment format), array length must match display size
+		void set(const byte customs[]); // custom characters (encoded in abcdefgp format), array length must match display size
 		void set(const char characters[], bool dots[]); // arrays length must match display size
 
 		// modify buffer at index
 		void setDot(int index, bool dot); // show or hide a dot
-		void setCustom(int index, byte custom); // replace with a custom character (encoded in 7segment format)
+		void setCustom(int index, byte custom); // replace with a custom character (encoded in abcdefgp format)
 
 		// store a value to buffer in section indexes
 		void setAt(int section, int value, char alignment = DEFAULT_ALIGN_NUMBER);
@@ -83,12 +83,12 @@ class ShiftDisplay {
 		void setAt(int section, char value, char alignment = DEFAULT_ALIGN_TEXT);
 		void setAt(int section, const char value[], char alignment = DEFAULT_ALIGN_TEXT); // c string
 		void setAt(int section, const String &value, char alignment = DEFAULT_ALIGN_TEXT); // Arduino string object
-		void setAt(int section, const byte customs[]); // custom characters (encoded in 7segment format), array length must match defined section size
+		void setAt(int section, const byte customs[]); // custom characters (encoded in abcdefgp format), array length must match defined section size
 		void setAt(int section, const char characters[], bool dots[]); // arrays length must match defined section size
 
 		// modify buffer at index in section
 		void setDotAt(int section, int relativeIndex, bool dot); // show or hide a dot
-		void setCustomAt(int section, int relativeIndex, byte custom); // replace with a custom character (encoded in 7segment format)
+		void setCustomAt(int section, int relativeIndex, byte custom); // replace with a custom character (encoded in abcdefgp format)
 
 		// show buffer value on display
 		void show(); // for a single iteration
@@ -102,7 +102,7 @@ class ShiftDisplay {
 		void show(char value, unsigned long time, char alignment = DEFAULT_ALIGN_TEXT);
 		void show(const char value[], unsigned long time, char alignment = DEFAULT_ALIGN_TEXT); // c string
 		void show(const String &value, unsigned long time, char alignment = DEFAULT_ALIGN_TEXT); // Arduino string object
-		void show(const byte customs[], unsigned long time); // custom characters (encoded in 7segment format), array length must match display size
+		void show(const byte customs[], unsigned long time); // custom characters (encoded in abcdefgp format), array length must match display size
 		void show(const char characters[], bool dots[], unsigned long time); // arrays length must match display size
 
 		// duplicates to retain compatibility with old versions

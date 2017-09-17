@@ -384,8 +384,7 @@ TODO
 
 ## TODO
 
-- [x] Sectioned display
-- [x] Improve README
+- [ ] Finish README
 - [ ] Example for sectioned display
 - [ ] Example for custom characters
 - [ ] INDIVIDUAL_CATHODE and INDIVIDUAL_ANODE display types

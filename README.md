@@ -3,7 +3,7 @@ https://miguelpynto.github.io/ShiftDisplay/
 # ShiftDisplay
 _by MiguelPynto_
 
-Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 shift registers
+Arduino library for driving 7-segment displays using 74HC595 shift registers
 
 - Show numbers and text
 - Concatenate multiple displays as one, for a maximum of 8 digits
@@ -17,12 +17,13 @@ Arduino library for driving multiple-digit 7-segment LED displays using 74HC595 
 
 - 1x (or more) 7-segment LED display
 - 2x 74HC595 shift register
+- 2x 0.1uF ceramic capacitor
 - 8x (per display) 220 Ohm resistor
 
 
 ## Wiring
 
-1. Connect Arduino to shift registers:
+1. Connect Arduino board to shift registers:
 ![input](https://raw.githubusercontent.com/MiguelPynto/ShiftDisplay/master/extras/input.png)
 
 2. Connect shift registers to display(s):
@@ -117,7 +118,7 @@ void loop() {
   `decimalPlaces`: number of digits following the decimal point;
   if is not specified, the default is 2.
 
-  `customs`: array of bytes initialized with the custom characters to set, encoded in 7segment format, each byte is a character on the display, from left to right;
+  `customs`: array of bytes initialized with the custom characters to set, encoded in abcdefgp format, each byte is a character on the display, from left to right;
   array length must match display size.
 
   `characters`: array of chars initialized with the characters to set, each char is a character on the display, from left to right;
@@ -152,7 +153,7 @@ void loop() {
   `index`: position on the display to set the custom character, starting at 0 for the leftmost;
   if is out of display bounds, function does not have any effect.
 
-  `custom`: byte with the custom character to set, encoded in 7segment format.
+  `custom`: byte with the custom character to set, encoded in abcdefgp format.
 
 * __setAt()__
 
@@ -186,7 +187,7 @@ void loop() {
   `decimalPlaces`: number of digits following the decimal point;
   if is not specified, the default is 2.
 
-  `customs`: array of bytes initialized with the custom characters to set, encoded in 7segment format, each byte is a character on the section, from left to right;
+  `customs`: array of bytes initialized with the custom characters to set, encoded in abcdefgp format, each byte is a character on the section, from left to right;
   array length must match section size.
 
   `characters`: array of chars initialized with the characters to set, each char is a character on the section, from left to right;
@@ -227,7 +228,7 @@ void loop() {
   `index`: position on the section to set the custom character, starting at 0 for the leftmost;
   if is out of section bounds, function does not have any effect.
 
-  `custom`: byte with the custom character to set, encoded in 7segment format.
+  `custom`: byte with the custom character to set, encoded in abcdefgp format.
 
 * __show()__
 
@@ -240,7 +241,7 @@ void loop() {
 
   `time`: duration in milliseconds to show the value;
   if is not specified, the value is shown for a single iteration;
-  exact time showing will be an under aproximation. TODO explain iteration
+  exact time showing will be an under aproximation.
 
 * __show()__
 
@@ -274,7 +275,7 @@ void loop() {
   `decimalPlaces`: number of digits following the decimal point;
   if is not specified, the default is 2.
 
-  `customs`: array of bytes initialized with the custom characters to set and show, encoded in 7segment format, each byte is a character on the display, from left to right;
+  `customs`: array of bytes initialized with the custom characters to set and show, encoded in abcdefgp format, each byte is a character on the display, from left to right;
   array length must match display size.
 
   `characters`: array of chars initialized with the characters to set and show, each char is a character on the display, from left to right;
@@ -295,15 +296,19 @@ void loop() {
 
 ## Notes
 
-* __7segment format__
+* __Common Cathode & Common Anode__
 
 TODO
 
-* __common cathode / common anode__
+* __abcdefgp format__
 
 TODO
 
-* __multiplex__
+* __Multiplexing__
+
+TODO
+
+* __Decoupling capacitor__
 
 TODO
 
@@ -378,7 +383,7 @@ TODO
 ## TODO
 
 - [x] Sectioned display
-- [ ] Improve README
+- [x] Improve README
 - [ ] Example for sectioned display
 - [ ] Example for custom characters
 - [ ] INDIVIDUAL_CATHODE and INDIVIDUAL_ANODE display types

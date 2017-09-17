@@ -76,7 +76,7 @@ void ShiftDisplay::constructSectionedDisplay(int latchPin, int clockPin, int dat
 
 // PRIVATE FUNCTIONS ***********************************************************
 
-void ShiftDisplay::showDisplay() {
+void ShiftDisplay::multiplexDisplay() {
 	for (int i = 0; i < _displaySize; i++) {
 		digitalWrite(_latchPin, LOW);
 
@@ -385,14 +385,14 @@ void ShiftDisplay::setCustomAt(int section, int relativeIndex, byte custom) {
 }
 
 void ShiftDisplay::show() {
-	showDisplay();
+	multiplexDisplay();
 	clearDisplay();
 }
 
 void ShiftDisplay::show(unsigned long time) {
 	unsigned long end = millis() + time - (POV * _displaySize); // start + total - last iteration
 	while (millis() <= end)
-		showDisplay();
+		multiplexDisplay();
 	clearDisplay();
 }
 

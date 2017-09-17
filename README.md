@@ -315,6 +315,8 @@ TODO
 
 ## Changelog
 
+- 3.6.1 (17/9/2017)
+  - DOC: improved README
 - 3.6.0 (15/9/2017)
   - NEW: sectioned display feature
   - NEW: setAt() function

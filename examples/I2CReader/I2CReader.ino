@@ -22,7 +22,7 @@ void receiveEvent(int numBytes) {
 	char str[numBytes];
 	for (int i = 0; i < numBytes; i++)
 		str[i] = Wire.read();
-	display.set(str); // save to buffer
+	display.set(str); // store received value
 }
 
 void setup() {
@@ -31,5 +31,5 @@ void setup() {
 }
 
 void loop() {
-	display.show(); // show what is on buffer forever
+	display.show(); // show current stored value
 }

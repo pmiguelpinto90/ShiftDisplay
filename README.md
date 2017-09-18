@@ -76,7 +76,7 @@ void loop() {
 
   `display`: newly created ShiftDisplay type object.
 
-  `displayType`: constant `COMMON_CATHODE` or `COMMON_ANODE`, defining the type of the display.
+  `displayType`: constant `COMMON_ANODE`, `COMMON_CATHODE`, `INDIVIDUAL_ANODE` or `INDIVIDUAL_CATHODE`, defining the type of the display.
 
   `displaySize`: quantity of digits on the display.
 
@@ -293,6 +293,8 @@ void loop() {
 - ALIGN_CENTER
 - COMMON_ANODE
 - COMMON_CATHODE
+- INDIVIDUAL_ANODE
+- INDIVIDUAL_CATHODE
 
 ## Notes
 

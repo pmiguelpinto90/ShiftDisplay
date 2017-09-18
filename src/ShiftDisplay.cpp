@@ -43,8 +43,8 @@ void ShiftDisplay::constructSingleDisplay(int latchPin, int clockPin, int dataPi
 	memset(_storage, initial, MAX_DISPLAY_SIZE); // fill storage with blank character
 
 	displaySize = min(displaySize, MAX_DISPLAY_SIZE); // override if displaySize is too big
-	_displayType = displayType;
-	_cathode = displayType == COMMON_CATHODE || displayType == INDIVIDUAL_CATHODE;
+	_isCathode = displayType == COMMON_CATHODE || displayType == INDIVIDUAL_CATHODE;
+	_isMultiplexed = displayType == COMMON_CATHODE || displayType == COMMON_ANODE;
 	_displaySize = displaySize;
 	_sectionCount = 1;
 	_sectionSizes[0] = displaySize;
@@ -56,8 +56,8 @@ void ShiftDisplay::constructSectionedDisplay(int latchPin, int clockPin, int dat
 	byte initial = displayType ? BLANK : ~BLANK;
 	memset(_storage, initial, MAX_DISPLAY_SIZE); // fill storage with blank character
 
-	_displayType = displayType;
-	_cathode = displayType == COMMON_CATHODE || displayType == INDIVIDUAL_CATHODE;
+	_isCathode = displayType == COMMON_CATHODE || displayType == INDIVIDUAL_CATHODE;
+	_isMultiplexed = displayType == COMMON_CATHODE || displayType == COMMON_ANODE;
 	int i = 0;
 	int displaySize = 0;
 	for (; i < sectionCount && displaySize < MAX_DISPLAY_SIZE && i < MAX_DISPLAY_SIZE; i++) {
@@ -83,7 +83,7 @@ void ShiftDisplay::multiplexDisplay() {
 		digitalWrite(_latchPin, LOW);
 
 		// data for last shift register
-		byte out = _cathode ? ~INDEXES[i] : INDEXES[i];
+		byte out = _isCathode ? ~INDEXES[i] : INDEXES[i];
 		shiftOut(_dataPin, _clockPin, LSBFIRST, out);
 
 		// data for first shift register
@@ -110,16 +110,16 @@ void ShiftDisplay::clearDisplay() {
 }
 
 void ShiftDisplay::modifyStorage(int index, byte code) {
-	_storage[index] = _cathode ? code : ~code;
+	_storage[index] = _isCathode ? code : ~code;
 }
 
 void ShiftDisplay::modifyStorage(int beginIndex, int size, byte codes[]) {
 	for (int i = 0; i < size; i++)
-		_storage[i+beginIndex] = _cathode ? codes[i] : ~codes[i];
+		_storage[i+beginIndex] = _isCathode ? codes[i] : ~codes[i];
 }
 
 void ShiftDisplay::modifyStorageDot(int index, bool dot) {
-	bool bit = _cathode ? dot : !dot;
+	bool bit = _isCathode ? dot : !dot;
 	bitWrite(_storage[index], 0, bit);
 }
 

@@ -32,8 +32,8 @@ class ShiftDisplay {
 		int _latchPin;
 		int _clockPin;
 		int _dataPin;
-		int _displayType; // TODO remove?
-		bool _cathode; // _displayType is *CATHODE, redundant var for speed and readability
+		bool _isCathode; // display type is common cathode or individual cathode
+		bool _isMultiplexed; // display type is common cathode or common anode
 		int _displaySize; // length of whole display
 		int _sectionCount; // quantity of display sections
 		int _sectionSizes[MAX_DISPLAY_SIZE]; // length of each section

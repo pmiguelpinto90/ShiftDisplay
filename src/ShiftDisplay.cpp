@@ -119,12 +119,7 @@ void ShiftDisplay::modifyStorage(int beginIndex, int size, byte codes[]) {
 }
 
 void ShiftDisplay::modifyStorageDot(int index, bool dot) {
-	int bit;
-	if (dot)
-		bit = _cathode ? 1 : 0;
-	else
-		bit = _cathode ? 0 : 1;
-	//int bit = (dot == (bool)_cathode) TODO
+	bool bit = _cathode ? dot : !dot;
 	bitWrite(_storage[index], 0, bit);
 }
 

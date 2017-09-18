@@ -390,8 +390,8 @@ void ShiftDisplay::show() {
 }
 
 void ShiftDisplay::show(unsigned long time) {
-	unsigned long end = millis() + time - (POV * _displaySize); // start + total - last iteration
-	while (millis() <= end)
+	unsigned long beforeLast = millis() + time - (POV * _displaySize); // start + total - last iteration
+	while (millis() <= beforeLast) // it will not enter loop if it would overtake time
 		multiplexDisplay();
 	clearDisplay();
 }

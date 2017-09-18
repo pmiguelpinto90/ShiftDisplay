@@ -44,6 +44,7 @@ void ShiftDisplay::constructSingleDisplay(int latchPin, int clockPin, int dataPi
 
 	displaySize = min(displaySize, MAX_DISPLAY_SIZE); // override if displaySize is too big
 	_displayType = displayType;
+	_cathode = displayType == COMMON_CATHODE || displayType == INDIVIDUAL_CATHODE;
 	_displaySize = displaySize;
 	_sectionCount = 1;
 	_sectionSizes[0] = displaySize;
@@ -56,6 +57,7 @@ void ShiftDisplay::constructSectionedDisplay(int latchPin, int clockPin, int dat
 	memset(_storage, initial, MAX_DISPLAY_SIZE); // fill storage with blank character
 
 	_displayType = displayType;
+	_cathode = displayType == COMMON_CATHODE || displayType == INDIVIDUAL_CATHODE;
 	int i = 0;
 	int displaySize = 0;
 	for (; i < sectionCount && displaySize < MAX_DISPLAY_SIZE && i < MAX_DISPLAY_SIZE; i++) {
@@ -81,7 +83,7 @@ void ShiftDisplay::multiplexDisplay() {
 		digitalWrite(_latchPin, LOW);
 
 		// data for last shift register
-		byte out = _displayType ? ~INDEXES[i] : INDEXES[i];
+		byte out = _cathode ? ~INDEXES[i] : INDEXES[i];
 		shiftOut(_dataPin, _clockPin, LSBFIRST, out);
 
 		// data for first shift register
@@ -108,21 +110,21 @@ void ShiftDisplay::clearDisplay() {
 }
 
 void ShiftDisplay::modifyStorage(int index, byte code) {
-	_storage[index] = _displayType ? code : ~code;
+	_storage[index] = _cathode ? code : ~code;
 }
 
 void ShiftDisplay::modifyStorage(int beginIndex, int size, byte codes[]) {
 	for (int i = 0; i < size; i++)
-		_storage[i+beginIndex] = _displayType ? codes[i] : ~codes[i];
+		_storage[i+beginIndex] = _cathode ? codes[i] : ~codes[i];
 }
 
 void ShiftDisplay::modifyStorageDot(int index, bool dot) {
 	int bit;
 	if (dot)
-		bit = _displayType ? 1 : 0;
+		bit = _cathode ? 1 : 0;
 	else
-		bit = _displayType ? 0 : 1;
-	//int bit = (dot == (bool)_displayType) TODO
+		bit = _cathode ? 0 : 1;
+	//int bit = (dot == (bool)_cathode) TODO
 	bitWrite(_storage[index], 0, bit);
 }
 

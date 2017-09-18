@@ -43,7 +43,8 @@ class ShiftDisplay {
 		void constructSingleDisplay(int latchPin, int clockPin, int dataPin, int displayType, int displaySize); // common instructions to be called by single display constructors
 		void constructSectionedDisplay(int latchPin, int clockPin, int dataPin, int displayType, int sectionCount, int sectionSizes[]); // common instructions to be called by sectioned display constructors
 
-		void multiplexDisplay(); // iterate stored value on each display index, achieving persistence of vision
+		void multiplexDisplay(); // for common pin type display; iterate stored value on each display index, achieving persistence of vision
+		void constantDisplay(); // for individual pin type display; send stored value to whole display
 		void clearDisplay(); // clear shift registers
 		void modifyStorage(int index, byte code); // replace a position of storage
 		void modifyStorage(int beginIndex, int size, byte codes[]); // replace interval of storage

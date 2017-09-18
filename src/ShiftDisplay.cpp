@@ -93,6 +93,13 @@ void ShiftDisplay::multiplexDisplay() {
 	}
 }
 
+void ShiftDisplay::constantDisplay() {
+	digitalWrite(_latchPin, LOW);
+	for (int i = _displaySize - 1; i >= 0 ; i--)
+		shiftOut(_dataPin, _clockPin, LSBFIRST, _storage[i]);
+	digitalWrite(_latchPin, HIGH);
+}
+
 void ShiftDisplay::clearDisplay() {
 	digitalWrite(_latchPin, LOW);
 	shiftOut(_dataPin, _clockPin, MSBFIRST, 0); // both ends of led with same value

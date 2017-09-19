@@ -54,7 +54,7 @@ const byte LETTERS[] = {
 };
 
 const byte MINUS = B00000010;
-const byte BLANK = B00000000;
+const byte EMPTY = B00000000;
 
 // encoding for each index in display (common anode with LSBFIRST)
 const byte INDEXES[] = {

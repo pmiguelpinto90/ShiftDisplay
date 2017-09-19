@@ -33,7 +33,7 @@ class ShiftDisplay {
 		int _clockPin;
 		int _dataPin;
 		bool _isCathode; // display type is common cathode or individual cathode
-		bool _isMultiplexed; // display type is common cathode or common anode
+		bool _isMultiplex; // display type is common cathode or common anode
 		int _displaySize; // length of whole display
 		int _sectionCount; // quantity of display sections
 		int _sectionSizes[MAX_DISPLAY_SIZE]; // length of each section
@@ -44,9 +44,11 @@ class ShiftDisplay {
 		void constructSingleDisplay(int latchPin, int clockPin, int dataPin, int displayType, int displaySize); // common instructions to be called by single display constructors
 		void constructSectionedDisplay(int latchPin, int clockPin, int dataPin, int displayType, int sectionCount, int sectionSizes[]); // common instructions to be called by sectioned display constructors
 
-		void multiplexDisplay(); // for common pin type display; iterate stored value on each display index, achieving persistence of vision
-		void constantDisplay(); // for individual pin type display; send stored value to whole display
-		void clearDisplay(); // clear shift registers
+		void showMultiplexDisplay(); // for common pin type display; iterate stored value on each display index, achieving persistence of vision
+		void showConstantDisplay(); // for individual pin type display; send stored value to whole display
+		void clearMultiplexDisplay(); // for common pin type display; clear both shift registers
+		void clearConstantDisplay(); // for individual pin type display; clear all shift registers
+
 		void modifyStorage(int index, byte code); // replace a position of storage
 		void modifyStorage(int beginIndex, int size, byte codes[]); // replace interval of storage
 		void modifyStorageDot(int index, bool dot); // change dot in a position of storage
@@ -97,6 +99,9 @@ class ShiftDisplay {
 		// show stored value on display
 		void show(); // for a single iteration
 		void show(unsigned long time); // for the specified time (or less if would exceed it)
+
+		// hide display content
+		void hide();
 
 		// store and show value on display for the specified time (or less if would exceed it)
 		void show(int value, unsigned long time, char alignment = DEFAULT_ALIGN_NUMBER);

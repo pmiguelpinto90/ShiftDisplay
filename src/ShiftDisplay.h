@@ -45,8 +45,7 @@ class ShiftDisplay {
 		byte _storage[MAX_DISPLAY_SIZE]; // value to show on display (encoded in abcdefgp format)
 
 		void initPins(int latchPin, int clockPin, int dataPin); // initialize shift register pins and clears it
-		void constructSingleDisplay(int latchPin, int clockPin, int dataPin, int displayType, int displaySize); // common instructions to be called by single display constructors
-		void constructSectionedDisplay(int latchPin, int clockPin, int dataPin, int displayType, int sectionCount, int sectionSizes[]); // common instructions to be called by sectioned display constructors
+		void construct(int latchPin, int clockPin, int dataPin, int displayType, int sectionCount, int sectionSizes[]); // common instructions to be called by constructors
 
 		void showMultiplexDisplay(); // CP: iterate stored value on each display index, achieving persistence of vision
 		void setConstantDisplay(); // IP: send stored value to whole display

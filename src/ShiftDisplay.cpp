@@ -12,19 +12,21 @@ https://miguelpynto.github.io/ShiftDisplay/
 // CONSTRUCTORS ****************************************************************
 
 ShiftDisplay::ShiftDisplay(int displayType, int displaySize) {
-	constructSingleDisplay(DEFAULT_LATCH_PIN, DEFAULT_CLOCK_PIN, DEFAULT_DATA_PIN, displayType, displaySize);
+	int sectionSizes[] = {displaySize};
+	construct(DEFAULT_LATCH_PIN, DEFAULT_CLOCK_PIN, DEFAULT_DATA_PIN, displayType, 1, sectionSizes);
 }
 
 ShiftDisplay::ShiftDisplay(int latchPin, int clockPin, int dataPin, int displayType, int displaySize) {
-	constructSingleDisplay(latchPin, clockPin, dataPin, displayType, displaySize);
+	int sectionSizes[] = {displaySize};
+	construct(latchPin, clockPin, dataPin, displayType, 1, sectionSizes);
 }
 
 ShiftDisplay::ShiftDisplay(int displayType, int sectionCount, int sectionSizes[]) {
-	constructSectionedDisplay(DEFAULT_LATCH_PIN, DEFAULT_CLOCK_PIN, DEFAULT_DATA_PIN, displayType, sectionCount, sectionSizes);
+	construct(DEFAULT_LATCH_PIN, DEFAULT_CLOCK_PIN, DEFAULT_DATA_PIN, displayType, sectionCount, sectionSizes);
 }
 
 ShiftDisplay::ShiftDisplay(int latchPin, int clockPin, int dataPin, int displayType, int sectionCount, int sectionSizes[]) {
-	constructSectionedDisplay(latchPin, clockPin, dataPin, displayType, sectionCount, sectionSizes);
+	construct(latchPin, clockPin, dataPin, displayType, sectionCount, sectionSizes);
 }
 
 void ShiftDisplay::initPins(int latchPin, int clockPin, int dataPin) {
@@ -34,27 +36,10 @@ void ShiftDisplay::initPins(int latchPin, int clockPin, int dataPin) {
 	pinMode(_latchPin, OUTPUT);
 	pinMode(_clockPin, OUTPUT);
 	pinMode(_dataPin, OUTPUT);
-	clearMultiplexDisplay(); // clear asap so junk doesnt show while initiating
 }
 
-void ShiftDisplay::constructSingleDisplay(int latchPin, int clockPin, int dataPin, int displayType, int displaySize) {
+void ShiftDisplay::construct(int latchPin, int clockPin, int dataPin, int displayType, int sectionCount, int sectionSizes[]) {
 	initPins(latchPin, clockPin, dataPin);
-	byte initial = displayType ? EMPTY : ~EMPTY;
-	memset(_storage, initial, MAX_DISPLAY_SIZE); // fill storage with empty character
-
-	displaySize = min(displaySize, MAX_DISPLAY_SIZE); // override if displaySize is too big
-	_isCathode = displayType == COMMON_CATHODE || displayType == INDIVIDUAL_CATHODE;
-	_isMultiplex = displayType == COMMON_CATHODE || displayType == COMMON_ANODE;
-	_displaySize = displaySize;
-	_sectionCount = 1;
-	_sectionSizes[0] = displaySize;
-	_sectionBegins[0] = 0;
-}
-
-void ShiftDisplay::constructSectionedDisplay(int latchPin, int clockPin, int dataPin, int displayType, int sectionCount, int sectionSizes[]) {
-	initPins(latchPin, clockPin, dataPin);
-	byte initial = displayType ? EMPTY : ~EMPTY;
-	memset(_storage, initial, MAX_DISPLAY_SIZE); // fill storage with empty character
 
 	_isCathode = displayType == COMMON_CATHODE || displayType == INDIVIDUAL_CATHODE;
 	_isMultiplex = displayType == COMMON_CATHODE || displayType == COMMON_ANODE;
@@ -74,6 +59,13 @@ void ShiftDisplay::constructSectionedDisplay(int latchPin, int clockPin, int dat
 	}
 	_sectionCount = i;
 	_displaySize = displaySize;
+
+	byte empty = _isCathode ? EMPTY : ~EMPTY;
+	memset(_storage, empty, MAX_DISPLAY_SIZE); // fill storage with empty character
+	if (_isMultiplex)
+		clearMultiplexDisplay();
+	else
+		clearConstantDisplay();
 }
 
 // PRIVATE FUNCTIONS ***********************************************************

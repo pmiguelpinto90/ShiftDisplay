@@ -11,21 +11,21 @@ https://miguelpynto.github.io/ShiftDisplay/
 
 // CONSTRUCTORS ****************************************************************
 
-ShiftDisplay::ShiftDisplay(int displayType, int displaySize) {
+ShiftDisplay::ShiftDisplay(DisplayType displayType, int displaySize) {
 	int sectionSizes[] = {displaySize};
 	construct(DEFAULT_LATCH_PIN, DEFAULT_CLOCK_PIN, DEFAULT_DATA_PIN, displayType, 1, sectionSizes);
 }
 
-ShiftDisplay::ShiftDisplay(int latchPin, int clockPin, int dataPin, int displayType, int displaySize) {
+ShiftDisplay::ShiftDisplay(int latchPin, int clockPin, int dataPin, DisplayType displayType, int displaySize) {
 	int sectionSizes[] = {displaySize};
 	construct(latchPin, clockPin, dataPin, displayType, 1, sectionSizes);
 }
 
-ShiftDisplay::ShiftDisplay(int displayType, int sectionCount, int sectionSizes[]) {
+ShiftDisplay::ShiftDisplay(DisplayType displayType, int sectionCount, int sectionSizes[]) {
 	construct(DEFAULT_LATCH_PIN, DEFAULT_CLOCK_PIN, DEFAULT_DATA_PIN, displayType, sectionCount, sectionSizes);
 }
 
-ShiftDisplay::ShiftDisplay(int latchPin, int clockPin, int dataPin, int displayType, int sectionCount, int sectionSizes[]) {
+ShiftDisplay::ShiftDisplay(int latchPin, int clockPin, int dataPin, DisplayType displayType, int sectionCount, int sectionSizes[]) {
 	construct(latchPin, clockPin, dataPin, displayType, sectionCount, sectionSizes);
 }
 
@@ -38,7 +38,7 @@ void ShiftDisplay::initPins(int latchPin, int clockPin, int dataPin) {
 	pinMode(_dataPin, OUTPUT);
 }
 
-void ShiftDisplay::construct(int latchPin, int clockPin, int dataPin, int displayType, int sectionCount, int sectionSizes[]) {
+void ShiftDisplay::construct(int latchPin, int clockPin, int dataPin, DisplayType displayType, int sectionCount, int sectionSizes[]) {
 	initPins(latchPin, clockPin, dataPin);
 
 	_isCathode = displayType == COMMON_CATHODE || displayType == INDIVIDUAL_CATHODE;

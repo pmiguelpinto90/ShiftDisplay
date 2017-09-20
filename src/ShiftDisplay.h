@@ -12,19 +12,23 @@ https://miguelpynto.github.io/ShiftDisplay/
 const char ALIGN_LEFT = 'L';
 const char ALIGN_RIGHT = 'R';
 const char ALIGN_CENTER = 'C';
-const int COMMON_ANODE = 0;
-const int COMMON_CATHODE = 1;
-const int INDIVIDUAL_ANODE = 2;
-const int INDIVIDUAL_CATHODE = 3;
+
 const int DEFAULT_LATCH_PIN = 6;
 const int DEFAULT_CLOCK_PIN = 7;
 const int DEFAULT_DATA_PIN = 5;
 const int DEFAULT_DECIMAL_PLACES = 1;
 const char DEFAULT_ALIGN_TEXT = ALIGN_LEFT;
 const char DEFAULT_ALIGN_NUMBER = ALIGN_RIGHT;
+
 const int MAX_DISPLAY_SIZE = 8;
 const int POV = 1; // milliseconds showing each character when iterating
 
+enum DisplayType {
+	COMMON_ANODE,
+	COMMON_CATHODE,
+	INDIVIDUAL_ANODE,
+	INDIVIDUAL_CATHODE,
+};
 
 class ShiftDisplay {
 
@@ -45,7 +49,7 @@ class ShiftDisplay {
 		byte _storage[MAX_DISPLAY_SIZE]; // value to show on display (encoded in abcdefgp format)
 
 		void initPins(int latchPin, int clockPin, int dataPin); // initialize shift register pins and clears it
-		void construct(int latchPin, int clockPin, int dataPin, int displayType, int sectionCount, int sectionSizes[]); // common instructions to be called by constructors
+		void construct(int latchPin, int clockPin, int dataPin, DisplayType displayType, int sectionCount, int sectionSizes[]); // common instructions to be called by constructors
 
 		void showMultiplexDisplay(); // CP: iterate stored value on each display index, achieving persistence of vision
 		void setConstantDisplay(); // IP: send stored value to whole display
@@ -64,10 +68,10 @@ class ShiftDisplay {
 	public:
 
 		// constructors
-		ShiftDisplay(int displayType, int displaySize); // default pins
-		ShiftDisplay(int latchPin, int clockPin, int dataPin, int displayType, int displaySize); // custom pins
-		ShiftDisplay(int displayType, int sectionCount, int sectionSizes[]); // default pins, sectioned display
-		ShiftDisplay(int latchPin, int clockPin, int dataPin, int displayType, int sectionCount, int sectionSizes[]); // custom pins, sectioned display
+		ShiftDisplay(DisplayType displayType, int displaySize); // default pins
+		ShiftDisplay(int latchPin, int clockPin, int dataPin, DisplayType displayType, int displaySize); // custom pins
+		ShiftDisplay(DisplayType displayType, int sectionCount, int sectionSizes[]); // default pins, sectioned display
+		ShiftDisplay(int latchPin, int clockPin, int dataPin, DisplayType displayType, int sectionCount, int sectionSizes[]); // custom pins, sectioned display
 
 		// CP: store value; IP: store and show value
 		void set(int value, char alignment = DEFAULT_ALIGN_NUMBER);

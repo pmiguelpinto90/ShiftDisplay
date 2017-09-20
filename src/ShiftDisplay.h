@@ -25,7 +25,11 @@ const char DEFAULT_ALIGN_NUMBER = ALIGN_RIGHT;
 const int MAX_DISPLAY_SIZE = 8;
 const int POV = 1; // milliseconds showing each character when iterating
 
+
 class ShiftDisplay {
+
+	// CP: for common pin type display
+	// IP: for individual pin type display
 
 	private:
 
@@ -44,10 +48,10 @@ class ShiftDisplay {
 		void constructSingleDisplay(int latchPin, int clockPin, int dataPin, int displayType, int displaySize); // common instructions to be called by single display constructors
 		void constructSectionedDisplay(int latchPin, int clockPin, int dataPin, int displayType, int sectionCount, int sectionSizes[]); // common instructions to be called by sectioned display constructors
 
-		void showMultiplexDisplay(); // for common pin type display; iterate stored value on each display index, achieving persistence of vision
-		void showConstantDisplay(); // for individual pin type display; send stored value to whole display
-		void clearMultiplexDisplay(); // for common pin type display; clear both shift registers
-		void clearConstantDisplay(); // for individual pin type display; clear all shift registers
+		void showMultiplexDisplay(); // CP: iterate stored value on each display index, achieving persistence of vision
+		void setConstantDisplay(); // IP: send stored value to whole display
+		void clearMultiplexDisplay(); // CP: clear both shift registers
+		void clearConstantDisplay(); // IP: clear all shift registers
 
 		void modifyStorage(int index, byte code); // replace a position of storage
 		void modifyStorage(int beginIndex, int size, byte codes[]); // replace interval of storage
@@ -66,7 +70,7 @@ class ShiftDisplay {
 		ShiftDisplay(int displayType, int sectionCount, int sectionSizes[]); // default pins, sectioned display
 		ShiftDisplay(int latchPin, int clockPin, int dataPin, int displayType, int sectionCount, int sectionSizes[]); // custom pins, sectioned display
 
-		// store value
+		// CP: store value; IP: store and show value
 		void set(int value, char alignment = DEFAULT_ALIGN_NUMBER);
 		void set(long value, char alignment = DEFAULT_ALIGN_NUMBER);
 		void set(double valueReal, int decimalPlaces = DEFAULT_DECIMAL_PLACES, char alignment = DEFAULT_ALIGN_NUMBER);
@@ -77,11 +81,11 @@ class ShiftDisplay {
 		void set(const byte customs[]); // custom characters (encoded in abcdefgp format), array length must match display size
 		void set(const char characters[], bool dots[]); // arrays length must match display size
 
-		// modify stored value at index
+		// CP: modify stored value at index; IP: modify and show stored value at index
 		void setDot(int index, bool dot); // show or hide a dot on character
 		void setCustom(int index, byte custom); // replace with a custom character (encoded in abcdefgp format)
 
-		// store value at section indexes
+		// CP: store value at section indexes; IP: store and show value at section indexes
 		void setAt(int section, int value, char alignment = DEFAULT_ALIGN_NUMBER);
 		void setAt(int section, long value, char alignment = DEFAULT_ALIGN_NUMBER);
 		void setAt(int section, double valueReal, int decimalPlaces = DEFAULT_DECIMAL_PLACES, char alignment = DEFAULT_ALIGN_NUMBER);
@@ -92,18 +96,18 @@ class ShiftDisplay {
 		void setAt(int section, const byte customs[]); // custom characters (encoded in abcdefgp format), array length must match defined section size
 		void setAt(int section, const char characters[], bool dots[]); // arrays length must match defined section size
 
-		// modify stored value at index in section
+		// CP: modify stored value at index in section; IP: modify and show stored value at index in section
 		void setDotAt(int section, int relativeIndex, bool dot); // show or hide a dot on character
 		void setCustomAt(int section, int relativeIndex, byte custom); // replace with a custom character (encoded in abcdefgp format)
 
-		// show stored value on display
+		// IP: clear display content
+		void clear();
+
+		// CP: show stored value on display
 		void show(); // for a single iteration
 		void show(unsigned long time); // for the specified time (or less if would exceed it)
 
-		// hide display content
-		void hide();
-
-		// store and show value on display for the specified time (or less if would exceed it)
+		// CP: store and show value on display for the specified time (or less if would exceed it)
 		void show(int value, unsigned long time, char alignment = DEFAULT_ALIGN_NUMBER);
 		void show(long value, unsigned long time, char alignment = DEFAULT_ALIGN_NUMBER);
 		void show(double valueReal, unsigned long time, int decimalPlaces = DEFAULT_DECIMAL_PLACES, char alignment = DEFAULT_ALIGN_NUMBER);

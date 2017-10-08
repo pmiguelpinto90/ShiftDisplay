@@ -302,6 +302,10 @@ void loop() {
 
 TODO
 
+* __Individual Cathode & Individual Anode__
+
+TODO
+
 * __abcdefgp format__
 
 TODO
@@ -317,7 +321,8 @@ TODO
 
 ## Changelog
 
-- 3.6.2 ()
+- 3.7.0 ()
+  - NEW: individual cathode and individual anode display types
   - CHANGE: default decimal places = 1
 - 3.6.1 (17/9/2017)
   - DOC: improved README
@@ -391,7 +396,9 @@ TODO
 - [ ] Finish README
 - [ ] Example for sectioned display
 - [ ] Example for custom characters
-- [ ] INDIVIDUAL_CATHODE and INDIVIDUAL_ANODE display types
+- [x] INDIVIDUAL_CATHODE and INDIVIDUAL_ANODE display types
+- [ ] Example for individual cathode and individual anode
+- [ ] Remove display max size
 
 
 ## Contacts

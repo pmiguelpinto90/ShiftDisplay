@@ -87,7 +87,7 @@ void ShiftDisplay::showMultiplexDisplay() {
 	}
 }
 
-void ShiftDisplay::setConstantDisplay() {
+void ShiftDisplay::showConstantDisplay() {
 	digitalWrite(_latchPin, LOW);
 	for (int i = _displaySize - 1; i >= 0 ; i--)
 		shiftOut(_dataPin, _clockPin, LSBFIRST, _storage[i]);
@@ -279,8 +279,6 @@ void ShiftDisplay::setAt(int section, long value, char alignment) {
 		byte encodedCharacters[sectionSize];
 		encodeCharacters(sectionSize, formattedCharacters, encodedCharacters);
 		modifyStorage(_sectionBegins[section], sectionSize, encodedCharacters);
-		if (!_isMultiplex)
-			setConstantDisplay();
 	}
 }
 
@@ -306,8 +304,6 @@ void ShiftDisplay::setAt(int section, double valueReal, int decimalPlaces, char 
 		byte encodedCharacters[sectionSize];
 		encodeCharacters(sectionSize, formattedCharacters, encodedCharacters, dotIndex);
 		modifyStorage(_sectionBegins[section], sectionSize, encodedCharacters);
-		if (!_isMultiplex)
-			setConstantDisplay();
 	}
 }
 
@@ -324,8 +320,6 @@ void ShiftDisplay::setAt(int section, char value, char alignment) {
 		byte encodedCharacters[sectionSize];
 		encodeCharacters(sectionSize, formattedCharacters, encodedCharacters);
 		modifyStorage(_sectionBegins[section], sectionSize, encodedCharacters);
-		if (!_isMultiplex)
-			setConstantDisplay();
 	}
 }
 
@@ -338,8 +332,6 @@ void ShiftDisplay::setAt(int section, const char value[], char alignment) {
 		byte encodedCharacters[sectionSize];
 		encodeCharacters(sectionSize, formattedCharacters, encodedCharacters);
 		modifyStorage(_sectionBegins[section], sectionSize, encodedCharacters);
-		if (!_isMultiplex)
-			setConstantDisplay();
 	}
 }
 
@@ -363,8 +355,6 @@ void ShiftDisplay::setAt(int section, const byte customs[]) {
 	if (section >= 0 && section < _sectionCount) { // valid section
 		int sectionSize = _sectionSizes[section];
 		modifyStorage(_sectionBegins[section], sectionSize, customs);
-		if (!_isMultiplex)
-			setConstantDisplay();
 	}
 }
 
@@ -377,8 +367,6 @@ void ShiftDisplay::setAt(int section, const char characters[], bool dots[]) {
 		modifyStorage(begin, sectionSize, encodedCharacters);
 		for (int i = 0; i < sectionSize; i++)
 			modifyStorageDot(i+begin, dots[i]);
-		if (!_isMultiplex)
-			setConstantDisplay();
 	}
 }
 
@@ -387,8 +375,6 @@ void ShiftDisplay::setDotAt(int section, int relativeIndex, bool dot) {
 		if (relativeIndex >= 0 && relativeIndex < _sectionSizes[section]) { // valid index in display
 			int index = _sectionBegins[section] + relativeIndex;
 			modifyStorageDot(index, dot);
-			if (!_isMultiplex)
-				setConstantDisplay();
 		}
 	}
 }
@@ -398,13 +384,11 @@ void ShiftDisplay::setCustomAt(int section, int relativeIndex, byte custom) {
 		if (relativeIndex >= 0 && relativeIndex < _sectionSizes[section]) { // valid index in display
 			int index = _sectionBegins[section] + relativeIndex;
 			modifyStorage(index, custom);
-			if (!_isMultiplex)
-				setConstantDisplay();
 		}
 	}
 }
 
-void ShiftDisplay::clear() {
+void ShiftDisplay::hide() {
 	if (!_isMultiplex)
 		clearConstantDisplay();
 }
@@ -413,6 +397,8 @@ void ShiftDisplay::show() {
 	if (_isMultiplex) {
 		showMultiplexDisplay();
 		clearMultiplexDisplay();
+	} else {
+		showConstantDisplay();
 	}
 }
 
@@ -422,70 +408,58 @@ void ShiftDisplay::show(unsigned long time) {
 		while (millis() <= beforeLast) // it will not enter loop if it would overtake time
 			showMultiplexDisplay();
 		clearMultiplexDisplay();
+	} else {
+		unsigned long stop = millis() + time;
+		showConstantDisplay();
+		while (millis() < stop)
+			delay();
+		clearConstantDisplay();
 	}
 }
 
 void ShiftDisplay::show(int value, unsigned long time, char alignment) {
-	if (_isMultiplex) {
-		set(value, alignment);
-		show(time);
-	}
+	set(value, alignment);
+	show(time);
 }
 
 void ShiftDisplay::show(long value, unsigned long time, char alignment) {
-	if (_isMultiplex) {
-		set(value, alignment);
-		show(time);
-	}
+	set(value, alignment);
+	show(time);
 }
 
 void ShiftDisplay::show(double valueReal, unsigned long time, int decimalPlaces, char alignment) {
-	if (_isMultiplex) {
-		set(valueReal, decimalPlaces, alignment);
-		show(time);
-	}
+	set(valueReal, decimalPlaces, alignment);
+	show(time);
 }
 
 void ShiftDisplay::show(double valueReal, unsigned long time, char alignment) {
-	if (_isMultiplex) {
-		set(valueReal, alignment);
-		show(time);
-	}
+	set(valueReal, alignment);
+	show(time);
 }
 
 void ShiftDisplay::show(char value, unsigned long time, char alignment) {
-	if (_isMultiplex) {
-		set(value, alignment);
-		show(time);
-	}
+	set(value, alignment);
+	show(time);
 }
 
 void ShiftDisplay::show(const char value[], unsigned long time, char alignment) {
-	if (_isMultiplex) {
-		set(value, alignment);
-		show(time);
-	}
+	set(value, alignment);
+	show(time);
 }
 
 void ShiftDisplay::show(const String &value, unsigned long time, char alignment) {
-	if (_isMultiplex) {
-		set(value, alignment);
-		show(time);
-	}
+	set(value, alignment);
+	show(time);
 }
 
 void ShiftDisplay::show(const byte customs[], unsigned long time) {
-	if (_isMultiplex) {
-		set(customs);
-		show(time);
-	}
+	set(customs);
+	show(time);
 }
 
 void ShiftDisplay::show(const char characters[], bool dots[], unsigned long time) {
-	if (_isMultiplex) {
-		set(characters, dots);
-		show(time);
-	}
+	set(characters, dots);
+	show(time);
 }
 
 void ShiftDisplay::insertPoint(int index) { setDot(index, true); }

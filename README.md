@@ -321,7 +321,7 @@ TODO
 
 ## Changelog
 
-- 3.7.0 ()
+- master ()
   - NEW: individual cathode and individual anode display types
   - CHANGE: default decimal places = 1
 - 3.6.1 (17/9/2017)

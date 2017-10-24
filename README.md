@@ -240,7 +240,7 @@ void loop() {
   `display`: object of type ShiftDisplay.
 
   `time`: duration in milliseconds to show the value;
-  if is not specified, the value is shown for a single iteration;
+  if is not specified, the value is shown for a single iteration (common anode/cathode), or until hide/show is called (individual anode/cathode);
   exact time showing will be an under aproximation.
 
 * __show()__

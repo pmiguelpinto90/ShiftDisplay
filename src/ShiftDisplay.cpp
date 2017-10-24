@@ -40,7 +40,7 @@ void ShiftDisplay::initPins(int latchPin, int clockPin, int dataPin) {
 void ShiftDisplay::constructSingleDisplay(int latchPin, int clockPin, int dataPin, int displayType, int displaySize) {
 	initPins(latchPin, clockPin, dataPin);
 	byte initial = displayType ? BLANK : ~BLANK;
-	memset(_storage, initial, MAX_DISPLAY_SIZE); // fill storage with blank character
+	memset(_cache, initial, MAX_DISPLAY_SIZE); // fill cache with blank character
 
 	displaySize = min(displaySize, MAX_DISPLAY_SIZE); // override if displaySize is too big
 	_displayType = displayType;
@@ -53,7 +53,7 @@ void ShiftDisplay::constructSingleDisplay(int latchPin, int clockPin, int dataPi
 void ShiftDisplay::constructSectionedDisplay(int latchPin, int clockPin, int dataPin, int displayType, int sectionCount, int sectionSizes[]) {
 	initPins(latchPin, clockPin, dataPin);
 	byte initial = displayType ? BLANK : ~BLANK;
-	memset(_storage, initial, MAX_DISPLAY_SIZE); // fill storage with blank character
+	memset(_cache, initial, MAX_DISPLAY_SIZE); // fill cache with blank character
 
 	_displayType = displayType;
 	int i = 0;
@@ -85,7 +85,7 @@ void ShiftDisplay::multiplexDisplay() {
 		shiftOut(_dataPin, _clockPin, LSBFIRST, out);
 
 		// data for first shift register
-		shiftOut(_dataPin, _clockPin, LSBFIRST, _storage[i]);
+		shiftOut(_dataPin, _clockPin, LSBFIRST, _cache[i]);
 
 		digitalWrite(_latchPin, HIGH);
 
@@ -100,23 +100,23 @@ void ShiftDisplay::clearDisplay() {
 	digitalWrite(_latchPin, HIGH);
 }
 
-void ShiftDisplay::modifyStorage(int index, byte code) {
-	_storage[index] = _displayType ? code : ~code;
+void ShiftDisplay::modifyCache(int index, byte code) {
+	_cache[index] = _displayType ? code : ~code;
 }
 
-void ShiftDisplay::modifyStorage(int beginIndex, int size, byte codes[]) {
+void ShiftDisplay::modifyCache(int beginIndex, int size, byte codes[]) {
 	for (int i = 0; i < size; i++)
-		_storage[i+beginIndex] = _displayType ? codes[i] : ~codes[i];
+		_cache[i+beginIndex] = _displayType ? codes[i] : ~codes[i];
 }
 
-void ShiftDisplay::modifyStorageDot(int index, bool dot) {
+void ShiftDisplay::modifyCacheDot(int index, bool dot) {
 	int bit;
 	if (dot)
 		bit = _displayType ? 1 : 0;
 	else
 		bit = _displayType ? 0 : 1;
 	//int bit = (dot == (bool)_displayType) TODO
-	bitWrite(_storage[index], 0, bit);
+	bitWrite(_cache[index], 0, bit);
 }
 
 void ShiftDisplay::encodeCharacters(int size, const char input[], byte output[], int dotIndex = -1) {
@@ -274,7 +274,7 @@ void ShiftDisplay::setAt(int section, long value, char alignment) {
 		formatCharacters(valueSize, originalCharacters, sectionSize, formattedCharacters, alignment);
 		byte encodedCharacters[sectionSize];
 		encodeCharacters(sectionSize, formattedCharacters, encodedCharacters);
-		modifyStorage(_sectionBegins[section], sectionSize, encodedCharacters);
+		modifyCache(_sectionBegins[section], sectionSize, encodedCharacters);
 	}
 }
 
@@ -299,7 +299,7 @@ void ShiftDisplay::setAt(int section, double valueReal, int decimalPlaces, char 
 		int dotIndex = formatCharacters(valueSize, originalCharacters, sectionSize, formattedCharacters, alignment, decimalPlaces);
 		byte encodedCharacters[sectionSize];
 		encodeCharacters(sectionSize, formattedCharacters, encodedCharacters, dotIndex);
-		modifyStorage(_sectionBegins[section], sectionSize, encodedCharacters);
+		modifyCache(_sectionBegins[section], sectionSize, encodedCharacters);
 	}
 }
 
@@ -315,7 +315,7 @@ void ShiftDisplay::setAt(int section, char value, char alignment) {
 		formatCharacters(1, originalCharacters, sectionSize, formattedCharacters, alignment);
 		byte encodedCharacters[sectionSize];
 		encodeCharacters(sectionSize, formattedCharacters, encodedCharacters);
-		modifyStorage(_sectionBegins[section], sectionSize, encodedCharacters);
+		modifyCache(_sectionBegins[section], sectionSize, encodedCharacters);
 	}
 }
 
@@ -327,7 +327,7 @@ void ShiftDisplay::setAt(int section, const char value[], char alignment) {
 		formatCharacters(valueSize, value, sectionSize, formattedCharacters, alignment);
 		byte encodedCharacters[sectionSize];
 		encodeCharacters(sectionSize, formattedCharacters, encodedCharacters);
-		modifyStorage(_sectionBegins[section], sectionSize, encodedCharacters);
+		modifyCache(_sectionBegins[section], sectionSize, encodedCharacters);
 	}
 }
 
@@ -350,7 +350,7 @@ void ShiftDisplay::setAt(int section, const String &value, char alignment) {
 void ShiftDisplay::setAt(int section, const byte customs[]) {
 	if (section >= 0 && section < _sectionCount) { // valid section
 		int sectionSize = _sectionSizes[section];
-		modifyStorage(_sectionBegins[section], sectionSize, customs);
+		modifyCache(_sectionBegins[section], sectionSize, customs);
 	}
 }
 
@@ -360,9 +360,9 @@ void ShiftDisplay::setAt(int section, const char characters[], bool dots[]) {
 		byte encodedCharacters[sectionSize];
 		encodeCharacters(sectionSize, characters, encodedCharacters);
 		int begin = _sectionBegins[section];
-		modifyStorage(begin, sectionSize, encodedCharacters);
+		modifyCache(begin, sectionSize, encodedCharacters);
 		for (int i = 0; i < sectionSize; i++)
-			modifyStorageDot(i+begin, dots[i]);
+			modifyCacheDot(i+begin, dots[i]);
 	}
 }
 
@@ -370,7 +370,7 @@ void ShiftDisplay::setDotAt(int section, int relativeIndex, bool dot) {
 	if (section >= 0 && section < _sectionCount) { // valid section
 		if (relativeIndex >= 0 && relativeIndex < _sectionSizes[section]) { // valid index in display
 			int index = _sectionBegins[section] + relativeIndex;
-			modifyStorageDot(index, dot);
+			modifyCacheDot(index, dot);
 		}
 	}
 }
@@ -379,7 +379,7 @@ void ShiftDisplay::setCustomAt(int section, int relativeIndex, byte custom) {
 	if (section >= 0 && section < _sectionCount) { // valid section
 		if (relativeIndex >= 0 && relativeIndex < _sectionSizes[section]) { // valid index in display
 			int index = _sectionBegins[section] + relativeIndex;
-			modifyStorage(index, custom);
+			modifyCache(index, custom);
 		}
 	}
 }

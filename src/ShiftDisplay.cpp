@@ -412,7 +412,7 @@ void ShiftDisplay::show(unsigned long time) {
 		unsigned long stop = millis() + time;
 		showConstantDisplay();
 		while (millis() < stop)
-			delay();
+			delay(1);
 		clearConstantDisplay();
 	}
 }

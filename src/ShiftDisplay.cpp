@@ -21,11 +21,11 @@ ShiftDisplay::ShiftDisplay(int latchPin, int clockPin, int dataPin, DisplayType 
 	construct(latchPin, clockPin, dataPin, displayType, 1, sectionSizes);
 }
 
-ShiftDisplay::ShiftDisplay(DisplayType displayType, int sectionCount, int sectionSizes[]) {
+ShiftDisplay::ShiftDisplay(DisplayType displayType, int sectionCount, const int sectionSizes[]) {
 	construct(DEFAULT_LATCH_PIN, DEFAULT_CLOCK_PIN, DEFAULT_DATA_PIN, displayType, sectionCount, sectionSizes);
 }
 
-ShiftDisplay::ShiftDisplay(int latchPin, int clockPin, int dataPin, DisplayType displayType, int sectionCount, int sectionSizes[]) {
+ShiftDisplay::ShiftDisplay(int latchPin, int clockPin, int dataPin, DisplayType displayType, int sectionCount, const int sectionSizes[]) {
 	construct(latchPin, clockPin, dataPin, displayType, sectionCount, sectionSizes);
 }
 
@@ -38,7 +38,7 @@ void ShiftDisplay::initPins(int latchPin, int clockPin, int dataPin) {
 	pinMode(_dataPin, OUTPUT);
 }
 
-void ShiftDisplay::construct(int latchPin, int clockPin, int dataPin, DisplayType displayType, int sectionCount, int sectionSizes[]) {
+void ShiftDisplay::construct(int latchPin, int clockPin, int dataPin, DisplayType displayType, int sectionCount, const int sectionSizes[]) {
 	initPins(latchPin, clockPin, dataPin);
 
 	_isCathode = displayType == COMMON_CATHODE || displayType == INDIVIDUAL_CATHODE;
@@ -113,7 +113,7 @@ void ShiftDisplay::modifyCache(int index, byte code) {
 	_cache[index] = _isCathode ? code : ~code;
 }
 
-void ShiftDisplay::modifyCache(int beginIndex, int size, byte codes[]) {
+void ShiftDisplay::modifyCache(int beginIndex, int size, const byte codes[]) {
 	for (int i = 0; i < size; i++)
 		_cache[i+beginIndex] = _isCathode ? codes[i] : ~codes[i];
 }
@@ -252,7 +252,7 @@ void ShiftDisplay::set(const byte customs[]) {
 	setAt(0, customs);
 }
 
-void ShiftDisplay::set(const char characters[], bool dots[]) {
+void ShiftDisplay::set(const char characters[], const bool dots[]) {
 	setAt(0, characters, dots);
 }
 
@@ -358,7 +358,7 @@ void ShiftDisplay::setAt(int section, const byte customs[]) {
 	}
 }
 
-void ShiftDisplay::setAt(int section, const char characters[], bool dots[]) {
+void ShiftDisplay::setAt(int section, const char characters[], const bool dots[]) {
 	if (section >= 0 && section < _sectionCount) { // valid section
 		int sectionSize = _sectionSizes[section];
 		byte encodedCharacters[sectionSize];
@@ -457,7 +457,7 @@ void ShiftDisplay::show(const byte customs[], unsigned long time) {
 	show(time);
 }
 
-void ShiftDisplay::show(const char characters[], bool dots[], unsigned long time) {
+void ShiftDisplay::show(const char characters[], const bool dots[], unsigned long time) {
 	set(characters, dots);
 	show(time);
 }

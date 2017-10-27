@@ -49,7 +49,7 @@ class ShiftDisplay {
 		byte _cache[MAX_DISPLAY_SIZE]; // value to show on display (encoded in abcdefgp format)
 
 		void initPins(int latchPin, int clockPin, int dataPin); // initialize shift register pins and clears it
-		void construct(int latchPin, int clockPin, int dataPin, DisplayType displayType, int sectionCount, int sectionSizes[]); // common instructions to be called by constructors
+		void construct(int latchPin, int clockPin, int dataPin, DisplayType displayType, int sectionCount, const int sectionSizes[]); // common instructions to be called by constructors
 
 		void showMultiplexDisplay(); // CP: iterate stored value on each display index, achieving persistence of vision
 		void showConstantDisplay(); // IP: send stored value to whole display
@@ -57,7 +57,7 @@ class ShiftDisplay {
 		void clearConstantDisplay(); // IP: clear all shift registers
 
 		void modifyCache(int index, byte code); // replace a position in cache
-		void modifyCache(int beginIndex, int size, byte codes[]); // replace a interval in cache
+		void modifyCache(int beginIndex, int size, const byte codes[]); // replace a interval in cache
 		void modifyCacheDot(int index, bool dot); // change dot in a cache position
 
 		void encodeCharacters(int size, const char input[], byte output[], int dotIndex); // encode array of chars to array of bytes in abcdefgp format
@@ -71,8 +71,8 @@ class ShiftDisplay {
 		// constructors
 		ShiftDisplay(DisplayType displayType, int displaySize); // default pins
 		ShiftDisplay(int latchPin, int clockPin, int dataPin, DisplayType displayType, int displaySize); // custom pins
-		ShiftDisplay(DisplayType displayType, int sectionCount, int sectionSizes[]); // default pins, sectioned display
-		ShiftDisplay(int latchPin, int clockPin, int dataPin, DisplayType displayType, int sectionCount, int sectionSizes[]); // custom pins, sectioned display
+		ShiftDisplay(DisplayType displayType, int sectionCount, const int sectionSizes[]); // default pins, sectioned display
+		ShiftDisplay(int latchPin, int clockPin, int dataPin, DisplayType displayType, int sectionCount, const int sectionSizes[]); // custom pins, sectioned display
 
 		// cache value
 		void set(int value, char alignment = DEFAULT_ALIGN_NUMBER);
@@ -83,7 +83,7 @@ class ShiftDisplay {
 		void set(const char value[], char alignment = DEFAULT_ALIGN_TEXT); // c string
 		void set(const String &value, char alignment = DEFAULT_ALIGN_TEXT); // Arduino string object
 		void set(const byte customs[]); // custom characters (encoded in abcdefgp format), array length must match display size
-		void set(const char characters[], bool dots[]); // arrays length must match display size
+		void set(const char characters[], const bool dots[]); // arrays length must match display size
 
 		// modify cached value at index
 		void setDot(int index, bool dot); // show or hide a dot on character
@@ -98,7 +98,7 @@ class ShiftDisplay {
 		void setAt(int section, const char value[], char alignment = DEFAULT_ALIGN_TEXT); // c string
 		void setAt(int section, const String &value, char alignment = DEFAULT_ALIGN_TEXT); // Arduino string object
 		void setAt(int section, const byte customs[]); // custom characters (encoded in abcdefgp format), array length must match defined section size
-		void setAt(int section, const char characters[], bool dots[]); // arrays length must match defined section size
+		void setAt(int section, const char characters[], const bool dots[]); // arrays length must match defined section size
 
 		// modify cached value at index in section
 		void setDotAt(int section, int relativeIndex, bool dot); // show or hide a dot on character
@@ -120,7 +120,7 @@ class ShiftDisplay {
 		void show(const char value[], unsigned long time, char alignment = DEFAULT_ALIGN_TEXT); // c string
 		void show(const String &value, unsigned long time, char alignment = DEFAULT_ALIGN_TEXT); // Arduino string object
 		void show(const byte customs[], unsigned long time); // custom characters (encoded in abcdefgp format), array length must match display size
-		void show(const char characters[], bool dots[], unsigned long time); // arrays length must match display size
+		void show(const char characters[], const bool dots[], unsigned long time); // arrays length must match display size
 
 		// duplicates to retain compatibility with old versions
 		void insertPoint(int index); // deprecated by setDot()

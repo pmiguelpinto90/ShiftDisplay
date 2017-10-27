@@ -12,25 +12,36 @@ https://miguelpynto.github.io/ShiftDisplay/
 const char ALIGN_LEFT = 'L';
 const char ALIGN_RIGHT = 'R';
 const char ALIGN_CENTER = 'C';
-const int COMMON_ANODE = 0;
-const int COMMON_CATHODE = 1;
+
 const int DEFAULT_LATCH_PIN = 6;
 const int DEFAULT_CLOCK_PIN = 7;
 const int DEFAULT_DATA_PIN = 5;
 const int DEFAULT_DECIMAL_PLACES = 1;
 const char DEFAULT_ALIGN_TEXT = ALIGN_LEFT;
 const char DEFAULT_ALIGN_NUMBER = ALIGN_RIGHT;
+
 const int MAX_DISPLAY_SIZE = 8;
 const int POV = 1; // milliseconds showing each character when iterating
 
+enum DisplayType {
+	COMMON_ANODE,
+	COMMON_CATHODE,
+	INDIVIDUAL_ANODE,
+	INDIVIDUAL_CATHODE,
+};
+
 class ShiftDisplay {
+
+	// CP: for common pin type display
+	// IP: for individual pin type display
 
 	private:
 
 		int _latchPin;
 		int _clockPin;
 		int _dataPin;
-		int _displayType;
+		bool _isCathode; // display type is common cathode or individual cathode
+		bool _isMultiplex; // display type is common cathode or common anode
 		int _displaySize; // length of whole display
 		int _sectionCount; // quantity of display sections
 		int _sectionSizes[MAX_DISPLAY_SIZE]; // length of each section
@@ -38,14 +49,17 @@ class ShiftDisplay {
 		byte _cache[MAX_DISPLAY_SIZE]; // value to show on display (encoded in abcdefgp format)
 
 		void initPins(int latchPin, int clockPin, int dataPin); // initialize shift register pins and clears it
-		void constructSingleDisplay(int latchPin, int clockPin, int dataPin, int displayType, int displaySize); // common instructions to be called by single display constructors
-		void constructSectionedDisplay(int latchPin, int clockPin, int dataPin, int displayType, int sectionCount, int sectionSizes[]); // common instructions to be called by sectioned display constructors
+		void construct(int latchPin, int clockPin, int dataPin, DisplayType displayType, int sectionCount, int sectionSizes[]); // common instructions to be called by constructors
 
-		void multiplexDisplay(); // iterate cached value on each display index, achieving persistence of vision
-		void clearDisplay(); // clear shift registers
+		void showMultiplexDisplay(); // CP: iterate stored value on each display index, achieving persistence of vision
+		void showConstantDisplay(); // IP: send stored value to whole display
+		void clearMultiplexDisplay(); // CP: clear both shift registers
+		void clearConstantDisplay(); // IP: clear all shift registers
+
 		void modifyCache(int index, byte code); // replace a position in cache
 		void modifyCache(int beginIndex, int size, byte codes[]); // replace a interval in cache
 		void modifyCacheDot(int index, bool dot); // change dot in a cache position
+
 		void encodeCharacters(int size, const char input[], byte output[], int dotIndex); // encode array of chars to array of bytes in abcdefgp format
 		int formatCharacters(int inSize, const char input[], int outSize, char output[], char alignment, int decimalPlaces); // arrange array of chars for displaying in specified alignment, returns dot index on display or -1 if none
 		void getCharacters(long input, int size, char output[]); // convert an integer number to an array of chars
@@ -55,10 +69,10 @@ class ShiftDisplay {
 	public:
 
 		// constructors
-		ShiftDisplay(int displayType, int displaySize); // default pins
-		ShiftDisplay(int latchPin, int clockPin, int dataPin, int displayType, int displaySize); // custom pins
-		ShiftDisplay(int displayType, int sectionCount, int sectionSizes[]); // default pins, sectioned display
-		ShiftDisplay(int latchPin, int clockPin, int dataPin, int displayType, int sectionCount, int sectionSizes[]); // custom pins, sectioned display
+		ShiftDisplay(DisplayType displayType, int displaySize); // default pins
+		ShiftDisplay(int latchPin, int clockPin, int dataPin, DisplayType displayType, int displaySize); // custom pins
+		ShiftDisplay(DisplayType displayType, int sectionCount, int sectionSizes[]); // default pins, sectioned display
+		ShiftDisplay(int latchPin, int clockPin, int dataPin, DisplayType displayType, int sectionCount, int sectionSizes[]); // custom pins, sectioned display
 
 		// cache value
 		void set(int value, char alignment = DEFAULT_ALIGN_NUMBER);
@@ -90,8 +104,11 @@ class ShiftDisplay {
 		void setDotAt(int section, int relativeIndex, bool dot); // show or hide a dot on character
 		void setCustomAt(int section, int relativeIndex, byte custom); // replace with a custom character (encoded in abcdefgp format)
 
+		// IP: hide display content
+		void hide();
+
 		// show cached value on display
-		void show(); // for a single iteration
+		void show(); // CP: for a single iteration; IP: while not hide or recalled
 		void show(unsigned long time); // for the specified time (or less if would exceed it)
 
 		// cache and show value on display for the specified time (or less if would exceed it)

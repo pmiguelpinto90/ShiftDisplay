@@ -11,20 +11,22 @@ https://miguelpynto.github.io/ShiftDisplay/
 
 // CONSTRUCTORS ****************************************************************
 
-ShiftDisplay::ShiftDisplay(int displayType, int displaySize) {
-	constructSingleDisplay(DEFAULT_LATCH_PIN, DEFAULT_CLOCK_PIN, DEFAULT_DATA_PIN, displayType, displaySize);
+ShiftDisplay::ShiftDisplay(DisplayType displayType, int displaySize) {
+	int sectionSizes[] = {displaySize};
+	construct(DEFAULT_LATCH_PIN, DEFAULT_CLOCK_PIN, DEFAULT_DATA_PIN, displayType, 1, sectionSizes);
 }
 
-ShiftDisplay::ShiftDisplay(int latchPin, int clockPin, int dataPin, int displayType, int displaySize) {
-	constructSingleDisplay(latchPin, clockPin, dataPin, displayType, displaySize);
+ShiftDisplay::ShiftDisplay(int latchPin, int clockPin, int dataPin, DisplayType displayType, int displaySize) {
+	int sectionSizes[] = {displaySize};
+	construct(latchPin, clockPin, dataPin, displayType, 1, sectionSizes);
 }
 
-ShiftDisplay::ShiftDisplay(int displayType, int sectionCount, int sectionSizes[]) {
-	constructSectionedDisplay(DEFAULT_LATCH_PIN, DEFAULT_CLOCK_PIN, DEFAULT_DATA_PIN, displayType, sectionCount, sectionSizes);
+ShiftDisplay::ShiftDisplay(DisplayType displayType, int sectionCount, int sectionSizes[]) {
+	construct(DEFAULT_LATCH_PIN, DEFAULT_CLOCK_PIN, DEFAULT_DATA_PIN, displayType, sectionCount, sectionSizes);
 }
 
-ShiftDisplay::ShiftDisplay(int latchPin, int clockPin, int dataPin, int displayType, int sectionCount, int sectionSizes[]) {
-	constructSectionedDisplay(latchPin, clockPin, dataPin, displayType, sectionCount, sectionSizes);
+ShiftDisplay::ShiftDisplay(int latchPin, int clockPin, int dataPin, DisplayType displayType, int sectionCount, int sectionSizes[]) {
+	construct(latchPin, clockPin, dataPin, displayType, sectionCount, sectionSizes);
 }
 
 void ShiftDisplay::initPins(int latchPin, int clockPin, int dataPin) {
@@ -34,28 +36,13 @@ void ShiftDisplay::initPins(int latchPin, int clockPin, int dataPin) {
 	pinMode(_latchPin, OUTPUT);
 	pinMode(_clockPin, OUTPUT);
 	pinMode(_dataPin, OUTPUT);
-	clearDisplay(); // clear asap so junk doesnt show while initiating
 }
 
-void ShiftDisplay::constructSingleDisplay(int latchPin, int clockPin, int dataPin, int displayType, int displaySize) {
+void ShiftDisplay::construct(int latchPin, int clockPin, int dataPin, DisplayType displayType, int sectionCount, int sectionSizes[]) {
 	initPins(latchPin, clockPin, dataPin);
-	byte initial = displayType ? BLANK : ~BLANK;
-	memset(_cache, initial, MAX_DISPLAY_SIZE); // fill cache with blank character
 
-	displaySize = min(displaySize, MAX_DISPLAY_SIZE); // override if displaySize is too big
-	_displayType = displayType;
-	_displaySize = displaySize;
-	_sectionCount = 1;
-	_sectionSizes[0] = displaySize;
-	_sectionBegins[0] = 0;
-}
-
-void ShiftDisplay::constructSectionedDisplay(int latchPin, int clockPin, int dataPin, int displayType, int sectionCount, int sectionSizes[]) {
-	initPins(latchPin, clockPin, dataPin);
-	byte initial = displayType ? BLANK : ~BLANK;
-	memset(_cache, initial, MAX_DISPLAY_SIZE); // fill cache with blank character
-
-	_displayType = displayType;
+	_isCathode = displayType == COMMON_CATHODE || displayType == INDIVIDUAL_CATHODE;
+	_isMultiplex = displayType == COMMON_CATHODE || displayType == COMMON_ANODE;
 	int i = 0;
 	int displaySize = 0;
 	for (; i < sectionCount && displaySize < MAX_DISPLAY_SIZE && i < MAX_DISPLAY_SIZE; i++) {
@@ -72,16 +59,23 @@ void ShiftDisplay::constructSectionedDisplay(int latchPin, int clockPin, int dat
 	}
 	_sectionCount = i;
 	_displaySize = displaySize;
+
+	byte empty = _isCathode ? EMPTY : ~EMPTY;
+	memset(_cache, empty, MAX_DISPLAY_SIZE); // fill storage with empty character
+	if (_isMultiplex)
+		clearMultiplexDisplay();
+	else
+		clearConstantDisplay();
 }
 
 // PRIVATE FUNCTIONS ***********************************************************
 
-void ShiftDisplay::multiplexDisplay() {
+void ShiftDisplay::showMultiplexDisplay() {
 	for (int i = 0; i < _displaySize; i++) {
 		digitalWrite(_latchPin, LOW);
 
 		// data for last shift register
-		byte out = _displayType ? ~INDEXES[i] : INDEXES[i];
+		byte out = _isCathode ? ~INDEXES[i] : INDEXES[i];
 		shiftOut(_dataPin, _clockPin, LSBFIRST, out);
 
 		// data for first shift register
@@ -93,29 +87,39 @@ void ShiftDisplay::multiplexDisplay() {
 	}
 }
 
-void ShiftDisplay::clearDisplay() {
+void ShiftDisplay::showConstantDisplay() {
 	digitalWrite(_latchPin, LOW);
-	shiftOut(_dataPin, _clockPin, MSBFIRST, 0); // both ends of led with same value
-	shiftOut(_dataPin, _clockPin, MSBFIRST, 0);
+	for (int i = _displaySize - 1; i >= 0 ; i--)
+		shiftOut(_dataPin, _clockPin, LSBFIRST, _cache[i]);
+	digitalWrite(_latchPin, HIGH);
+}
+
+void ShiftDisplay::clearMultiplexDisplay() {
+	digitalWrite(_latchPin, LOW);
+	shiftOut(_dataPin, _clockPin, MSBFIRST, EMPTY); // 0 at both ends of led
+	shiftOut(_dataPin, _clockPin, MSBFIRST, EMPTY);
+	digitalWrite(_latchPin, HIGH);
+}
+
+void ShiftDisplay::clearConstantDisplay() {
+	digitalWrite(_latchPin, LOW);
+	byte empty = _isCathode ? EMPTY : ~EMPTY;
+	for (int i = 0; i < _displaySize; i++)
+		shiftOut(_dataPin, _clockPin, MSBFIRST, empty);
 	digitalWrite(_latchPin, HIGH);
 }
 
 void ShiftDisplay::modifyCache(int index, byte code) {
-	_cache[index] = _displayType ? code : ~code;
+	_cache[index] = _isCathode ? code : ~code;
 }
 
 void ShiftDisplay::modifyCache(int beginIndex, int size, byte codes[]) {
 	for (int i = 0; i < size; i++)
-		_cache[i+beginIndex] = _displayType ? codes[i] : ~codes[i];
+		_cache[i+beginIndex] = _isCathode ? codes[i] : ~codes[i];
 }
 
 void ShiftDisplay::modifyCacheDot(int index, bool dot) {
-	int bit;
-	if (dot)
-		bit = _displayType ? 1 : 0;
-	else
-		bit = _displayType ? 0 : 1;
-	//int bit = (dot == (bool)_displayType) TODO
+	bool bit = _isCathode ? dot : !dot;
 	bitWrite(_cache[index], 0, bit);
 }
 
@@ -132,7 +136,7 @@ void ShiftDisplay::encodeCharacters(int size, const char input[], byte output[],
 		else if (c == '-')
 			output[i] = MINUS;
 		else // space or invalid
-			output[i] = BLANK;
+			output[i] = EMPTY;
 	}
 	
 	if (dotIndex != -1)
@@ -384,16 +388,33 @@ void ShiftDisplay::setCustomAt(int section, int relativeIndex, byte custom) {
 	}
 }
 
+void ShiftDisplay::hide() {
+	if (!_isMultiplex)
+		clearConstantDisplay();
+}
+
 void ShiftDisplay::show() {
-	multiplexDisplay();
-	clearDisplay();
+	if (_isMultiplex) {
+		showMultiplexDisplay();
+		clearMultiplexDisplay();
+	} else {
+		showConstantDisplay();
+	}
 }
 
 void ShiftDisplay::show(unsigned long time) {
-	unsigned long beforeLast = millis() + time - (POV * _displaySize); // start + total - last iteration
-	while (millis() <= beforeLast) // it will not enter loop if it would overtake time
-		multiplexDisplay();
-	clearDisplay();
+	if (_isMultiplex) {
+		unsigned long beforeLast = millis() + time - (POV * _displaySize); // start + total - last iteration
+		while (millis() <= beforeLast) // it will not enter loop if it would overtake time
+			showMultiplexDisplay();
+		clearMultiplexDisplay();
+	} else {
+		unsigned long stop = millis() + time;
+		showConstantDisplay();
+		while (millis() < stop)
+			delay(1);
+		clearConstantDisplay();
+	}
 }
 
 void ShiftDisplay::show(int value, unsigned long time, char alignment) {

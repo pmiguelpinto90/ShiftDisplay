@@ -76,7 +76,7 @@ void loop() {
 
   `display`: newly created ShiftDisplay type object.
 
-  `displayType`: constant `COMMON_CATHODE` or `COMMON_ANODE`, defining the type of the display.
+  `displayType`: constant `COMMON_ANODE`, `COMMON_CATHODE`, `INDIVIDUAL_ANODE` or `INDIVIDUAL_CATHODE`, defining the type of the display.
 
   `displaySize`: quantity of digits on the display.
 
@@ -240,7 +240,7 @@ void loop() {
   `display`: object of type ShiftDisplay.
 
   `time`: duration in milliseconds to show the value;
-  if is not specified, the value is shown for a single iteration;
+  if is not specified, the value is shown for a single iteration (common anode/cathode), or until hide/show is called (individual anode/cathode);
   exact time showing will be an under aproximation.
 
 * __show()__
@@ -293,10 +293,16 @@ void loop() {
 - ALIGN_CENTER
 - COMMON_ANODE
 - COMMON_CATHODE
+- INDIVIDUAL_ANODE
+- INDIVIDUAL_CATHODE
 
 ## Notes
 
 * __Common Cathode & Common Anode__
+
+TODO
+
+* __Individual Cathode & Individual Anode__
 
 TODO
 
@@ -315,7 +321,8 @@ TODO
 
 ## Changelog
 
-- 3.6.2 ()
+- master ()
+  - NEW: individual cathode and individual anode display types
   - CHANGE: default decimal places = 1
 - 3.6.1 (17/9/2017)
   - DOC: improved README
@@ -389,7 +396,9 @@ TODO
 - [ ] Finish README
 - [ ] Example for sectioned display
 - [ ] Example for custom characters
-- [ ] INDIVIDUAL_CATHODE and INDIVIDUAL_ANODE display types
+- [x] INDIVIDUAL_CATHODE and INDIVIDUAL_ANODE display types
+- [ ] Example for individual cathode and individual anode
+- [ ] Remove display max size
 
 
 ## Contacts

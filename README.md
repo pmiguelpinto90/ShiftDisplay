@@ -235,12 +235,12 @@ void loop() {
   * display.show()
   * display.show(time)
 
-  Show stored value on the display.
+  Show stored value on the display. 
 
   `display`: object of type ShiftDisplay.
 
   `time`: duration in milliseconds to show the value;
-  if is not specified, the value is shown for a single iteration (common anode/cathode), or until hide/show is called (individual anode/cathode);
+  if is not specified, the value is shown for a single iteration (common anode/cathode), or until show or hide is called (individual anode/cathode);
   exact time showing will be an under aproximation.
 
 * __show()__
@@ -286,6 +286,14 @@ void loop() {
   bool value, true to show dot, false to hide dot;
   array length must match display size.
 
+* __hide()__
+
+  * display.hide()
+
+  TODO
+  
+  `display`: an object of type ShiftDisplay.
+
 ### Constants
 
 - ALIGN_LEFT
@@ -298,11 +306,11 @@ void loop() {
 
 ## Notes
 
-* __Common Cathode & Common Anode__
+* __Common Anode & Common Cathode__
 
 TODO
 
-* __Individual Cathode & Individual Anode__
+* __Individual Anode & Individual Cathode__
 
 TODO
 
@@ -322,7 +330,7 @@ TODO
 ## Changelog
 
 - master ()
-  - NEW: individual cathode and individual anode display types
+  - NEW: individual anode/cathode display types
   - CHANGE: default decimal places = 1
 - 3.6.1 (17/9/2017)
   - DOC: improved README
@@ -396,9 +404,10 @@ TODO
 - [ ] Finish README
 - [ ] Example for sectioned display
 - [ ] Example for custom characters
-- [x] INDIVIDUAL_CATHODE and INDIVIDUAL_ANODE display types
-- [ ] Example for individual cathode and individual anode
-- [ ] Remove display max size
+- [x] INDIVIDUAL_ANODE and INDIVIDUAL_CATHODE display types
+- [ ] Example for individual anode/cathode
+- [ ] Docs for individual anode/cathode
+- [ ] Remove display max size for individual anode/cathode
 
 
 ## Contacts

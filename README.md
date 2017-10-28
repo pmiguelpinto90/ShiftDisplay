@@ -34,7 +34,7 @@ Arduino library for driving 7-segment displays using 74HC595 shift registers
 
 1. Launch the Arduino IDE
 1. Open the Library Manager by going to menu: Sketch > Include Library > Manage Libraries
-2. Search for ShiftDisplay library by typing shiftdisplay on Filter your search
+2. Search for ShiftDisplay library by typing shiftdisplay in Filter your search
 3. Select ShiftDisplay by MiguelPynto and click install
 
 
@@ -241,7 +241,7 @@ void loop() {
 
   `time`: duration in milliseconds to show the value;
   if is not specified, the value is shown for a single iteration (common anode/cathode), or until show or hide is called (individual anode/cathode);
-  exact time showing will be an under aproximation.
+  exact time showing will be an under approximation.
 
 * __show()__
 
@@ -266,7 +266,7 @@ void loop() {
   if is too big to fit in the display, it is trimmed according to alignment.
 
   `time`: duration in milliseconds to show the value;
-  exact time showing will be an under aproximation.
+  exact time showing will be an under approximation.
 
   `alignment`: alignment of the value or valueReal on the display;
   constant `ALIGN_LEFT`, `ALIGN_RIGHT` or `ALIGN_CENTER`;

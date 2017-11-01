@@ -389,17 +389,17 @@ void ShiftDisplay::setCustomAt(int section, int relativeIndex, byte custom) {
 }
 
 void ShiftDisplay::hide() {
-	if (!_isMultiplex)
+	if (_isMultiplex)
+		clearMultiplexDisplay();
+	else
 		clearConstantDisplay();
 }
 
-void ShiftDisplay::show() {
-	if (_isMultiplex) {
+void ShiftDisplay::update() {
+	if (_isMultiplex)
 		showMultiplexDisplay();
-		clearMultiplexDisplay();
-	} else {
+	else
 		showConstantDisplay();
-	}
 }
 
 void ShiftDisplay::show(unsigned long time) {
@@ -409,10 +409,8 @@ void ShiftDisplay::show(unsigned long time) {
 			showMultiplexDisplay();
 		clearMultiplexDisplay();
 	} else {
-		unsigned long stop = millis() + time;
 		showConstantDisplay();
-		while (millis() < stop)
-			delay(1);
+		delay(time);
 		clearConstantDisplay();
 	}
 }
@@ -462,10 +460,10 @@ void ShiftDisplay::show(const char characters[], const bool dots[], unsigned lon
 	show(time);
 }
 
-void ShiftDisplay::insertPoint(int index) { setDot(index, true); }
-void ShiftDisplay::removePoint(int index) { setDot(index, false); }
-void ShiftDisplay::insertDot(int index) { setDot(index, true); }
-void ShiftDisplay::removeDot(int index) { setDot(index, false); }
+void ShiftDisplay::insertPoint(int index) { modifyCacheDot(index, true); }
+void ShiftDisplay::removePoint(int index) { modifyCacheDot(index, false); }
+void ShiftDisplay::insertDot(int index) { modifyCacheDot(index, true); }
+void ShiftDisplay::removeDot(int index) { modifyCacheDot(index, false); }
 void ShiftDisplay::print(long time, int value, char alignment) { show(value, time, alignment); }
 void ShiftDisplay::print(long time, long value, char alignment) { show(value, time, alignment); }
 void ShiftDisplay::print(long time, double value, int decimalPlaces, char alignment) { show(value, time, decimalPlaces, alignment); }
@@ -473,3 +471,4 @@ void ShiftDisplay::print(long time, double value, char alignment) { show(value, 
 void ShiftDisplay::print(long time, char value, char alignment) { show(value, time, alignment); }
 void ShiftDisplay::print(long time, const char value[], char alignment) { show(value, time, alignment); }
 void ShiftDisplay::print(long time, const String &value, char alignment) { show(value, time, alignment); }
+void ShiftDisplay::show() { showMultiplexDisplay(); clearMultiplexDisplay(); }

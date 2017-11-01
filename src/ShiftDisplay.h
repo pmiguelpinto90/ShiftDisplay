@@ -104,14 +104,14 @@ class ShiftDisplay {
 		void setDotAt(int section, int relativeIndex, bool dot); // show or hide a dot on character
 		void setCustomAt(int section, int relativeIndex, byte custom); // replace with a custom character (encoded in abcdefgp format)
 
-		// IP: hide display content
+		// clear display content
 		void hide();
 
 		// show cached value on display
-		void show(); // CP: for a single iteration; IP: while not hide or recalled
-		void show(unsigned long time); // for the specified time (or less if would exceed it)
+		void update(); // CP: for a single iteration; IP: while not hide/show/update called
 
 		// cache and show value on display for the specified time (or less if would exceed it)
+		void show(unsigned long time); // show previous cached value
 		void show(int value, unsigned long time, char alignment = DEFAULT_ALIGN_NUMBER);
 		void show(long value, unsigned long time, char alignment = DEFAULT_ALIGN_NUMBER);
 		void show(double valueReal, unsigned long time, int decimalPlaces = DEFAULT_DECIMAL_PLACES, char alignment = DEFAULT_ALIGN_NUMBER);
@@ -134,6 +134,7 @@ class ShiftDisplay {
 		void print(long time, char value, char alignment = DEFAULT_ALIGN_TEXT); // deprecated by show()
 		void print(long time, const char value[], char alignment = DEFAULT_ALIGN_TEXT); // deprecated by show()
 		void print(long time, const String &value, char alignment = DEFAULT_ALIGN_TEXT); // deprecated by show()
+		void show(); // deprecated by update()
 };
 
 #endif

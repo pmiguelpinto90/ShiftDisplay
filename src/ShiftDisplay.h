@@ -104,11 +104,11 @@ class ShiftDisplay {
 		void setDotAt(int section, int relativeIndex, bool dot); // show or hide a dot on character
 		void setCustomAt(int section, int relativeIndex, byte custom); // replace with a custom character (encoded in abcdefgp format)
 
-		// clear display content
-		void hide();
-
 		// show cached value on display
 		void update(); // CP: for a single iteration; IP: while not hide/show/update called
+
+		// clear display content
+		void hide();
 
 		// cache and show value on display for the specified time (or less if would exceed it)
 		void show(unsigned long time); // show previous cached value

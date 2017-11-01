@@ -388,18 +388,18 @@ void ShiftDisplay::setCustomAt(int section, int relativeIndex, byte custom) {
 	}
 }
 
-void ShiftDisplay::hide() {
-	if (_isMultiplex)
-		clearMultiplexDisplay();
-	else
-		clearConstantDisplay();
-}
-
 void ShiftDisplay::update() {
 	if (_isMultiplex)
 		showMultiplexDisplay();
 	else
 		showConstantDisplay();
+}
+
+void ShiftDisplay::hide() {
+	if (_isMultiplex)
+		clearMultiplexDisplay();
+	else
+		clearConstantDisplay();
 }
 
 void ShiftDisplay::show(unsigned long time) {

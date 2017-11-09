@@ -86,7 +86,7 @@ class ShiftDisplay {
 		void set(const char characters[], const bool dots[]); // arrays length must match display size
 
 		// modify cached value at index
-		void setDot(int index, bool dot); // show or hide a dot on character
+		void setDot(int index, bool dot = true); // show or hide a dot on character
 		void setCustom(int index, byte custom); // replace with a custom character (encoded in abcdefgp format)
 
 		// cache value at section indexes
@@ -101,7 +101,7 @@ class ShiftDisplay {
 		void setAt(int section, const char characters[], const bool dots[]); // arrays length must match defined section size
 
 		// modify cached value at index in section
-		void setDotAt(int section, int relativeIndex, bool dot); // show or hide a dot on character
+		void setDotAt(int section, int relativeIndex, bool dot = true); // show or hide a dot on character
 		void setCustomAt(int section, int relativeIndex, byte custom); // replace with a custom character (encoded in abcdefgp format)
 
 		// show cached value on display

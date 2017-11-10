@@ -11,13 +11,16 @@ ShiftDisplay display(COMMON_CATHODE, 3);
 
 void setup() {
 	for (int i = 3; i > 0; i--) {
-		display.show(i, 400, ALIGN_CENTER); // store number and show it for 400ms
-		display.setDot(1, true); // add dot to stored number
-		display.show(400); // show number with dot for 400ms
+		// store number and show it for 400ms
+		display.set(i, ALIGN_CENTER);
+		display.show(400);
+		// add dot to stored number and show it for 400ms
+		display.setDot(1);
+		display.show(400);
 	}
 	display.set("GO"); // store "GO"
 }
 
 void loop() {
-	display.show(); // show stored "GO" while in loop
+	display.update(); // show stored "GO" while in loop
 }

@@ -13,7 +13,7 @@ const int DISPLAY_ADDRESS = 8;
 const int LATCH_PIN = 6;
 const int CLOCK_PIN = 7;
 const int DATA_PIN = 5;
-const int DISPLAY_TYPE = COMMON_CATHODE; // COMMON_CATHODE or COMMON_ANODE
+const DisplayType DISPLAY_TYPE = COMMON_CATHODE; // COMMON_CATHODE or COMMON_ANODE
 const int DISPLAY_SIZE = 4; // number of digits on display
 
 ShiftDisplay display(LATCH_PIN, CLOCK_PIN, DATA_PIN, DISPLAY_TYPE, DISPLAY_SIZE);
@@ -31,5 +31,5 @@ void setup() {
 }
 
 void loop() {
-	display.show(); // show current stored value
+	display.update(); // show current stored value
 }

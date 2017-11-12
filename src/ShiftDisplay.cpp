@@ -240,40 +240,6 @@ void ShiftDisplay::setReal(double number, int decimalPlaces, bool leadingZeros, 
 	modifyCache(_sectionBegins[section], sectionSize, encodedCharacters);
 }
 
-void ShiftDisplay::setChar(char value, char alignment, int section = 0) {
-	char originalCharacters[] = {value};
-	int sectionSize = _sectionSizes[section];
-	char formattedCharacters[sectionSize];
-	formatCharacters(1, originalCharacters, sectionSize, formattedCharacters, alignment);
-	byte encodedCharacters[sectionSize];
-	encodeCharacters(sectionSize, formattedCharacters, encodedCharacters);
-	modifyCache(_sectionBegins[section], sectionSize, encodedCharacters);
-}
-
-void ShiftDisplay::setCharArray(const char value[], char alignment, int section = 0) {
-	int valueSize = strlen(value);
-	int sectionSize = _sectionSizes[section];
-	char formattedCharacters[sectionSize];
-	formatCharacters(valueSize, value, sectionSize, formattedCharacters, alignment);
-	byte encodedCharacters[sectionSize];
-	encodeCharacters(sectionSize, formattedCharacters, encodedCharacters);
-	modifyCache(_sectionBegins[section], sectionSize, encodedCharacters);
-}
-
-void ShiftDisplay::setString(const String &value, char alignment, int section = 0) {
-	
-	// convert String to char array manually for better support between Arduino cores
-	int size = 0;
-	while (value[size] != '\0')
-		size++;
-	char str[size + 1];
-	for (int i = 0; i < size; i++)
-		str[i] = value[i];
-	str[size] = '\0';
-
-	setCharArray(str, alignment, section); // call char array function
-}
-
 void ShiftDisplay::setNumber(long number, int decimalPlaces, bool leadingZeros, char alignment, int section = 0) {
 	if (decimalPlaces == 0)
 		setInteger(number, leadingZeros, alignment, section);
@@ -287,6 +253,40 @@ void ShiftDisplay::setNumber(double number, int decimalPlaces, bool leadingZeros
 		setInteger(roundNumber, leadingZeros, alignment, section);
 	} else
 		setReal(number, decimalPlaces, leadingZeros, alignment, section);
+}
+
+void ShiftDisplay::setText(char value, char alignment, int section = 0) {
+	char originalCharacters[] = {value};
+	int sectionSize = _sectionSizes[section];
+	char formattedCharacters[sectionSize];
+	formatCharacters(1, originalCharacters, sectionSize, formattedCharacters, alignment);
+	byte encodedCharacters[sectionSize];
+	encodeCharacters(sectionSize, formattedCharacters, encodedCharacters);
+	modifyCache(_sectionBegins[section], sectionSize, encodedCharacters);
+}
+
+void ShiftDisplay::setText(const char value[], char alignment, int section = 0) {
+	int valueSize = strlen(value);
+	int sectionSize = _sectionSizes[section];
+	char formattedCharacters[sectionSize];
+	formatCharacters(valueSize, value, sectionSize, formattedCharacters, alignment);
+	byte encodedCharacters[sectionSize];
+	encodeCharacters(sectionSize, formattedCharacters, encodedCharacters);
+	modifyCache(_sectionBegins[section], sectionSize, encodedCharacters);
+}
+
+void ShiftDisplay::setText(const String &value, char alignment, int section = 0) {
+	
+	// convert String to char array manually for better support between Arduino cores
+	int size = 0;
+	while (value[size] != '\0')
+		size++;
+	char str[size + 1];
+	for (int i = 0; i < size; i++)
+		str[i] = value[i];
+	str[size] = '\0';
+
+	setText(str, alignment, section); // call char array function
 }
 
 bool ShiftDisplay::isValidSection(int section) {
@@ -344,15 +344,15 @@ void ShiftDisplay::set(double number, char alignment) {
 }
 
 void ShiftDisplay::set(char value, char alignment) {
-	setChar(value, alignment);
+	setText(value, alignment);
 }
 
 void ShiftDisplay::set(const char value[], char alignment) {
-	setCharArray(value, alignment);
+	setText(value, alignment);
 }
 
 void ShiftDisplay::set(const String &value, char alignment) {
-	setString(value, alignment);
+	setText(value, alignment);
 }
 
 void ShiftDisplay::set(const byte customs[]) {
@@ -425,17 +425,17 @@ void ShiftDisplay::setAt(int section, double number, char alignment) {
 
 void ShiftDisplay::setAt(int section, char value, char alignment) {
 	if (isValidSection(section))
-		setChar(value, alignment, section);
+		setText(value, alignment, section);
 }
 
 void ShiftDisplay::setAt(int section, const char value[], char alignment) {
 	if (isValidSection(section))
-		setCharArray(value, alignment, section);
+		setText(value, alignment, section);
 }
 
 void ShiftDisplay::setAt(int section, const String &value, char alignment) {
 	if (isValidSection(section))
-		setString(value, alignment, section);
+		setText(value, alignment, section);
 }
 
 void ShiftDisplay::setAt(int section, const byte customs[]) {

@@ -72,12 +72,11 @@ class ShiftDisplay {
 		
 		void setInteger(long value, bool leadingZeros, char alignment, int section);
 		void setReal(double value, int decimalPlaces, bool leadingZeros, char alignment, int section);
-		void setChar(char value, char alignment, int section);
-		void setCharArray(const char value[], char alignment, int section);
-		void setString(const String &value, char alignment, int section);
-
 		void setNumber(long number, int decimalPlaces, bool leadingZeros, char alignment, int section);
 		void setNumber(double number, int decimalPlaces, bool leadingZeros, char alignment, int section);
+		void setText(char value, char alignment, int section);
+		void setText(const char value[], char alignment, int section);
+		void setText(const String &value, char alignment, int section);
 
 		bool isValidSection(int section);
 

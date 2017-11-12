@@ -28,6 +28,8 @@ const int DEFAULT_DATA_PIN = 5;
 const int DEFAULT_DECIMAL_PLACES = 1;
 const char DEFAULT_ALIGN_TEXT = ALIGN_LEFT;
 const char DEFAULT_ALIGN_NUMBER = ALIGN_RIGHT;
+const bool DEFAULT_SET_DOT = true;
+const bool DEFAULT_LEADING_ZEROS = false;
 
 const int MAX_DISPLAY_SIZE = 8;
 const int POV = 1; // milliseconds showing each character when iterating
@@ -62,10 +64,18 @@ class ShiftDisplay {
 		void modifyCacheDot(int index, bool dot); // change dot in a cache position
 
 		void encodeCharacters(int size, const char input[], byte output[], int dotIndex); // encode array of chars to array of bytes in abcdefgp format
-		int formatCharacters(int inSize, const char input[], int outSize, char output[], char alignment, int decimalPlaces); // arrange array of chars for displaying in specified alignment, returns dot index on display or -1 if none
+		int formatCharacters(int inSize, const char input[], int outSize, char output[], char alignment, bool leadingZeros, int decimalPlaces); // arrange array of chars for displaying in specified alignment, returns dot index on display or -1 if none
 		void getCharacters(long input, int size, char output[]); // convert an integer number to an array of chars
 		int countCharacters(long number); // calculate the length of an array of chars for an integer number
 		int countCharacters(double number); // calculate the length of an array of chars for the integer part on a real number
+		
+		void setInteger(long value, bool leadingZeros, char alignment, int section);
+		void setReal(double value, int decimalPlaces, bool leadingZeros, char alignment, int section);
+		void setChar(char value, char alignment, int section);
+		void setCharArray(const char value[], char alignment, int section);
+		void setString(const String &value, char alignment, int section);
+
+		bool isValidSection(int section);
 
 	public:
 
@@ -76,10 +86,12 @@ class ShiftDisplay {
 		ShiftDisplay(int latchPin, int clockPin, int dataPin, DisplayType displayType, int sectionCount, const int sectionSizes[], DisplayDrive displayDrive = MULTIPLEXED_DRIVE); // custom pins, sectioned display
 
 		// cache value
-		void set(int value, char alignment = DEFAULT_ALIGN_NUMBER);
-		void set(long value, char alignment = DEFAULT_ALIGN_NUMBER);
-		void set(double valueReal, int decimalPlaces = DEFAULT_DECIMAL_PLACES, char alignment = DEFAULT_ALIGN_NUMBER);
-		void set(double valueReal, char alignment); // override decimalPlaces obligation in function above
+		void set(int value, bool leadingZeros = DEFAULT_LEADING_ZEROS, char alignment = DEFAULT_ALIGN_NUMBER);
+		void set(int value, char alignment); // override leadingZeros obligation
+		void set(long value, bool leadingZeros = DEFAULT_LEADING_ZEROS, char alignment = DEFAULT_ALIGN_NUMBER);
+		void set(long value, char alignment); // override leadingZeros obligation
+		void set(double valueReal, int decimalPlaces = DEFAULT_DECIMAL_PLACES, bool leadingZeros = DEFAULT_LEADING_ZEROS, char alignment = DEFAULT_ALIGN_NUMBER);
+		void set(double valueReal, char alignment); // override decimalPlaces and leadingZeros obligation
 		void set(char value, char alignment = DEFAULT_ALIGN_TEXT);
 		void set(const char value[], char alignment = DEFAULT_ALIGN_TEXT); // c string
 		void set(const String &value, char alignment = DEFAULT_ALIGN_TEXT); // Arduino string object
@@ -87,14 +99,16 @@ class ShiftDisplay {
 		void set(const char characters[], const bool dots[]); // arrays length must match display size
 
 		// modify cached value at index
-		void setDot(int index, bool dot = true); // show or hide a dot on character
+		void setDot(int index, bool dot = DEFAULT_SET_DOT); // show or hide a dot on character
 		void setCustom(int index, byte custom); // replace with a custom character (encoded in abcdefgp format)
 
 		// cache value at section indexes
-		void setAt(int section, int value, char alignment = DEFAULT_ALIGN_NUMBER);
-		void setAt(int section, long value, char alignment = DEFAULT_ALIGN_NUMBER);
-		void setAt(int section, double valueReal, int decimalPlaces = DEFAULT_DECIMAL_PLACES, char alignment = DEFAULT_ALIGN_NUMBER);
-		void setAt(int section, double valueReal, char alignment); // override decimalPlaces obligation in function above
+		void setAt(int section, int value, bool leadingZeros = DEFAULT_LEADING_ZEROS, char alignment = DEFAULT_ALIGN_NUMBER);
+		void setAt(int section, int value, char alignment); // override leadingZeros obligation
+		void setAt(int section, long value, bool leadingZeros = DEFAULT_LEADING_ZEROS, char alignment = DEFAULT_ALIGN_NUMBER);
+		void setAt(int section, long value, char alignment); // override leadingZeros obligation
+		void setAt(int section, double valueReal, int decimalPlaces = DEFAULT_DECIMAL_PLACES, bool leadingZeros = DEFAULT_LEADING_ZEROS, char alignment = DEFAULT_ALIGN_NUMBER);
+		void setAt(int section, double valueReal, char alignment); // override decimalPlaces obligation
 		void setAt(int section, char value, char alignment = DEFAULT_ALIGN_TEXT);
 		void setAt(int section, const char value[], char alignment = DEFAULT_ALIGN_TEXT); // c string
 		void setAt(int section, const String &value, char alignment = DEFAULT_ALIGN_TEXT); // Arduino string object
@@ -102,7 +116,7 @@ class ShiftDisplay {
 		void setAt(int section, const char characters[], const bool dots[]); // arrays length must match defined section size
 
 		// modify cached value at index in section
-		void setDotAt(int section, int relativeIndex, bool dot = true); // show or hide a dot on character
+		void setDotAt(int section, int relativeIndex, bool dot = DEFAULT_SET_DOT); // show or hide a dot on character
 		void setCustomAt(int section, int relativeIndex, byte custom); // replace with a custom character (encoded in abcdefgp format)
 
 		// show cached value on display

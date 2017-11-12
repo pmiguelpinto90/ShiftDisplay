@@ -140,7 +140,7 @@ void ShiftDisplay::encodeCharacters(int size, const char input[], byte output[],
 		bitWrite(output[dotIndex], 0, 1);
 }
 
-int ShiftDisplay::formatCharacters(int inSize, const char input[], int outSize, char output[], char alignment, int decimalPlaces = -1) {
+int ShiftDisplay::formatCharacters(int inSize, const char input[], int outSize, char output[], char alignment, bool leadingZeros = false, int decimalPlaces = -1) {
 	
 	// index of character virtual borders
 	int left; // lowest index
@@ -163,7 +163,7 @@ int ShiftDisplay::formatCharacters(int inSize, const char input[], int outSize, 
 	
 	// fill output array with empty space or characters
 	for (int i = 0; i < left; i++) // before characters
-		output[i] = ' ';
+		output[i] = leadingZeros ? '0' : ' ';
 	for (int i = left, j = 0; i <= right; i++, j++) // characters
 		if (i >= minimum && i <= maximum) // not out of bounds on display
 			output[i] = input[j];
@@ -215,34 +215,115 @@ int ShiftDisplay::countCharacters(double number) {
 	return countCharacters((long) number);
 }
 
+void ShiftDisplay::setInteger(long value, bool leadingZeros, char alignment, int section = 0) {
+	int valueSize = countCharacters(value);
+	char originalCharacters[valueSize];
+	getCharacters(value, valueSize, originalCharacters);
+	int sectionSize = _sectionSizes[section];
+	char formattedCharacters[sectionSize];
+	formatCharacters(valueSize, originalCharacters, sectionSize, formattedCharacters, alignment, leadingZeros);
+	byte encodedCharacters[sectionSize];
+	encodeCharacters(sectionSize, formattedCharacters, encodedCharacters);
+	modifyCache(_sectionBegins[section], sectionSize, encodedCharacters);
+}
+
+void ShiftDisplay::setReal(double value, int decimalPlaces, bool leadingZeros, char alignment, int section = 0) {
+
+	// if no decimal places, call integer function instead
+	if (decimalPlaces == 0) {
+		long value = round(valueReal);
+		setInteger(value, leadingZeros, alignment, section);
+		return;
+	}
+
+	// calculate value with specified decimal places as integer (eg 1.236, 2 = 124)
+	long value = round(valueReal * pow(10, decimalPlaces));
+
+	int valueSize = countCharacters(valueReal) + decimalPlaces;
+	char originalCharacters[valueSize];
+	getCharacters(value, valueSize, originalCharacters);
+	int sectionSize = _sectionSizes[section];
+	char formattedCharacters[sectionSize];
+	int dotIndex = formatCharacters(valueSize, originalCharacters, sectionSize, formattedCharacters, alignment, false, decimalPlaces);
+	byte encodedCharacters[sectionSize];
+	encodeCharacters(sectionSize, formattedCharacters, encodedCharacters, dotIndex);
+	modifyCache(_sectionBegins[section], sectionSize, encodedCharacters);
+}
+
+void ShiftDisplay::setChar(char value, char alignment, int section = 0) {
+	char originalCharacters[] = {value};
+	int sectionSize = _sectionSizes[section];
+	char formattedCharacters[sectionSize];
+	formatCharacters(1, originalCharacters, sectionSize, formattedCharacters, alignment);
+	byte encodedCharacters[sectionSize];
+	encodeCharacters(sectionSize, formattedCharacters, encodedCharacters);
+	modifyCache(_sectionBegins[section], sectionSize, encodedCharacters);
+}
+
+void ShiftDisplay::setCharArray(const char value[], char alignment, int section = 0) {
+	int valueSize = strlen(value);
+	int sectionSize = _sectionSizes[section];
+	char formattedCharacters[sectionSize];
+	formatCharacters(valueSize, value, sectionSize, formattedCharacters, alignment);
+	byte encodedCharacters[sectionSize];
+	encodeCharacters(sectionSize, formattedCharacters, encodedCharacters);
+	modifyCache(_sectionBegins[section], sectionSize, encodedCharacters);
+}
+
+void ShiftDisplay::setString(const String &value, char alignment, int section = 0) {
+	
+	// convert String to char array manually for better support between Arduino cores
+	int size = 0;
+	while (value[size] != '\0')
+		size++;
+	char str[size + 1];
+	for (int i = 0; i < size; i++)
+		str[i] = value[i];
+	str[size] = '\0';
+
+	setCharArray(str, alignment, section); // call char array function
+}
+
+bool ShiftDisplay::isValidSection(int section) {
+	return section >= 0 && section < _sectionCount;
+}
+
 // PUBLIC FUNCTIONS ************************************************************
 
+void ShiftDisplay::set(int value, bool leadingZeros, char alignment) {
+	setInteger((long) value, leadingZeros, alignment);
+}
+
 void ShiftDisplay::set(int value, char alignment) {
-	setAt(0, value, alignment);
+	setInteger((long) value, DEFAULT_LEADING_ZEROS, alignment);
+}
+
+void ShiftDisplay::set(long value, bool leadingZeros, char alignment) {
+	setInteger(value, leadingZeros, alignment);
 }
 
 void ShiftDisplay::set(long value, char alignment) {
-	setAt(0, value, alignment);
+	setInteger(value, DEFAULT_LEADING_ZEROS, alignment);
 }
 
-void ShiftDisplay::set(double valueReal, int decimalPlaces, char alignment) {
-	setAt(0, valueReal, decimalPlaces, alignment);
+void ShiftDisplay::set(double valueReal, int decimalPlaces, bool leadingZeros, char alignment) {
+	setReal(valueReal, decimalPlaces, leadingZeros, alignment);
 }
 
 void ShiftDisplay::set(double valueReal, char alignment) {
-	setAt(0, valueReal, alignment);
+	setReal(valueReal, DEFAULT_DECIMAL_PLACES, DEFAULT_LEADING_ZEROS, alignment);
 }
 
 void ShiftDisplay::set(char value, char alignment) {
-	setAt(0, value, alignment);
+	setChar(value, alignment);
 }
 
 void ShiftDisplay::set(const char value[], char alignment) {
-	setAt(0, value, alignment);
+	setCharArray(value, alignment);
 }
 
 void ShiftDisplay::set(const String &value, char alignment) {
-	setAt(0, value, alignment);
+	setString(value, alignment);
 }
 
 void ShiftDisplay::set(const byte customs[]) {
@@ -261,102 +342,60 @@ void ShiftDisplay::setCustom(int index, byte custom) {
 	setCustomAt(0, index, custom);
 }
 
+void ShiftDisplay::setAt(int section, int value, bool leadingZeros, char alignment) {
+	if (isValidSection(section))
+		setInteger((long) value, leadingZeros, alignment, section);
+}
+
 void ShiftDisplay::setAt(int section, int value, char alignment) {
-	setAt(section, (long) value, alignment); // call long function
+	if (isValidSection(section))
+		setInteger((long) value, DEFAULT_LEADING_ZEROS, alignment, section);
+}
+
+void ShiftDisplay::setAt(int section, long value, bool leadingZeros, char alignment) {
+	if (isValidSection(section))
+		setInteger(value, leadingZeros, alignment, section);
 }
 
 void ShiftDisplay::setAt(int section, long value, char alignment) {
-	if (section >= 0 && section < _sectionCount) { // valid section
-		int valueSize = countCharacters(value);
-		char originalCharacters[valueSize];
-		getCharacters(value, valueSize, originalCharacters);
-		int sectionSize = _sectionSizes[section];
-		char formattedCharacters[sectionSize];
-		formatCharacters(valueSize, originalCharacters, sectionSize, formattedCharacters, alignment);
-		byte encodedCharacters[sectionSize];
-		encodeCharacters(sectionSize, formattedCharacters, encodedCharacters);
-		modifyCache(_sectionBegins[section], sectionSize, encodedCharacters);
-	}
+	if (isValidSection(section))
+		setInteger(value, DEFAULT_LEADING_ZEROS, alignment, section);
 }
 
-void ShiftDisplay::setAt(int section, double valueReal, int decimalPlaces, char alignment) {
-	if (section >= 0 && section < _sectionCount) { // valid section
-		
-		// if no decimal places, call long function instead
-		if (decimalPlaces == 0) {
-			long value = round(valueReal);
-			setAt(section, value, alignment);
-			return;
-		}
-	
-		 // calculate value with specified decimal places as integer (eg 1.236, 2 = 124)
-		long value = round(valueReal * pow(10, decimalPlaces));
-	
-		int valueSize = countCharacters(valueReal) + decimalPlaces;
-		char originalCharacters[valueSize];
-		getCharacters(value, valueSize, originalCharacters);
-		int sectionSize = _sectionSizes[section];
-		char formattedCharacters[sectionSize];
-		int dotIndex = formatCharacters(valueSize, originalCharacters, sectionSize, formattedCharacters, alignment, decimalPlaces);
-		byte encodedCharacters[sectionSize];
-		encodeCharacters(sectionSize, formattedCharacters, encodedCharacters, dotIndex);
-		modifyCache(_sectionBegins[section], sectionSize, encodedCharacters);
-	}
+void ShiftDisplay::setAt(int section, double valueReal, int decimalPlaces, bool leadingZeros, char alignment) {
+	if (isValidSection(section))
+		setReal(valueReal, decimalPlaces, leadingZeros, alignment, section);
 }
 
 void ShiftDisplay::setAt(int section, double valueReal, char alignment) {
-	setAt(section, valueReal, DEFAULT_DECIMAL_PLACES, alignment); // call other double function
+	if (isValidSection(section))
+		setReal(valueReal, DEFAULT_DECIMAL_PLACES, DEFAULT_LEADING_ZEROS, alignment, section);
 }
 
 void ShiftDisplay::setAt(int section, char value, char alignment) {
-	if (section >= 0 && section < _sectionCount) { // valid section
-		char originalCharacters[] = {value};
-		int sectionSize = _sectionSizes[section];
-		char formattedCharacters[sectionSize];
-		formatCharacters(1, originalCharacters, sectionSize, formattedCharacters, alignment);
-		byte encodedCharacters[sectionSize];
-		encodeCharacters(sectionSize, formattedCharacters, encodedCharacters);
-		modifyCache(_sectionBegins[section], sectionSize, encodedCharacters);
-	}
+	if (isValidSection(section))
+		setChar(value, alignment, section);
 }
 
 void ShiftDisplay::setAt(int section, const char value[], char alignment) {
-	if (section >= 0 && section < _sectionCount) { // valid section
-		int valueSize = strlen(value);
-		int sectionSize = _sectionSizes[section];
-		char formattedCharacters[sectionSize];
-		formatCharacters(valueSize, value, sectionSize, formattedCharacters, alignment);
-		byte encodedCharacters[sectionSize];
-		encodeCharacters(sectionSize, formattedCharacters, encodedCharacters);
-		modifyCache(_sectionBegins[section], sectionSize, encodedCharacters);
-	}
+	if (isValidSection(section))
+		setCharArray(value, alignment, section);
 }
 
 void ShiftDisplay::setAt(int section, const String &value, char alignment) {
-	if (section >= 0 && section < _sectionCount) { // valid section
-	
-		// convert String to char array manually for better support between Arduino cores
-		int size = 0;
-		while (value[size] != '\0')
-			size++;
-		char str[size + 1];
-		for (int i = 0; i < size; i++)
-			str[i] = value[i];
-		str[size] = '\0';
-	
-		setAt(section, str, alignment); // call char array function
-	}
+	if (isValidSection(section))
+		setString(value, alignment, section);
 }
 
 void ShiftDisplay::setAt(int section, const byte customs[]) {
-	if (section >= 0 && section < _sectionCount) { // valid section
+	if (isValidSection(section)) {
 		int sectionSize = _sectionSizes[section];
 		modifyCache(_sectionBegins[section], sectionSize, customs);
 	}
 }
 
 void ShiftDisplay::setAt(int section, const char characters[], const bool dots[]) {
-	if (section >= 0 && section < _sectionCount) { // valid section
+	if (isValidSection(section)) {
 		int sectionSize = _sectionSizes[section];
 		byte encodedCharacters[sectionSize];
 		encodeCharacters(sectionSize, characters, encodedCharacters);
@@ -368,7 +407,7 @@ void ShiftDisplay::setAt(int section, const char characters[], const bool dots[]
 }
 
 void ShiftDisplay::setDotAt(int section, int relativeIndex, bool dot) {
-	if (section >= 0 && section < _sectionCount) { // valid section
+	if (isValidSection(section)) {
 		if (relativeIndex >= 0 && relativeIndex < _sectionSizes[section]) { // valid index in display
 			int index = _sectionBegins[section] + relativeIndex;
 			modifyCacheDot(index, dot);
@@ -377,7 +416,7 @@ void ShiftDisplay::setDotAt(int section, int relativeIndex, bool dot) {
 }
 
 void ShiftDisplay::setCustomAt(int section, int relativeIndex, byte custom) {
-	if (section >= 0 && section < _sectionCount) { // valid section
+	if (isValidSection(section)) {
 		if (relativeIndex >= 0 && relativeIndex < _sectionSizes[section]) { // valid index in display
 			int index = _sectionBegins[section] + relativeIndex;
 			modifyCache(index, custom);

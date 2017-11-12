@@ -95,28 +95,22 @@ void loop() {
 
 * __set()__
 
-  * display.set(value[, alignment])
-  * display.set(valueReal[, decimalPlaces][, alignment])
+  * display.set(number[, decimalPlaces][, leadingZeros][, alignment])
+  * display.set(text[, alignment])
   * display.set(customs)
   * display.set(characters, dots)
 
-  Store a value to show next on the display. The entire previous value is cleared.
+  Encode and store a value for showing next on the display. The entire previous value is cleared.
 
   `display`: object of type ShiftDisplay.
 
-  `value`: value to set, a number (int, long) or text (char, char array, string object);
-  text valid characters are `0-9 a-z A-Z -`, other characters are converted to a space;
+  `number`: value to set, of type int, long, float, or double;
+  if is too big to fit in the display, it is trimmed according to alignment.
+
+  `text`: value to set, of type char, char array, or string object;
+  valid characters are `0-9 a-z A-Z -`, other characters are converted to space;
   char array must be null-terminated;
   if is too big to fit in the display, it is trimmed according to alignment.
-  
-  `valueReal`: value to set, a real number (float, double);
-  if is too big to fit in the display, it is trimmed according to alignment.
-
-  `alignment`: alignment of the value or valueReal on the display, a constant `ALIGN_LEFT` or `ALIGN_RIGHT` or `ALIGN_CENTER`;
-  if is not specified, the default is ALIGN_RIGHT for numbers and ALIGN_LEFT for text.
-
-  `decimalPlaces`: quantity of digits following the decimal point;
-  if is not specified, the default is 1.
 
   `customs`: array of bytes initialized with the custom characters to set, encoded in abcdefgp format, each byte is a character on the display, from left to right;
   array length must match display size.
@@ -128,6 +122,17 @@ void loop() {
   `dots`: array of bools initialized with the dot values to set, each bool is a dot on the display, from left to right;
   true to show the dot, false to not show the dot;
   array length must match display size.
+
+  `decimalPlaces`: quantity of digits following the decimal point;
+  the value is rounded according to this;
+  if is set to 0, the decimal point will be removed;
+  if is not specified, the default is 1 for real numbers and 0 for integer numbers.
+
+  `leadingZeros`: show zeros on the left of value;
+   if is not specified, the default is false.
+
+  `alignment`: alignment of the value on the display, a constant `ALIGN_LEFT` or `ALIGN_RIGHT` or `ALIGN_CENTER`;
+  if is not specified, the default is ALIGN_RIGHT for numbers and ALIGN_LEFT for text.
 
 * __setDot()__
 
@@ -158,31 +163,25 @@ void loop() {
 
 * __setAt()__
 
-  * display.setAt(section, value[, alignment])
-  * display.setAt(section, valueReal[, decimalPlaces][, alignment])
+  * display.setAt(section, number[, decimalPlaces][, leadingZeros][, alignment])
+  * display.setAt(section, text[, alignment])
   * display.setAt(section, customs)
   * display.setAt(section, characters, dots)
 
-  Store a value to show next on the specified section. The section previous value is cleared.
+  Encode and store a value for showing next on the specified section. The section previous value is cleared.
 
   `display`: object of type ShiftDisplay.
 
   `section`: position of the section on the display to set the value, starting at 0 for the first;
   if is out of bounds, function does not have any effect.
 
-  `value`: value to set, a number (int, long) or text (char, char array, string object);
-  text valid characters are `0-9 a-z A-Z -`, other characters are converted to a space;
+  `number`: value to set, of type int, long, float, or double;
+  if is too big to fit in the section, it is trimmed according to alignment.
+
+  `text`: value to set, of type char, char array, or string object;
+  valid characters are `0-9 a-z A-Z -`, other characters are converted to space;
   char array must be null-terminated;
   if is too big to fit in the section, it is trimmed according to alignment.
-  
-  `valueReal`: value to set, a real number (float, double);
-  if is too big to fit in the section, it is trimmed according to alignment.
-
-  `alignment`: alignment of the value or valueReal on the section, a constant `ALIGN_LEFT` or `ALIGN_RIGHT` or `ALIGN_CENTER`;
-  if is not specified, the default is ALIGN_RIGHT for numbers and ALIGN_LEFT for text.
-
-  `decimalPlaces`: quantity of digits following the decimal point;
-  if is not specified, the default is 1.
 
   `customs`: array of bytes initialized with the custom characters to set, encoded in abcdefgp format, each byte is a character on the section, from left to right;
   array length must match section size.
@@ -194,6 +193,17 @@ void loop() {
   `dots`: array of bools initialized with the dot values to set, each bool is a dot on the section, from left to right;
   true to show the dot, false to not show the dot;
   array length must match section size.
+
+  `decimalPlaces`: quantity of digits following the decimal point;
+  the value is rounded according to this;
+  if is set to 0, the decimal point will be removed;
+  if is not specified, the default is 1 for real numbers and 0 for integer numbers.
+
+  `leadingZeros`: show zeros on the left of value;
+   if is not specified, the default is false.
+
+  `alignment`: alignment of the value on the section, a constant `ALIGN_LEFT` or `ALIGN_RIGHT` or `ALIGN_CENTER`;
+  if is not specified, the default is ALIGN_RIGHT for numbers and ALIGN_LEFT for text.
 
 * __setDotAt()__
 
@@ -290,6 +300,8 @@ TODO
 - master ()
   - NEW: added static drive
   - NEW: added clear() function
+  - NEW: leading zeros in set functions
+  - CHANGE: in set functions, every type of number has the same possible args
   - CHANGE: default decimal places is now 1
   - CHANGE: renamed show() to update() and changed its behaviour
   - CHANGE: display type constants type changed from int to DisplayType
@@ -297,6 +309,7 @@ TODO
   - CHANGE: deprecated show(value, time) for simplicity sake
   - DOC: removed 74HC595 references because it works with other shift registers
   - DOC: added type of constants
+  - DOC: differentiate between numbers and text
   - DOC: square brackets for optional args
   - FIX: compiler warnings
 - 3.6.1 (17/9/2017)

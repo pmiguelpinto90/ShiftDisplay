@@ -97,12 +97,6 @@ class ShiftDisplay {
 		void set(const String &value, char alignment = DEFAULT_ALIGN_TEXT); // Arduino string object
 		void set(const byte customs[]); // custom characters (encoded in abcdefgp format), array length must match display size
 		void set(const char characters[], const bool dots[]); // arrays length must match display size
-
-		// modify cached value at index
-		void setDot(int index, bool dot = DEFAULT_SET_DOT); // show or hide a dot on character
-		void setCustom(int index, byte custom); // replace with a custom character (encoded in abcdefgp format)
-
-		// cache value at section indexes
 		void setAt(int section, int value, bool leadingZeros = DEFAULT_LEADING_ZEROS, char alignment = DEFAULT_ALIGN_NUMBER);
 		void setAt(int section, int value, char alignment); // override leadingZeros obligation
 		void setAt(int section, long value, bool leadingZeros = DEFAULT_LEADING_ZEROS, char alignment = DEFAULT_ALIGN_NUMBER);
@@ -115,7 +109,9 @@ class ShiftDisplay {
 		void setAt(int section, const byte customs[]); // custom characters (encoded in abcdefgp format), array length must match defined section size
 		void setAt(int section, const char characters[], const bool dots[]); // arrays length must match defined section size
 
-		// modify cached value at index in section
+		// modify cached value at index
+		void setDot(int index, bool dot = DEFAULT_SET_DOT); // show or hide a dot on character
+		void setCustom(int index, byte custom); // replace with a custom character (encoded in abcdefgp format)
 		void setDotAt(int section, int relativeIndex, bool dot = DEFAULT_SET_DOT); // show or hide a dot on character
 		void setCustomAt(int section, int relativeIndex, byte custom); // replace with a custom character (encoded in abcdefgp format)
 

@@ -334,14 +334,6 @@ void ShiftDisplay::set(const char characters[], const bool dots[]) {
 	setAt(0, characters, dots);
 }
 
-void ShiftDisplay::setDot(int index, bool dot) {
-	setDotAt(0, index, dot);
-}
-
-void ShiftDisplay::setCustom(int index, byte custom) {
-	setCustomAt(0, index, custom);
-}
-
 void ShiftDisplay::setAt(int section, int value, bool leadingZeros, char alignment) {
 	if (isValidSection(section))
 		setInteger((long) value, leadingZeros, alignment, section);
@@ -404,6 +396,14 @@ void ShiftDisplay::setAt(int section, const char characters[], const bool dots[]
 		for (int i = 0; i < sectionSize; i++)
 			modifyCacheDot(i+begin, dots[i]);
 	}
+}
+
+void ShiftDisplay::setDot(int index, bool dot) {
+	setDotAt(0, index, dot);
+}
+
+void ShiftDisplay::setCustom(int index, byte custom) {
+	setCustomAt(0, index, custom);
 }
 
 void ShiftDisplay::setDotAt(int section, int relativeIndex, bool dot) {

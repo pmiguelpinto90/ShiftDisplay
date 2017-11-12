@@ -25,11 +25,12 @@ const char ALIGN_CENTER = 'C';
 const int DEFAULT_LATCH_PIN = 6;
 const int DEFAULT_CLOCK_PIN = 7;
 const int DEFAULT_DATA_PIN = 5;
-const int DEFAULT_DECIMAL_PLACES = 1;
 const char DEFAULT_ALIGN_TEXT = ALIGN_LEFT;
 const char DEFAULT_ALIGN_NUMBER = ALIGN_RIGHT;
-const bool DEFAULT_SET_DOT = true;
+const int DEFAULT_DECIMAL_PLACES_REAL = 1;
+const int DEFAULT_DECIMAL_PLACES_INTEGER = 0;
 const bool DEFAULT_LEADING_ZEROS = false;
+const bool DEFAULT_SET_DOT = true;
 
 const int MAX_DISPLAY_SIZE = 8;
 const int POV = 1; // milliseconds showing each character when iterating
@@ -75,6 +76,9 @@ class ShiftDisplay {
 		void setCharArray(const char value[], char alignment, int section);
 		void setString(const String &value, char alignment, int section);
 
+		void setNumber(long number, int decimalPlaces, bool leadingZeros, char alignment, int section);
+		void setNumber(double number, int decimalPlaces, bool leadingZeros, char alignment, int section);
+
 		bool isValidSection(int section);
 
 	public:
@@ -86,23 +90,35 @@ class ShiftDisplay {
 		ShiftDisplay(int latchPin, int clockPin, int dataPin, DisplayType displayType, int sectionCount, const int sectionSizes[], DisplayDrive displayDrive = MULTIPLEXED_DRIVE); // custom pins, sectioned display
 
 		// cache value
-		void set(int value, bool leadingZeros = DEFAULT_LEADING_ZEROS, char alignment = DEFAULT_ALIGN_NUMBER);
-		void set(int value, char alignment); // override leadingZeros obligation
-		void set(long value, bool leadingZeros = DEFAULT_LEADING_ZEROS, char alignment = DEFAULT_ALIGN_NUMBER);
-		void set(long value, char alignment); // override leadingZeros obligation
-		void set(double valueReal, int decimalPlaces = DEFAULT_DECIMAL_PLACES, bool leadingZeros = DEFAULT_LEADING_ZEROS, char alignment = DEFAULT_ALIGN_NUMBER);
-		void set(double valueReal, char alignment); // override decimalPlaces and leadingZeros obligation
+		void set(int number, int decimalPlaces = DEFAULT_DECIMAL_PLACES_INTEGER, bool leadingZeros = DEFAULT_LEADING_ZEROS, char alignment = DEFAULT_ALIGN_NUMBER);
+		void set(int number, bool leadingZeros, char alignment = DEFAULT_ALIGN_NUMBER); // override decimalPlaces obligation
+		void set(int number, int decimalPlaces, char alignment); // override leadingZeros obligation
+		void set(int number, char alignment); // override decimalPlaces and leadingZeros obligation
+		void set(long number, int decimalPlaces = DEFAULT_DECIMAL_PLACES_INTEGER, bool leadingZeros = DEFAULT_LEADING_ZEROS, char alignment = DEFAULT_ALIGN_NUMBER);
+		void set(long number, bool leadingZeros, char alignment = DEFAULT_ALIGN_NUMBER); // override decimalPlaces obligation
+		void set(long number, int decimalPlaces, char alignment); // override leadingZeros obligation
+		void set(long number, char alignment); // override decimalPlaces and leadingZeros obligation
+		void set(double number, int decimalPlaces = DEFAULT_DECIMAL_PLACES_REAL, bool leadingZeros = DEFAULT_LEADING_ZEROS, char alignment = DEFAULT_ALIGN_NUMBER);
+		void set(double number, bool leadingZeros, char alignment = DEFAULT_ALIGN_NUMBER); // override decimalPlaces obligation
+		void set(double number, int decimalPlaces, char alignment); // override leadingZeros obligation
+		void set(double number, char alignment); // override decimalPlaces and leadingZeros obligation
 		void set(char value, char alignment = DEFAULT_ALIGN_TEXT);
 		void set(const char value[], char alignment = DEFAULT_ALIGN_TEXT); // c string
 		void set(const String &value, char alignment = DEFAULT_ALIGN_TEXT); // Arduino string object
 		void set(const byte customs[]); // custom characters (encoded in abcdefgp format), array length must match display size
 		void set(const char characters[], const bool dots[]); // arrays length must match display size
-		void setAt(int section, int value, bool leadingZeros = DEFAULT_LEADING_ZEROS, char alignment = DEFAULT_ALIGN_NUMBER);
-		void setAt(int section, int value, char alignment); // override leadingZeros obligation
-		void setAt(int section, long value, bool leadingZeros = DEFAULT_LEADING_ZEROS, char alignment = DEFAULT_ALIGN_NUMBER);
-		void setAt(int section, long value, char alignment); // override leadingZeros obligation
-		void setAt(int section, double valueReal, int decimalPlaces = DEFAULT_DECIMAL_PLACES, bool leadingZeros = DEFAULT_LEADING_ZEROS, char alignment = DEFAULT_ALIGN_NUMBER);
-		void setAt(int section, double valueReal, char alignment); // override decimalPlaces obligation
+		void setAt(int section, int number, int decimalPlaces = DEFAULT_DECIMAL_PLACES_INTEGER, bool leadingZeros = DEFAULT_LEADING_ZEROS, char alignment = DEFAULT_ALIGN_NUMBER);
+		void setAt(int section, int number, bool leadingZeros, char alignment = DEFAULT_ALIGN_NUMBER); // override decimalPlaces obligation
+		void setAt(int section, int number, int decimalPlaces, char alignment); // override leadingZeros obligation
+		void setAt(int section, int number, char alignment); // override decimalPlaces and leadingZeros obligation
+		void setAt(int section, long number, int decimalPlaces = DEFAULT_DECIMAL_PLACES_INTEGER, bool leadingZeros = DEFAULT_LEADING_ZEROS, char alignment = DEFAULT_ALIGN_NUMBER);
+		void setAt(int section, long number, bool leadingZeros, char alignment = DEFAULT_ALIGN_NUMBER); // override decimalPlaces obligation
+		void setAt(int section, long number, int decimalPlaces, char alignment); // override leadingZeros obligation
+		void setAt(int section, long number, char alignment); // override decimalPlaces and leadingZeros obligation
+		void setAt(int section, double number, int decimalPlaces = DEFAULT_DECIMAL_PLACES_REAL, bool leadingZeros = DEFAULT_LEADING_ZEROS, char alignment = DEFAULT_ALIGN_NUMBER);
+		void setAt(int section, double number, bool leadingZeros, char alignment = DEFAULT_ALIGN_NUMBER); // override decimalPlaces obligation
+		void setAt(int section, double number, int decimalPlaces, char alignment); // override leadingZeros obligation
+		void setAt(int section, double number, char alignment); // override decimalPlaces and leadingZeros obligation
 		void setAt(int section, char value, char alignment = DEFAULT_ALIGN_TEXT);
 		void setAt(int section, const char value[], char alignment = DEFAULT_ALIGN_TEXT); // c string
 		void setAt(int section, const String &value, char alignment = DEFAULT_ALIGN_TEXT); // Arduino string object
@@ -131,7 +147,7 @@ class ShiftDisplay {
 		void removeDot(int index); // deprecated by setDot()
 		void print(long time, int value, char alignment = DEFAULT_ALIGN_NUMBER); // deprecated by show()
 		void print(long time, long value, char alignment = DEFAULT_ALIGN_NUMBER); // deprecated by show()
-		void print(long time, double value, int decimalPlaces = DEFAULT_DECIMAL_PLACES, char alignment = DEFAULT_ALIGN_NUMBER); // deprecated by show()
+		void print(long time, double value, int decimalPlaces = DEFAULT_DECIMAL_PLACES_REAL, char alignment = DEFAULT_ALIGN_NUMBER); // deprecated by show()
 		void print(long time, double value, char alignment); // deprecated by show()
 		void print(long time, char value, char alignment = DEFAULT_ALIGN_TEXT); // deprecated by show()
 		void print(long time, const char value[], char alignment = DEFAULT_ALIGN_TEXT); // deprecated by show()
@@ -139,7 +155,7 @@ class ShiftDisplay {
 		void show(); // deprecated by update()
 		void show(int value, unsigned long time, char alignment = DEFAULT_ALIGN_NUMBER); // deprecated by set() show()
 		void show(long value, unsigned long time, char alignment = DEFAULT_ALIGN_NUMBER); // deprecated by set() show()
-		void show(double valueReal, unsigned long time, int decimalPlaces = DEFAULT_DECIMAL_PLACES, char alignment = DEFAULT_ALIGN_NUMBER); // deprecated by set() show()
+		void show(double valueReal, unsigned long time, int decimalPlaces = DEFAULT_DECIMAL_PLACES_REAL, char alignment = DEFAULT_ALIGN_NUMBER); // deprecated by set() show()
 		void show(double valueReal, unsigned long time, char alignment); // deprecated by set() show()
 		void show(char value, unsigned long time, char alignment = DEFAULT_ALIGN_TEXT); // deprecated by set() show()
 		void show(const char value[], unsigned long time, char alignment = DEFAULT_ALIGN_TEXT); // deprecated by set() show()

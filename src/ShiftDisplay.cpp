@@ -215,10 +215,10 @@ int ShiftDisplay::countCharacters(double number) {
 	return countCharacters((long) number);
 }
 
-void ShiftDisplay::setInteger(long value, bool leadingZeros, char alignment, int section = 0) {
-	int valueSize = countCharacters(value);
+void ShiftDisplay::setInteger(long number, bool leadingZeros, char alignment, int section) {
+	int valueSize = countCharacters(number);
 	char originalCharacters[valueSize];
-	getCharacters(value, valueSize, originalCharacters);
+	getCharacters(number, valueSize, originalCharacters);
 	int sectionSize = _sectionSizes[section];
 	char formattedCharacters[sectionSize];
 	formatCharacters(valueSize, originalCharacters, sectionSize, formattedCharacters, alignment, leadingZeros);
@@ -227,24 +227,14 @@ void ShiftDisplay::setInteger(long value, bool leadingZeros, char alignment, int
 	modifyCache(_sectionBegins[section], sectionSize, encodedCharacters);
 }
 
-void ShiftDisplay::setReal(double value, int decimalPlaces, bool leadingZeros, char alignment, int section = 0) {
-
-	// if no decimal places, call integer function instead
-	if (decimalPlaces == 0) {
-		long value = round(valueReal);
-		setInteger(value, leadingZeros, alignment, section);
-		return;
-	}
-
-	// calculate value with specified decimal places as integer (eg 1.236, 2 = 124)
-	long value = round(valueReal * pow(10, decimalPlaces));
-
-	int valueSize = countCharacters(valueReal) + decimalPlaces;
+void ShiftDisplay::setReal(double number, int decimalPlaces, bool leadingZeros, char alignment, int section) {
+	long value = round(number * pow(10, decimalPlaces)); // convert to integer (eg 1.236, 2 = 124)
+	int valueSize = countCharacters(number) + decimalPlaces;
 	char originalCharacters[valueSize];
 	getCharacters(value, valueSize, originalCharacters);
 	int sectionSize = _sectionSizes[section];
 	char formattedCharacters[sectionSize];
-	int dotIndex = formatCharacters(valueSize, originalCharacters, sectionSize, formattedCharacters, alignment, false, decimalPlaces);
+	int dotIndex = formatCharacters(valueSize, originalCharacters, sectionSize, formattedCharacters, alignment, leadingZeros, decimalPlaces);
 	byte encodedCharacters[sectionSize];
 	encodeCharacters(sectionSize, formattedCharacters, encodedCharacters, dotIndex);
 	modifyCache(_sectionBegins[section], sectionSize, encodedCharacters);
@@ -284,34 +274,73 @@ void ShiftDisplay::setString(const String &value, char alignment, int section = 
 	setCharArray(str, alignment, section); // call char array function
 }
 
+void ShiftDisplay::setNumber(long number, int decimalPlaces, bool leadingZeros, char alignment, int section = 0) {
+	if (decimalPlaces == 0)
+		setInteger(number, leadingZeros, alignment, section);
+	else
+		setReal(number, decimalPlaces, leadingZeros, alignment, section);
+}
+
+void ShiftDisplay::setNumber(double number, int decimalPlaces, bool leadingZeros, char alignment, int section = 0) {
+	if (decimalPlaces == 0) {
+		long roundNumber = round(number);
+		setInteger(roundNumber, leadingZeros, alignment, section);
+	} else
+		setReal(number, decimalPlaces, leadingZeros, alignment, section);
+}
+
 bool ShiftDisplay::isValidSection(int section) {
 	return section >= 0 && section < _sectionCount;
 }
 
 // PUBLIC FUNCTIONS ************************************************************
 
-void ShiftDisplay::set(int value, bool leadingZeros, char alignment) {
-	setInteger((long) value, leadingZeros, alignment);
+void ShiftDisplay::set(int number, int decimalPlaces, bool leadingZeros, char alignment) {
+	setNumber((long)number, decimalPlaces, leadingZeros, alignment);
 }
 
-void ShiftDisplay::set(int value, char alignment) {
-	setInteger((long) value, DEFAULT_LEADING_ZEROS, alignment);
+void ShiftDisplay::set(int number, bool leadingZeros, char alignment) {
+	setNumber((long)number, DEFAULT_DECIMAL_PLACES_INTEGER, leadingZeros, alignment);
 }
 
-void ShiftDisplay::set(long value, bool leadingZeros, char alignment) {
-	setInteger(value, leadingZeros, alignment);
+void ShiftDisplay::set(int number, int decimalPlaces, char alignment) {
+	setNumber((long)number, decimalPlaces, DEFAULT_LEADING_ZEROS, alignment);
 }
 
-void ShiftDisplay::set(long value, char alignment) {
-	setInteger(value, DEFAULT_LEADING_ZEROS, alignment);
+void ShiftDisplay::set(int number, char alignment) {
+	setNumber((long)number, DEFAULT_DECIMAL_PLACES_INTEGER, DEFAULT_LEADING_ZEROS, alignment);
 }
 
-void ShiftDisplay::set(double valueReal, int decimalPlaces, bool leadingZeros, char alignment) {
-	setReal(valueReal, decimalPlaces, leadingZeros, alignment);
+void ShiftDisplay::set(long number, int decimalPlaces, bool leadingZeros, char alignment) {
+	setNumber(number, decimalPlaces, leadingZeros, alignment);
 }
 
-void ShiftDisplay::set(double valueReal, char alignment) {
-	setReal(valueReal, DEFAULT_DECIMAL_PLACES, DEFAULT_LEADING_ZEROS, alignment);
+void ShiftDisplay::set(long number, bool leadingZeros, char alignment) {
+	setNumber(number, DEFAULT_DECIMAL_PLACES_INTEGER, leadingZeros, alignment);
+}
+
+void ShiftDisplay::set(long number, int decimalPlaces, char alignment) {
+	setNumber(number, decimalPlaces, DEFAULT_LEADING_ZEROS, alignment);
+}
+
+void ShiftDisplay::set(long number, char alignment) {
+	setNumber(number, DEFAULT_DECIMAL_PLACES_INTEGER, DEFAULT_LEADING_ZEROS, alignment);
+}
+
+void ShiftDisplay::set(double number, int decimalPlaces, bool leadingZeros, char alignment) {
+	setNumber(number, decimalPlaces, leadingZeros, alignment);
+}
+
+void ShiftDisplay::set(double number, bool leadingZeros, char alignment) {
+	setNumber(number, DEFAULT_DECIMAL_PLACES_REAL, leadingZeros, alignment);
+}
+
+void ShiftDisplay::set(double number, int decimalPlaces, char alignment) {
+	setNumber(number, decimalPlaces, DEFAULT_LEADING_ZEROS, alignment);
+}
+
+void ShiftDisplay::set(double number, char alignment) {
+	setNumber(number, DEFAULT_DECIMAL_PLACES_REAL, DEFAULT_LEADING_ZEROS, alignment);
 }
 
 void ShiftDisplay::set(char value, char alignment) {
@@ -334,34 +363,64 @@ void ShiftDisplay::set(const char characters[], const bool dots[]) {
 	setAt(0, characters, dots);
 }
 
-void ShiftDisplay::setAt(int section, int value, bool leadingZeros, char alignment) {
+void ShiftDisplay::setAt(int section, int number, int decimalPlaces, bool leadingZeros, char alignment) {
 	if (isValidSection(section))
-		setInteger((long) value, leadingZeros, alignment, section);
+		setNumber((long)number, decimalPlaces, leadingZeros, alignment);
 }
 
-void ShiftDisplay::setAt(int section, int value, char alignment) {
+void ShiftDisplay::setAt(int section, int number, bool leadingZeros, char alignment) {
 	if (isValidSection(section))
-		setInteger((long) value, DEFAULT_LEADING_ZEROS, alignment, section);
+		setNumber((long)number, DEFAULT_DECIMAL_PLACES_INTEGER, leadingZeros, alignment);
 }
 
-void ShiftDisplay::setAt(int section, long value, bool leadingZeros, char alignment) {
+void ShiftDisplay::setAt(int section, int number, int decimalPlaces, char alignment) {
 	if (isValidSection(section))
-		setInteger(value, leadingZeros, alignment, section);
+		setNumber((long)number, decimalPlaces, DEFAULT_LEADING_ZEROS, alignment);
 }
 
-void ShiftDisplay::setAt(int section, long value, char alignment) {
+void ShiftDisplay::setAt(int section, int number, char alignment) {
 	if (isValidSection(section))
-		setInteger(value, DEFAULT_LEADING_ZEROS, alignment, section);
+		setNumber((long)number, DEFAULT_DECIMAL_PLACES_INTEGER, DEFAULT_LEADING_ZEROS, alignment);
 }
 
-void ShiftDisplay::setAt(int section, double valueReal, int decimalPlaces, bool leadingZeros, char alignment) {
+void ShiftDisplay::setAt(int section, long number, int decimalPlaces, bool leadingZeros, char alignment) {
 	if (isValidSection(section))
-		setReal(valueReal, decimalPlaces, leadingZeros, alignment, section);
+		setNumber(number, decimalPlaces, leadingZeros, alignment);
 }
 
-void ShiftDisplay::setAt(int section, double valueReal, char alignment) {
+void ShiftDisplay::setAt(int section, long number, bool leadingZeros, char alignment) {
 	if (isValidSection(section))
-		setReal(valueReal, DEFAULT_DECIMAL_PLACES, DEFAULT_LEADING_ZEROS, alignment, section);
+		setNumber(number, DEFAULT_DECIMAL_PLACES_INTEGER, leadingZeros, alignment);
+}
+
+void ShiftDisplay::setAt(int section, long number, int decimalPlaces, char alignment) {
+	if (isValidSection(section))
+		setNumber(number, decimalPlaces, DEFAULT_LEADING_ZEROS, alignment);
+}
+
+void ShiftDisplay::setAt(int section, long number, char alignment) {
+	if (isValidSection(section))
+		setNumber(number, DEFAULT_DECIMAL_PLACES_INTEGER, DEFAULT_LEADING_ZEROS, alignment);
+}
+
+void ShiftDisplay::setAt(int section, double number, int decimalPlaces, bool leadingZeros, char alignment) {
+	if (isValidSection(section))
+		setNumber(number, decimalPlaces, leadingZeros, alignment);
+}
+
+void ShiftDisplay::setAt(int section, double number, bool leadingZeros, char alignment) {
+	if (isValidSection(section))
+		setNumber(number, DEFAULT_DECIMAL_PLACES_REAL, leadingZeros, alignment);
+}
+
+void ShiftDisplay::setAt(int section, double number, int decimalPlaces, char alignment) {
+	if (isValidSection(section))
+		setNumber(number, decimalPlaces, DEFAULT_LEADING_ZEROS, alignment);
+}
+
+void ShiftDisplay::setAt(int section, double number, char alignment) {
+	if (isValidSection(section))
+		setNumber(number, DEFAULT_DECIMAL_PLACES_REAL, DEFAULT_LEADING_ZEROS, alignment);
 }
 
 void ShiftDisplay::setAt(int section, char value, char alignment) {

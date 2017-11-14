@@ -161,6 +161,8 @@ class ShiftDisplay {
 		void show(const String &value, unsigned long time, char alignment = DEFAULT_ALIGN_TEXT); // deprecated by set() show()
 		void show(const byte customs[], unsigned long time); // deprecated by set() show()
 		void show(const char characters[], const bool dots[], unsigned long time); // deprecated by set() show()
+		ShiftDisplay(DisplayType displayType, int sectionCount, const int sectionSizes[]);
+		ShiftDisplay(int latchPin, int clockPin, int dataPin, DisplayType displayType, int sectionCount, const int sectionSizes[]);
 };
 
 #endif

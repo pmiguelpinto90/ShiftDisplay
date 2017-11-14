@@ -531,3 +531,5 @@ void ShiftDisplay::show(const char value[], unsigned long time, char alignment) 
 void ShiftDisplay::show(const String &value, unsigned long time, char alignment) { set(value, alignment); show(time); }
 void ShiftDisplay::show(const byte customs[], unsigned long time) { set(customs); show(time); }
 void ShiftDisplay::show(const char characters[], const bool dots[], unsigned long time) { set(characters, dots); show(time); }
+ShiftDisplay::ShiftDisplay(DisplayType displayType, int sectionCount, const int sectionSizes[]) { ShiftDisplay(DEFAULT_LATCH_PIN, DEFAULT_CLOCK_PIN, DEFAULT_DATA_PIN, displayType, sectionCount, sectionSizes); }
+ShiftDisplay::ShiftDisplay(int latchPin, int clockPin, int dataPin, DisplayType displayType, int sectionCount, const int sectionSizes[]) { int s[sectionCount+1]; s[sectionCount] = 0; memcpy(s, sectionSizes, sectionCount*sizeof(int)); ShiftDisplay(latchPin, clockPin, dataPin, displayType, s, MULTIPLEXED_DRIVE); }

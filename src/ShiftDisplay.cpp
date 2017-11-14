@@ -12,24 +12,24 @@ https://miguelpynto.github.io/ShiftDisplay/
 // CONSTRUCTORS ****************************************************************
 
 ShiftDisplay::ShiftDisplay(DisplayType displayType, int displaySize, DisplayDrive displayDrive) {
-	int sectionSizes[] = {displaySize}; // single section with size of display
-	construct(DEFAULT_LATCH_PIN, DEFAULT_CLOCK_PIN, DEFAULT_DATA_PIN, displayType, 1, sectionSizes, displayDrive);
+	int sectionSizes[] = {displaySize, 0}; // single section with size of display
+	construct(DEFAULT_LATCH_PIN, DEFAULT_CLOCK_PIN, DEFAULT_DATA_PIN, displayType, sectionSizes, displayDrive);
 }
 
 ShiftDisplay::ShiftDisplay(int latchPin, int clockPin, int dataPin, DisplayType displayType, int displaySize, DisplayDrive displayDrive) {
-	int sectionSizes[] = {displaySize}; // single section with size of display
-	construct(latchPin, clockPin, dataPin, displayType, 1, sectionSizes, displayDrive);
+	int sectionSizes[] = {displaySize, 0}; // single section with size of display
+	construct(latchPin, clockPin, dataPin, displayType, sectionSizes, displayDrive);
 }
 
-ShiftDisplay::ShiftDisplay(DisplayType displayType, int sectionCount, const int sectionSizes[], DisplayDrive displayDrive) {
-	construct(DEFAULT_LATCH_PIN, DEFAULT_CLOCK_PIN, DEFAULT_DATA_PIN, displayType, sectionCount, sectionSizes, displayDrive);
+ShiftDisplay::ShiftDisplay(DisplayType displayType, const int sectionSizes[], DisplayDrive displayDrive) {
+	construct(DEFAULT_LATCH_PIN, DEFAULT_CLOCK_PIN, DEFAULT_DATA_PIN, displayType, sectionSizes, displayDrive);
 }
 
-ShiftDisplay::ShiftDisplay(int latchPin, int clockPin, int dataPin, DisplayType displayType, int sectionCount, const int sectionSizes[], DisplayDrive displayDrive) {
-	construct(latchPin, clockPin, dataPin, displayType, sectionCount, sectionSizes, displayDrive);
+ShiftDisplay::ShiftDisplay(int latchPin, int clockPin, int dataPin, DisplayType displayType, const int sectionSizes[], DisplayDrive displayDrive) {
+	construct(latchPin, clockPin, dataPin, displayType, sectionSizes, displayDrive);
 }
 
-void ShiftDisplay::construct(int latchPin, int clockPin, int dataPin, DisplayType displayType, int sectionCount, const int sectionSizes[], DisplayDrive displayDrive) {
+void ShiftDisplay::construct(int latchPin, int clockPin, int dataPin, DisplayType displayType, const int sectionSizes[], DisplayDrive displayDrive) {
 
 	// initialize pins
 	_latchPin = latchPin;
@@ -42,22 +42,21 @@ void ShiftDisplay::construct(int latchPin, int clockPin, int dataPin, DisplayTyp
 	// initialize globals
 	_isCathode = displayType == COMMON_CATHODE;
 	_isMultiplexed = displayDrive == MULTIPLEXED_DRIVE;
-	int i = 0;
-	int displaySize = 0;
-	for (; i < sectionCount && displaySize < MAX_DISPLAY_SIZE && i < MAX_DISPLAY_SIZE; i++) {
-		int preTotalSize = displaySize + sectionSizes[i]; // preview new size
-		if (preTotalSize <= MAX_DISPLAY_SIZE) { // size is ok
-			_sectionSizes[i] = sectionSizes[i];
-			_sectionBegins[i] = displaySize;
-			displaySize = preTotalSize;
-		} else { // size is out of bounds
-			_sectionSizes[i] = MAX_DISPLAY_SIZE - displaySize; // override last size to until max
-			_sectionBegins[i] = displaySize;
-			displaySize = MAX_DISPLAY_SIZE; // override size to max
-		}
+
+	_displaySize = 0;
+	_sectionCount = 0;
+	int	sSize; // loop current section size
+	while ((sSize = sectionSizes[_sectionCount]) > 0) {
+
+		// check overflow
+		if (_displaySize + sSize > MAX_DISPLAY_SIZE)
+			break;
+
+		_sectionBegins[_sectionCount] = _displaySize;
+		_sectionSizes[_sectionCount] = sSize;
+		_displaySize += sSize;
+		_sectionCount++;
 	}
-	_sectionCount = i;
-	_displaySize = displaySize;
 
 	// clear cache and display
 	byte empty = _isCathode ? EMPTY : ~EMPTY;

@@ -53,7 +53,7 @@ class ShiftDisplay {
 		int _sectionBegins[MAX_DISPLAY_SIZE]; // index where each section begins on whole display
 		byte _cache[MAX_DISPLAY_SIZE]; // value to show on display (encoded in abcdefgp format)
 
-		void construct(int latchPin, int clockPin, int dataPin, DisplayType displayType, int sectionCount, const int sectionSizes[], DisplayDrive displayDrive); // common instructions to be called by constructors
+		void construct(int latchPin, int clockPin, int dataPin, DisplayType displayType, const int sectionSizes[], DisplayDrive displayDrive); // common instructions to be called by constructors
 
 		void updateMultiplexedDisplay(); // MD: iterate stored value on each display index, achieving persistence of vision
 		void updateStaticDisplay(); // SD: send stored value to whole display
@@ -85,8 +85,8 @@ class ShiftDisplay {
 		// constructors
 		ShiftDisplay(DisplayType displayType, int displaySize, DisplayDrive displayDrive = MULTIPLEXED_DRIVE); // default pins
 		ShiftDisplay(int latchPin, int clockPin, int dataPin, DisplayType displayType, int displaySize, DisplayDrive displayDrive = MULTIPLEXED_DRIVE); // custom pins
-		ShiftDisplay(DisplayType displayType, int sectionCount, const int sectionSizes[], DisplayDrive displayDrive = MULTIPLEXED_DRIVE); // default pins, sectioned display
-		ShiftDisplay(int latchPin, int clockPin, int dataPin, DisplayType displayType, int sectionCount, const int sectionSizes[], DisplayDrive displayDrive = MULTIPLEXED_DRIVE); // custom pins, sectioned display
+		ShiftDisplay(DisplayType displayType, const int sectionSizes[], DisplayDrive displayDrive = MULTIPLEXED_DRIVE); // default pins, sectioned display
+		ShiftDisplay(int latchPin, int clockPin, int dataPin, DisplayType displayType, const int sectionSizes[], DisplayDrive displayDrive = MULTIPLEXED_DRIVE); // custom pins, sectioned display
 
 		// cache value
 		void set(int number, int decimalPlaces = DEFAULT_DECIMAL_PLACES_INTEGER, bool leadingZeros = DEFAULT_LEADING_ZEROS, char alignment = DEFAULT_ALIGN_NUMBER);

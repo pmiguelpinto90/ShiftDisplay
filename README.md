@@ -70,7 +70,7 @@ void loop() {
 * __ShiftDisplay()__
 
   * ShiftDisplay display([latchPin, clockPin, dataPin, ]displayType, displaySize[, displayDrive])
-  * ShiftDisplay display([latchPin, clockPin, dataPin, ]displayType, sectionCount, sectionSizes[, displayDrive])
+  * ShiftDisplay display([latchPin, clockPin, dataPin, ]displayType, sectionSizes[, displayDrive])
 
   Create a ShiftDisplay object, initialize the library using the interface pins and display properties.
   A display can be set as a whole, or divided by sections. Sections can be a logical separation (for example hours and minutes on a 4 digit clock display), or a physical separation (for example timer and score on a scoreboard with multiple displays).
@@ -84,9 +84,8 @@ void loop() {
 
   `displaySize`: quantity of digits on the display.
 
-  `sectionCount`: quantity of sections on the display.
-
-  `sectionSizes`: array of ints initialized with the quantities of digits for each section.
+  `sectionSizes`: array of ints, each array position contains the quantity of digits for a section, in order;
+  terminate array with a 0 or lower value.
 
   `displayDrive`: constant `MULTIPLEXED_DRIVE` or `STATIC_DRIVE`, defining the drive algorithm of the display;
   if is not specified, the default is MULTIPLEXED_DRIVE.

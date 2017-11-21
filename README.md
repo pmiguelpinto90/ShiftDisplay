@@ -71,6 +71,8 @@ void loop() {
 
   * ShiftDisplay display([latchPin, clockPin, dataPin, ]displayType, displaySize[, displayDrive])
   * ShiftDisplay display([latchPin, clockPin, dataPin, ]displayType, sectionSizes[, displayDrive])
+  * ShiftDisplay display([latchPin, clockPin, dataPin, ]displayType, displaySize, swappedShiftRegisters[, indexes])
+  * ShiftDisplay display([latchPin, clockPin, dataPin, ]displayType, sectionSizes, swappedShiftRegisters[, indexes])
 
   Create a ShiftDisplay object, initialize the library using the interface pins and display properties.
   A display can be set as a whole, or divided by sections. Sections can be a logical separation (for example hours and minutes on a 4 digit clock display), or a physical separation (for example timer and score on a scoreboard with multiple displays).
@@ -89,6 +91,12 @@ void loop() {
 
   `displayDrive`: constant `MULTIPLEXED_DRIVE` or `STATIC_DRIVE`, defining the drive algorithm of the display;
   if is not specified, the default is MULTIPLEXED_DRIVE.
+
+  `swappedShiftRegisters`: bla
+  if
+
+  `indexes`: customDigitOrder
+  if
 
 ### Functions
 
@@ -300,6 +308,7 @@ TODO
   - NEW: added static drive
   - NEW: added clear() function
   - NEW: leading zeros in set functions
+  - NEW: support for custom display modules (fix for issue #1)
   - CHANGE: in set functions, every type of number has the same possible args
   - CHANGE: default decimal places is now 1
   - CHANGE: renamed show() to update() and changed its behaviour
@@ -385,6 +394,7 @@ TODO
 - [ ] Example for custom characters
 - [x] Static Drive
 - [ ] Example for static drive
+- [ ] Example for custom display module
 - [ ] Docs for static drive
 - [ ] Remove display max size for static drive
 

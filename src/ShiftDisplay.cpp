@@ -13,23 +13,41 @@ https://miguelpynto.github.io/ShiftDisplay/
 
 ShiftDisplay::ShiftDisplay(DisplayType displayType, int displaySize, DisplayDrive displayDrive) {
 	int sectionSizes[] = {displaySize, 0}; // single section with size of display
-	construct(DEFAULT_LATCH_PIN, DEFAULT_CLOCK_PIN, DEFAULT_DATA_PIN, displayType, sectionSizes, displayDrive);
+	construct(DEFAULT_LATCH_PIN, DEFAULT_CLOCK_PIN, DEFAULT_DATA_PIN, displayType, sectionSizes, displayDrive, false, DEFAULT_INDEXES);
 }
 
 ShiftDisplay::ShiftDisplay(int latchPin, int clockPin, int dataPin, DisplayType displayType, int displaySize, DisplayDrive displayDrive) {
 	int sectionSizes[] = {displaySize, 0}; // single section with size of display
-	construct(latchPin, clockPin, dataPin, displayType, sectionSizes, displayDrive);
+	construct(latchPin, clockPin, dataPin, displayType, sectionSizes, displayDrive, false, DEFAULT_INDEXES);
 }
 
 ShiftDisplay::ShiftDisplay(DisplayType displayType, const int sectionSizes[], DisplayDrive displayDrive) {
-	construct(DEFAULT_LATCH_PIN, DEFAULT_CLOCK_PIN, DEFAULT_DATA_PIN, displayType, sectionSizes, displayDrive);
+	construct(DEFAULT_LATCH_PIN, DEFAULT_CLOCK_PIN, DEFAULT_DATA_PIN, displayType, sectionSizes, displayDrive, false, DEFAULT_INDEXES);
 }
 
 ShiftDisplay::ShiftDisplay(int latchPin, int clockPin, int dataPin, DisplayType displayType, const int sectionSizes[], DisplayDrive displayDrive) {
-	construct(latchPin, clockPin, dataPin, displayType, sectionSizes, displayDrive);
+	construct(latchPin, clockPin, dataPin, displayType, sectionSizes, displayDrive, false, DEFAULT_INDEXES);
 }
 
-void ShiftDisplay::construct(int latchPin, int clockPin, int dataPin, DisplayType displayType, const int sectionSizes[], DisplayDrive displayDrive) {
+ShiftDisplay::ShiftDisplay(DisplayType displayType, int displaySize, bool swappedShiftRegisters, const int indexes[]) {
+	int sectionSizes[] = {displaySize, 0}; // single section with size of display
+	construct(DEFAULT_LATCH_PIN, DEFAULT_CLOCK_PIN, DEFAULT_DATA_PIN, displayType, sectionSizes, MULTIPLEXED_DRIVE, swappedShiftRegisters, indexes);
+}
+
+ShiftDisplay::ShiftDisplay(int latchPin, int clockPin, int dataPin, DisplayType displayType, int displaySize, bool swappedShiftRegisters, const int indexes[]) {
+	int sectionSizes[] = {displaySize, 0}; // single section with size of display
+	construct(latchPin, clockPin, dataPin, displayType, sectionSizes, MULTIPLEXED_DRIVE, swappedShiftRegisters, indexes);
+}
+
+ShiftDisplay::ShiftDisplay(DisplayType displayType, const int sectionSizes[], bool swappedShiftRegisters, const int indexes[]) {
+	construct(DEFAULT_LATCH_PIN, DEFAULT_CLOCK_PIN, DEFAULT_DATA_PIN, displayType, sectionSizes, MULTIPLEXED_DRIVE, swappedShiftRegisters, indexes);
+}
+
+ShiftDisplay::ShiftDisplay(int latchPin, int clockPin, int dataPin, DisplayType displayType, const int sectionSizes[], bool swappedShiftRegisters, const int indexes[]) {
+	construct(latchPin, clockPin, dataPin, displayType, sectionSizes, MULTIPLEXED_DRIVE, swappedShiftRegisters, indexes);
+}
+
+void ShiftDisplay::construct(int latchPin, int clockPin, int dataPin, DisplayType displayType, const int sectionSizes[], DisplayDrive displayDrive, bool swappedShiftRegisters, const int indexes[]) {
 
 	// initialize pins
 	_latchPin = latchPin;
@@ -42,7 +60,18 @@ void ShiftDisplay::construct(int latchPin, int clockPin, int dataPin, DisplayTyp
 	// initialize globals
 	_isCathode = displayType == COMMON_CATHODE;
 	_isMultiplexed = displayDrive == MULTIPLEXED_DRIVE;
+	_isSwapped = swappedShiftRegisters;
 
+	// check and initialize indexes global
+	for (int pos = 0; pos < MAX_DISPLAY_SIZE; pos++) {
+		int index = indexes[pos];
+		byte encodedIndex = 0;
+		if (index >= 0 && index < MAX_DISPLAY_SIZE)
+			encodedIndex = _isCathode ? ~INDEXES[index] : INDEXES[index];
+		_indexes[pos] = encodedIndex;
+	}
+
+	// check and initialize size globals
 	_displaySize = 0;
 	_sectionCount = 0;
 	int	sSize; // loop current section size
@@ -70,12 +99,13 @@ void ShiftDisplay::updateMultiplexedDisplay() {
 	for (int i = 0; i < _displaySize; i++) {
 		digitalWrite(_latchPin, LOW);
 
-		// data for last shift register
-		byte out = _isCathode ? ~INDEXES[i] : INDEXES[i];
-		shiftOut(_dataPin, _clockPin, LSBFIRST, out);
-
-		// data for first shift register
-		shiftOut(_dataPin, _clockPin, LSBFIRST, _cache[i]);
+		if (!_isSwapped) {
+			shiftOut(_dataPin, _clockPin, LSBFIRST, _indexes[i]); // last shift register
+			shiftOut(_dataPin, _clockPin, LSBFIRST, _cache[i]); // first shift register
+		} else {
+			shiftOut(_dataPin, _clockPin, LSBFIRST, _cache[i]); // last shift register
+			shiftOut(_dataPin, _clockPin, LSBFIRST, _indexes[i]); // first shift register
+		}
 
 		digitalWrite(_latchPin, HIGH);
 

@@ -31,9 +31,11 @@ const int DEFAULT_DECIMAL_PLACES_REAL = 1;
 const int DEFAULT_DECIMAL_PLACES_INTEGER = 0;
 const bool DEFAULT_LEADING_ZEROS = false;
 const bool DEFAULT_SET_DOT = true;
+const DisplayDrive DEFAULT_DRIVE = MULTIPLEXED_DRIVE;
+const int DEFAULT_INDEXES[] = { 0, 1, 2, 3, 4, 5, 6, 7 };
 
 const int MAX_DISPLAY_SIZE = 8;
-const int POV = 1; // milliseconds showing each character when iterating
+const int POV = 1; // milliseconds showing each character when multiplexing
 
 class ShiftDisplay {
 
@@ -47,13 +49,15 @@ class ShiftDisplay {
 		int _dataPin;
 		bool _isCathode;
 		bool _isMultiplexed;
+		bool _isSwapped; // shift registers are swapped (first indexes then segments)
 		int _displaySize; // length of whole display
 		int _sectionCount; // quantity of display sections
 		int _sectionSizes[MAX_DISPLAY_SIZE]; // length of each section
 		int _sectionBegins[MAX_DISPLAY_SIZE]; // index where each section begins on whole display
+		byte _indexes[MAX_DISPLAY_SIZE]; // each display index in order (encoded)
 		byte _cache[MAX_DISPLAY_SIZE]; // value to show on display (encoded in abcdefgp format)
 
-		void construct(int latchPin, int clockPin, int dataPin, DisplayType displayType, const int sectionSizes[], DisplayDrive displayDrive); // common instructions to be called by constructors
+		void construct(int latchPin, int clockPin, int dataPin, DisplayType displayType, const int sectionSizes[], DisplayDrive displayDrive, bool swappedShiftRegisters, const int indexes[]); // common instructions to be called by constructors
 
 		void updateMultiplexedDisplay(); // MD: iterate stored value on each display index, achieving persistence of vision
 		void updateStaticDisplay(); // SD: send stored value to whole display
@@ -83,10 +87,14 @@ class ShiftDisplay {
 	public:
 
 		// constructors
-		ShiftDisplay(DisplayType displayType, int displaySize, DisplayDrive displayDrive = MULTIPLEXED_DRIVE); // default pins
-		ShiftDisplay(int latchPin, int clockPin, int dataPin, DisplayType displayType, int displaySize, DisplayDrive displayDrive = MULTIPLEXED_DRIVE); // custom pins
-		ShiftDisplay(DisplayType displayType, const int sectionSizes[], DisplayDrive displayDrive = MULTIPLEXED_DRIVE); // default pins, sectioned display
-		ShiftDisplay(int latchPin, int clockPin, int dataPin, DisplayType displayType, const int sectionSizes[], DisplayDrive displayDrive = MULTIPLEXED_DRIVE); // custom pins, sectioned display
+		ShiftDisplay(DisplayType displayType, int displaySize, DisplayDrive displayDrive = DEFAULT_DRIVE); // default connections, whole display, default pins
+		ShiftDisplay(int latchPin, int clockPin, int dataPin, DisplayType displayType, int displaySize, DisplayDrive displayDrive = DEFAULT_DRIVE); // default connections, whole display, custom pins
+		ShiftDisplay(DisplayType displayType, const int sectionSizes[], DisplayDrive displayDrive = DEFAULT_DRIVE); // default connections, sectioned display, default pins
+		ShiftDisplay(int latchPin, int clockPin, int dataPin, DisplayType displayType, const int sectionSizes[], DisplayDrive displayDrive = DEFAULT_DRIVE); // default connections, sectioned display, custom pins
+		ShiftDisplay(DisplayType displayType, int displaySize, bool swappedShiftRegisters, const int indexes[] = DEFAULT_INDEXES); // custom connections, whole display, default pins
+		ShiftDisplay(int latchPin, int clockPin, int dataPin, DisplayType displayType, int displaySize, bool swappedShiftRegisters, const int indexes[] = DEFAULT_INDEXES); // custom connections, whole display, custom pins
+		ShiftDisplay(DisplayType displayType, const int sectionSizes[], bool swappedShiftRegisters, const int indexes[] = DEFAULT_INDEXES); // custom connections, sectioned display, default pins
+		ShiftDisplay(int latchPin, int clockPin, int dataPin, DisplayType displayType, const int sectionSizes[], bool swappedShiftRegisters, const int indexes[] = DEFAULT_INDEXES); // custom connections, sectioned display, custom pins
 
 		// cache value
 		void set(int number, int decimalPlaces = DEFAULT_DECIMAL_PLACES_INTEGER, bool leadingZeros = DEFAULT_LEADING_ZEROS, char alignment = DEFAULT_ALIGN_NUMBER);

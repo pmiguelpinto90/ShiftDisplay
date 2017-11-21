@@ -8,7 +8,8 @@ https://miguelpynto.github.io/ShiftDisplay/
 #ifndef CharacterEncoding_h
 #define CharacterEncoding_h
 
-// encoding for characters segments (common cathode with LSBFIRST)
+// encoding for character segments in abcdefgp format (common cathode, LSBFIRST)
+
 const byte NUMBERS[] = {
 	//ABCDEFG
 	 B11111100, // 0
@@ -50,13 +51,14 @@ const byte LETTERS[] = {
 	 B01111110, // w
 	 B01101100, // x
 	 B01110110, // y
-	 B11011010 // z
+	 B11011010  // z
 };
 
 const byte MINUS = B00000010;
 const byte EMPTY = B00000000;
 
-// encoding for each index in display (common anode with LSBFIRST)
+// encoding for display indexes (common anode, LSBFIRST)
+
 const byte INDEXES[] = {
 	B10000000, // 0
 	B01000000, // 1
@@ -65,7 +67,7 @@ const byte INDEXES[] = {
 	B00001000, // 4
 	B00000100, // 5
 	B00000010, // 6
-	B00000001 // 7
+	B00000001  // 7
 };
 
 #endif

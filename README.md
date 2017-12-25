@@ -397,12 +397,11 @@ TODO
 
 ## TODO
 
-- [ ] Finish README
-- [x] Static Drive
+- [ ] Finish README Notes section
 - [ ] Example for sectioned display
 - [ ] Example for custom characters
-- [ ] Example for static drive
 - [ ] Example for commercial display module
+- [ ] Example for static drive
 - [ ] Schematics for static drive
 - [ ] Remove display max size for static drive
 

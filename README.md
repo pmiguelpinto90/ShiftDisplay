@@ -81,25 +81,23 @@ void loop() {
   Create a ShiftDisplay object, initialize the library using the interface pins, display properties and configurations.
   A display can be set as a whole, or divided by sections. Sections can be a logical separation (for example hours and minutes on a 4 digit clock display), or a physical separation (for example timer and score on a scoreboard with multiple displays).
 
-  `display`: newly created ShiftDisplay type object.
-
-  `latchPin`, `clockPin`, `dataPin`: number of the Arduino digital pins connected to the latch, clock and data pins of the shift registers;
+  `latchPin`, `clockPin`, `dataPin` (int): number of the Arduino digital pins connected to the latch, clock and data pins of the shift registers;
   if is not specified, the default pins are 6 for latch, 7 for clock, and 5 for data.
 
-  `displayType`: constant `COMMON_ANODE` or `COMMON_CATHODE`, defining the type of the display.
+  `displayType` (DisplayType): type of the display, can be common anode or cathode.
 
-  `displaySize`: quantity of digits on the display.
+  `displaySize` (int): quantity of digits on the display.
 
-  `sectionSizes`: array of ints, each array position contains the quantity of digits for a section, in order;
-  terminate array with a 0 or lower value.
+  `sectionSizes` (int[]): quantity of digits for each section, defined by each value in array;
+  end array with a 0 or lower value.
 
-  `displayDrive`: constant `MULTIPLEXED_DRIVE` or `STATIC_DRIVE`, defining the drive algorithm of the display;
-  if is not specified, the default is MULTIPLEXED_DRIVE.
+  `displayDrive` (DisplayDrive): drive algorithm of the display, can be multiplexed or static drive;
+  if is not specified, the default is `MULTIPLEXED_DRIVE`.
 
-  `swappedShiftRegisters`: when set to true, changes shift registers order to first being digit index controller, and second being segment controller;
-  when is set, displayDrive is forced to MULTIPLEXED_DRIVE.
+  `swappedShiftRegisters` (bool): when set to true, changes shift registers order to first being digit index controller, and second being segment controller;
+  if is specified, displayDrive is forced to `MULTIPLEXED_DRIVE`.
 
-  `indexes`: array of ints, with a custom digit index order, each array position contains the index of where the digit is output from the shift register;
+  `indexes` (int[]): custom digit index order, each array position contains the index of where the digit is output from the shift register;
   if is not specified, the default is `{ 0, 1, 2, 3, 4, 5, 6, 7 }`.
 
 ### Functions
@@ -113,36 +111,36 @@ void loop() {
 
   Encode and store a value for showing next on the display. The entire previous value is cleared.
 
-  `display`: object of type ShiftDisplay.
+  `display` (ShiftDisplay): object where function is called.
 
-  `number`: value to set, of type int, long, float, or double;
+  `number` (int | long | float | double): numeric value to set;
   if is too big to fit in the display, it is trimmed according to alignment.
 
-  `text`: value to set, of type char, char array, or string object;
+  `text` (char | char[] | String): textual value to set;
   valid characters are `0-9 a-z A-Z -`, other characters are converted to space;
   char array must be null-terminated;
   if is too big to fit in the display, it is trimmed according to alignment.
 
-  `customs`: array of bytes initialized with the custom characters to set, encoded in abcdefgp format, each byte is a character on the display, from left to right;
+  `customs` (byte[]): custom characters to set, encoded in abcdefgp format, each byte is a character on the display, from left to right;
   array length must match display size.
 
-  `characters`: array of chars initialized with the characters to set, each char is a character on the display, from left to right;
+  `characters` (char[]): characters to set, each char is a character on the display, from left to right;
   valid characters are `0-9 a-z A-Z -`, other characters are converted to a space;
   array length must match display size.
 
-  `dots`: array of bools initialized with the dot values to set, each bool is a dot on the display, from left to right;
+  `dots` (bool[]): dot values to set, each bool is a dot on the display, from left to right;
   true to show the dot, false to hide the dot;
   array length must match display size.
 
-  `decimalPlaces`: quantity of digits following the decimal point;
+  `decimalPlaces` (int): quantity of digits following the decimal point;
   the value is rounded according to this;
   if is set to 0, the decimal point will be removed;
   if is not specified, the default is 1 for real numbers and 0 for integer numbers.
 
-  `leadingZeros`: show zeros on the left of value;
-   if is not specified, the default is false.
+  `leadingZeros` (bool): show or hide zeros on the left of value;
+  if is not specified, the default is false.
 
-  `alignment`: alignment of the value on the display, a constant `ALIGN_LEFT` or `ALIGN_RIGHT` or `ALIGN_CENTER`;
+  `alignment` (char): alignment of the value on the display, can be left, right, or center;
   if is not specified, the default is ALIGN_RIGHT for numbers and ALIGN_LEFT for text.
 
 * __changeDot()__
@@ -151,12 +149,12 @@ void loop() {
 
   Modify the stored value by adding or hiding a dot.
 
-  `display`: object of type ShiftDisplay.
+  `display` (ShiftDisplay): object where function is called.
 
-  `index`: position on the display to change the dot, starting at 0 for the leftmost;
+  `index` (int): position on the display to change the dot, starting at 0 for the leftmost;
   if is out of bounds, function does not have any effect.
 
-  `dot`: bool value, true to show the dot, false to hide the dot;
+  `dot` (bool): true to show the dot, false to hide the dot;
   if is not specified, the default is true.
 
 * __changeCharacter()__
@@ -165,12 +163,12 @@ void loop() {
 
   Modify the stored value by replacing the character (and dot) with a custom character.
 
-  `display`: object of type ShiftDisplay.
+  `display` (ShiftDisplay): object where function is called.
 
-  `index`: position on the display to change the character, starting at 0 for the leftmost;
+  `index` (int): position on the display to change the character, starting at 0 for the leftmost;
   if is out of bounds, function does not have any effect.
 
-  `custom`: byte with the custom character to set, encoded in abcdefgp format.
+  `custom` (byte): custom character to set, encoded in abcdefgp format.
 
 * __setAt()__
 
@@ -181,39 +179,39 @@ void loop() {
 
   Encode and store a value for showing next on the specified section. The section previous value is cleared.
 
-  `display`: object of type ShiftDisplay.
+  `display` (ShiftDisplay): object where function is called.
 
-  `section`: position of the section on the display to set the value, starting at 0 for the first;
+  `section` (int): position of the section on the display to set the value, starting at 0 for the first;
   if is out of bounds, function does not have any effect.
 
-  `number`: value to set, of type int, long, float, or double;
+  `number` (int | long | float | double): numeric value to set;
   if is too big to fit in the section, it is trimmed according to alignment.
 
-  `text`: value to set, of type char, char array, or string object;
+  `text` (char | char[] | String): textual value to set;
   valid characters are `0-9 a-z A-Z -`, other characters are converted to space;
   char array must be null-terminated;
   if is too big to fit in the section, it is trimmed according to alignment.
 
-  `customs`: array of bytes initialized with the custom characters to set, encoded in abcdefgp format, each byte is a character on the section, from left to right;
+  `customs` (byte[]): custom characters to set, encoded in abcdefgp format, each byte is a character on the section, from left to right;
   array length must match section size.
 
-  `characters`: array of chars initialized with the characters to set, each char is a character on the section, from left to right;
+  `characters` (char[]): characters to set, each char is a character on the section, from left to right;
   valid characters are `0-9 a-z A-Z -`, other characters are converted to a space;
   array length must match section size.
 
-  `dots`: array of bools initialized with the dot values to set, each bool is a dot on the section, from left to right;
+  `dots` (bool[]): dot values to set, each bool is a dot on the section, from left to right;
   true to show the dot, false to hide the dot;
   array length must match section size.
 
-  `decimalPlaces`: quantity of digits following the decimal point;
+  `decimalPlaces` (int): quantity of digits following the decimal point;
   the value is rounded according to this;
   if is set to 0, the decimal point will be removed;
   if is not specified, the default is 1 for real numbers and 0 for integer numbers.
 
-  `leadingZeros`: show zeros on the left of value;
-   if is not specified, the default is false.
+  `leadingZeros` (bool): show or hide zeros on the left of value;
+  if is not specified, the default is false.
 
-  `alignment`: alignment of the value on the section, a constant `ALIGN_LEFT` or `ALIGN_RIGHT` or `ALIGN_CENTER`;
+  `alignment` (char): alignment of the value on the section, can be left, right, or center;
   if is not specified, the default is ALIGN_RIGHT for numbers and ALIGN_LEFT for text.
 
 * __changeDotAt()__
@@ -222,15 +220,15 @@ void loop() {
 
   Modify the stored value by adding or hiding a dot in a section.
 
-  `display`: object of type ShiftDisplay.
+  `display` (ShiftDisplay): object where function is called.
 
-  `section`: position of the section on the display to change the dot, starting at 0 for the first;
+  `section` (int): position of the section on the display to change the dot, starting at 0 for the first;
   if is out of bounds, function does not have any effect.
 
-  `index`: position on the section to change the dot, starting at 0 for the leftmost;
+  `index` (int): position on the section to change the dot, starting at 0 for the leftmost;
   if is out of bounds, function does not have any effect.
 
-  `dot`: bool value, true to show the dot, false to hide the dot;
+  `dot` (bool): true to show the dot, false to hide the dot;
   if is not specified, the default is true.
 
 * __changeCharacterAt()__
@@ -239,15 +237,15 @@ void loop() {
 
   Modify the stored value by replacing the character (and dot) with a custom character in a section.
 
-  `display`: object of type ShiftDisplay.
+  `display` (ShiftDisplay): object where function is called.
 
-  `section`: position of the section on the display to change the character, starting at 0 for the first;
+  `section` (int): position of the section on the display to change the character, starting at 0 for the first;
   if is out of bounds, function does not have any effect.
 
-  `index`: position on the section to change the character, starting at 0 for the leftmost;
+  `index` (int): position on the section to change the character, starting at 0 for the leftmost;
   if is out of bounds, function does not have any effect.
 
-  `custom`: byte with the custom character to set, encoded in abcdefgp format.
+  `custom` (byte): custom character to set, encoded in abcdefgp format.
 
 * __update()__
 
@@ -255,7 +253,7 @@ void loop() {
 
   Show on the display the stored value. For multiplexed drive, this must be called in a loop; for static drive, the value is shown until update()/clear()/show() is called.
 
-  `display`: object of type ShiftDisplay.
+  `display` (ShiftDisplay): object where function is called.
 
 * __clear()__
 
@@ -263,7 +261,7 @@ void loop() {
 
   Hide the display content, without erasing stored value.
   
-  `display`: object of type ShiftDisplay.
+  `display` (ShiftDisplay): object where function is called.
 
 * __show()__
 
@@ -271,20 +269,18 @@ void loop() {
 
   Show on the display the stored value, for the given time, then clear. Blocking function.
   
-  `display`: object of type ShiftDisplay.
+  `display` (ShiftDisplay): object where function is called.
 
-  `time`: duration in milliseconds to show the value;
+  `time` (long): duration in milliseconds to show the value;
   exact time showing will be an under approximation.
 
-### Constants
+### Types
 
-- ALIGN_LEFT (char)
-- ALIGN_RIGHT (char)
-- ALIGN_CENTER (char)
-- COMMON_ANODE (DisplayType)
-- COMMON_CATHODE (DisplayType)
-- MULTIPLEXED_DRIVE (DisplayDrive)
-- STATIC_DRIVE (DisplayDrive)
+* DisplayType: `COMMON_ANODE`, `COMMON_CATHODE`
+
+* DisplayDrive: `MULTIPLEXED_DRIVE`, `STATIC_DRIVE`
+
+* char: `ALIGN_LEFT`, `ALIGN_RIGHT`, `ALIGN_CENTER`
 
 
 ## Notes
@@ -326,7 +322,8 @@ TODO
   - CHANGE: renamed setCustom() and setCustomAt() to changeCharacter() and changeCharacterAt()
   - CHANGE: deprecated show(value, time) for simplicity sake
   - DOC: removed 74HC595 references because it works with other shift registers
-  - DOC: added type of constants
+  - DOC: added argument types
+  - DOC: added custom types
   - DOC: differentiate between numbers and text in set()
   - DOC: square brackets for optional args
   - FIX: compiler warnings

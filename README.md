@@ -5,9 +5,13 @@ _by MiguelPynto_
 
 Arduino library for driving 7-segment displays using shift registers
 
-- Show numbers and text
-- Concatenate multiple displays as one, for a maximum of 8 digits
+- Show numbers, text, and custom characters
+- Use the whole display as one, or separate by individual sections
+- Compatible with multiplexed drive and constant drive
 - Compatible with common cathode and common anode
+- Compatible with custom made and commercial display modules
+- Maximum of 8 digits (for now)
+- Concatenate multiple displays as one
 - Only 3 pins used on Arduino
 
 ![breadboard](https://raw.githubusercontent.com/MiguelPynto/ShiftDisplay/master/extras/foobar.jpg)
@@ -16,7 +20,7 @@ Arduino library for driving 7-segment displays using shift registers
 ## Hardware
 
 - 1x (or more) 7-segment LED display
-- 2x 74HC595 shift register
+- 2x shift register (eg: 74HC595, TPIC6B595)
 - 2x 0.1uF ceramic capacitor
 - 8x (per display) 220 Ohm resistor
 
@@ -51,7 +55,7 @@ void setup() {
 		display.set(i, ALIGN_CENTER);
 		display.show(400);
 		// add dot to stored number and show it for 400ms
-		display.setDot(1);
+		display.changeDot(1);
 		display.show(400);
 	}
 	display.set("GO"); // store "GO"
@@ -127,7 +131,7 @@ void loop() {
   array length must match display size.
 
   `dots`: array of bools initialized with the dot values to set, each bool is a dot on the display, from left to right;
-  true to show the dot, false to not show the dot;
+  true to show the dot, false to hide the dot;
   array length must match display size.
 
   `decimalPlaces`: quantity of digits following the decimal point;
@@ -141,18 +145,18 @@ void loop() {
   `alignment`: alignment of the value on the display, a constant `ALIGN_LEFT` or `ALIGN_RIGHT` or `ALIGN_CENTER`;
   if is not specified, the default is ALIGN_RIGHT for numbers and ALIGN_LEFT for text.
 
-* __setDot()__
+* __changeDot()__
 
-  * display.setDot(index[, dot])
+  * display.changeDot(index[, dot])
 
   Modify the stored value by adding or hiding a dot.
 
   `display`: object of type ShiftDisplay.
 
-  `index`: position on the display to set the dot, starting at 0 for the leftmost;
+  `index`: position on the display to change the dot, starting at 0 for the leftmost;
   if is out of bounds, function does not have any effect.
 
-  `dot`: bool value, true to show the dot, false to not show the dot;
+  `dot`: bool value, true to show the dot, false to hide the dot;
   if is not specified, the default is true.
 
 * __setCustom()__
@@ -198,7 +202,7 @@ void loop() {
   array length must match section size.
 
   `dots`: array of bools initialized with the dot values to set, each bool is a dot on the section, from left to right;
-  true to show the dot, false to not show the dot;
+  true to show the dot, false to hide the dot;
   array length must match section size.
 
   `decimalPlaces`: quantity of digits following the decimal point;
@@ -212,21 +216,21 @@ void loop() {
   `alignment`: alignment of the value on the section, a constant `ALIGN_LEFT` or `ALIGN_RIGHT` or `ALIGN_CENTER`;
   if is not specified, the default is ALIGN_RIGHT for numbers and ALIGN_LEFT for text.
 
-* __setDotAt()__
+* __changeDotAt()__
 
-  * display.setDotAt(section, index[, dot])
+  * display.changeDotAt(section, index[, dot])
 
   Modify the stored value by adding or hiding a dot in a section.
 
   `display`: object of type ShiftDisplay.
 
-  `section`: position of the section on the display to set the dot, starting at 0 for the first;
+  `section`: position of the section on the display to change the dot, starting at 0 for the first;
   if is out of bounds, function does not have any effect.
 
-  `index`: position on the section to set the dot, starting at 0 for the leftmost;
+  `index`: position on the section to change the dot, starting at 0 for the leftmost;
   if is out of bounds, function does not have any effect.
 
-  `dot`: bool value, true to show the dot, false to not show the dot;
+  `dot`: bool value, true to show the dot, false to hide the dot;
   if is not specified, the default is true.
 
 * __setCustomAt()__
@@ -301,23 +305,28 @@ TODO
 
 TODO
 
+* __Commercial Display Modules__
+
+TODO
+
 
 ## Changelog
 
 - master ()
   - NEW: added static drive
   - NEW: added clear() function
-  - NEW: leading zeros in set functions
-  - NEW: support for custom display modules (fix for issue #1)
-  - CHANGE: in set functions, every type of number has the same possible args
+  - NEW: leading zeros in set(number) functions
+  - NEW: support for commercial display modules (fix for issue #1)
+  - CHANGE: every set(number) functions has the same possible args
   - CHANGE: default decimal places is now 1
   - CHANGE: renamed show() to update() and changed its behaviour
-  - CHANGE: display type constants type changed from int to DisplayType
-  - CHANGE: dot value is now optional in setDot() and setDotAt()
+  - CHANGE: display type constants changed from int to DisplayType
+  - CHANGE: renamed setDot() and setDotAt() to changeDot() and changeDotAt()
+  - CHANGE: dot value is now optional in above functions
   - CHANGE: deprecated show(value, time) for simplicity sake
   - DOC: removed 74HC595 references because it works with other shift registers
   - DOC: added type of constants
-  - DOC: differentiate between numbers and text
+  - DOC: differentiate between numbers and text in set()
   - DOC: square brackets for optional args
   - FIX: compiler warnings
 - 3.6.1 (17/9/2017)
@@ -390,12 +399,12 @@ TODO
 ## TODO
 
 - [ ] Finish README
+- [x] Static Drive
 - [ ] Example for sectioned display
 - [ ] Example for custom characters
-- [x] Static Drive
 - [ ] Example for static drive
-- [ ] Example for custom display module
-- [ ] Docs for static drive
+- [ ] Example for commercial display module
+- [ ] Schematics for static drive
 - [ ] Remove display max size for static drive
 
 

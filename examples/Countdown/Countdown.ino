@@ -15,7 +15,7 @@ void setup() {
 		display.set(i, ALIGN_CENTER);
 		display.show(400);
 		// add dot to stored number and show it for 400ms
-		display.setDot(1);
+		display.changeDot(1);
 		display.show(400);
 	}
 	display.set("GO"); // store "GO"

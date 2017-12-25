@@ -30,7 +30,7 @@ const char DEFAULT_ALIGN_NUMBER = ALIGN_RIGHT;
 const int DEFAULT_DECIMAL_PLACES_REAL = 1;
 const int DEFAULT_DECIMAL_PLACES_INTEGER = 0;
 const bool DEFAULT_LEADING_ZEROS = false;
-const bool DEFAULT_SET_DOT = true;
+const bool DEFAULT_CHANGE_DOT = true;
 const DisplayDrive DEFAULT_DRIVE = MULTIPLEXED_DRIVE;
 const int DEFAULT_INDEXES[] = { 0, 1, 2, 3, 4, 5, 6, 7 };
 
@@ -133,9 +133,9 @@ class ShiftDisplay {
 		void setAt(int section, const char characters[], const bool dots[]); // arrays length must match defined section size
 
 		// modify cached value at index
-		void setDot(int index, bool dot = DEFAULT_SET_DOT); // show or hide a dot on character
+		void changeDot(int index, bool dot = DEFAULT_CHANGE_DOT); // show or hide a dot on character
 		void setCustom(int index, byte custom); // replace with a custom character (encoded in abcdefgp format)
-		void setDotAt(int section, int relativeIndex, bool dot = DEFAULT_SET_DOT); // show or hide a dot on character
+		void changeDotAt(int section, int relativeIndex, bool dot = DEFAULT_CHANGE_DOT); // show or hide a dot on character
 		void setCustomAt(int section, int relativeIndex, byte custom); // replace with a custom character (encoded in abcdefgp format)
 
 		// show cached value on display
@@ -171,6 +171,8 @@ class ShiftDisplay {
 		void show(const char characters[], const bool dots[], unsigned long time); // deprecated by set() show()
 		ShiftDisplay(DisplayType displayType, int sectionCount, const int sectionSizes[]);
 		ShiftDisplay(int latchPin, int clockPin, int dataPin, DisplayType displayType, int sectionCount, const int sectionSizes[]);
+		void setDot(int index, bool dot); // deprecated by changeDot()
+		void setDotAt(int section, int relativeIndex, bool dot); // deprecated by changeDotAt()
 };
 
 #endif

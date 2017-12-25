@@ -18,9 +18,9 @@ void loop() {
 	display.set(m, ALIGN_LEFT);
 	for (int i = 0; i < 60; i++) {
 		int pos = m < 10 ? 0 : 1;
-		display.setDot(pos);
+		display.changeDot(pos);
 		display.show(500);
-		display.setDot(pos, false);
+		display.changeDot(pos, false);
 		display.show(500);
 	}
 	m++;

@@ -486,15 +486,15 @@ void ShiftDisplay::setAt(int section, const char characters[], const bool dots[]
 	}
 }
 
-void ShiftDisplay::setDot(int index, bool dot) {
-	setDotAt(0, index, dot);
+void ShiftDisplay::changeDot(int index, bool dot) {
+	changeDotAt(0, index, dot);
 }
 
 void ShiftDisplay::setCustom(int index, byte custom) {
 	setCustomAt(0, index, custom);
 }
 
-void ShiftDisplay::setDotAt(int section, int relativeIndex, bool dot) {
+void ShiftDisplay::changeDotAt(int section, int relativeIndex, bool dot) {
 	if (isValidSection(section)) {
 		if (relativeIndex >= 0 && relativeIndex < _sectionSizes[section]) { // valid index in display
 			int index = _sectionBegins[section] + relativeIndex;
@@ -563,3 +563,5 @@ void ShiftDisplay::show(const byte customs[], unsigned long time) { set(customs)
 void ShiftDisplay::show(const char characters[], const bool dots[], unsigned long time) { set(characters, dots); show(time); }
 ShiftDisplay::ShiftDisplay(DisplayType displayType, int sectionCount, const int sectionSizes[]) { ShiftDisplay(DEFAULT_LATCH_PIN, DEFAULT_CLOCK_PIN, DEFAULT_DATA_PIN, displayType, sectionCount, sectionSizes); }
 ShiftDisplay::ShiftDisplay(int latchPin, int clockPin, int dataPin, DisplayType displayType, int sectionCount, const int sectionSizes[]) { int s[sectionCount+1]; s[sectionCount] = 0; memcpy(s, sectionSizes, sectionCount*sizeof(int)); ShiftDisplay(latchPin, clockPin, dataPin, displayType, s, MULTIPLEXED_DRIVE); }
+void ShiftDisplay::setDot(int index, bool dot) { changeDot(index, dot)}
+void ShiftDisplay::setDotAt(int section, int relativeIndex, bool dot) { changeDotAt(section, index, dot)}

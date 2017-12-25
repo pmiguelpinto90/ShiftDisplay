@@ -564,6 +564,6 @@ void ShiftDisplay::show(const char characters[], const bool dots[], unsigned lon
 ShiftDisplay::ShiftDisplay(DisplayType displayType, int sectionCount, const int sectionSizes[]) { ShiftDisplay(DEFAULT_LATCH_PIN, DEFAULT_CLOCK_PIN, DEFAULT_DATA_PIN, displayType, sectionCount, sectionSizes); }
 ShiftDisplay::ShiftDisplay(int latchPin, int clockPin, int dataPin, DisplayType displayType, int sectionCount, const int sectionSizes[]) { int s[sectionCount+1]; s[sectionCount] = 0; memcpy(s, sectionSizes, sectionCount*sizeof(int)); ShiftDisplay(latchPin, clockPin, dataPin, displayType, s, MULTIPLEXED_DRIVE); }
 void ShiftDisplay::setDot(int index, bool dot) { changeDot(index, dot); }
-void ShiftDisplay::setDotAt(int section, int relativeIndex, bool dot) { changeDotAt(section, index, dot); }
+void ShiftDisplay::setDotAt(int section, int relativeIndex, bool dot) { changeDotAt(section, relativeIndex, dot); }
 void ShiftDisplay::setCustom(int index, byte custom) { changeCharacter(index, custom); }
 void ShiftDisplay::setCustomAt(int section, int relativeIndex, byte custom) { changeCharacterAt(section, relativeIndex, custom); }

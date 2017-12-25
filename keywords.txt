@@ -2,10 +2,10 @@ ShiftDisplay	KEYWORD1
 
 set	KEYWORD2
 changeDot	KEYWORD2
-setCustom	KEYWORD2
+changeCharacter	KEYWORD2
 setAt	KEYWORD2
 changeDotAt	KEYWORD2
-setCustomAt	KEYWORD2
+changeCharacterAt	KEYWORD2
 update	KEYWORD2
 clear	KEYWORD2
 show	KEYWORD2

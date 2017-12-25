@@ -134,9 +134,9 @@ class ShiftDisplay {
 
 		// modify cached value at index
 		void changeDot(int index, bool dot = DEFAULT_CHANGE_DOT); // show or hide a dot on character
-		void setCustom(int index, byte custom); // replace with a custom character (encoded in abcdefgp format)
+		void changeCharacter(int index, byte custom); // replace with a custom character (encoded in abcdefgp format)
 		void changeDotAt(int section, int relativeIndex, bool dot = DEFAULT_CHANGE_DOT); // show or hide a dot on character
-		void setCustomAt(int section, int relativeIndex, byte custom); // replace with a custom character (encoded in abcdefgp format)
+		void changeCharacterAt(int section, int relativeIndex, byte custom); // replace with a custom character (encoded in abcdefgp format)
 
 		// show cached value on display
 		void update(); // MD: for a single iteration; SD: while not update/clear/show called
@@ -173,6 +173,8 @@ class ShiftDisplay {
 		ShiftDisplay(int latchPin, int clockPin, int dataPin, DisplayType displayType, int sectionCount, const int sectionSizes[]);
 		void setDot(int index, bool dot); // deprecated by changeDot()
 		void setDotAt(int section, int relativeIndex, bool dot); // deprecated by changeDotAt()
+		void setCustom(int index, byte custom);
+		void setCustomAt(int section, int relativeIndex, byte custom);
 };
 
 #endif

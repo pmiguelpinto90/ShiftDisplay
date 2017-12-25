@@ -159,15 +159,15 @@ void loop() {
   `dot`: bool value, true to show the dot, false to hide the dot;
   if is not specified, the default is true.
 
-* __setCustom()__
+* __changeCharacter()__
 
-  * display.setCustom(index, custom)
+  * display.changeCharacter(index, custom)
 
   Modify the stored value by replacing the character (and dot) with a custom character.
 
   `display`: object of type ShiftDisplay.
 
-  `index`: position on the display to set the custom character, starting at 0 for the leftmost;
+  `index`: position on the display to change the character, starting at 0 for the leftmost;
   if is out of bounds, function does not have any effect.
 
   `custom`: byte with the custom character to set, encoded in abcdefgp format.
@@ -233,18 +233,18 @@ void loop() {
   `dot`: bool value, true to show the dot, false to hide the dot;
   if is not specified, the default is true.
 
-* __setCustomAt()__
+* __changeCharacterAt()__
 
-  * display.setCustomAt(section, index, custom)
+  * display.changeCharacterAt(section, index, custom)
 
   Modify the stored value by replacing the character (and dot) with a custom character in a section.
 
   `display`: object of type ShiftDisplay.
 
-  `section`: position of the section on the display to set the custom character, starting at 0 for the first;
+  `section`: position of the section on the display to change the character, starting at 0 for the first;
   if is out of bounds, function does not have any effect.
 
-  `index`: position on the section to set the custom character, starting at 0 for the leftmost;
+  `index`: position on the section to change the character, starting at 0 for the leftmost;
   if is out of bounds, function does not have any effect.
 
   `custom`: byte with the custom character to set, encoded in abcdefgp format.
@@ -323,6 +323,7 @@ TODO
   - CHANGE: display type constants changed from int to DisplayType
   - CHANGE: renamed setDot() and setDotAt() to changeDot() and changeDotAt()
   - CHANGE: dot value is now optional in above functions
+  - CHANGE: renamed setCustom() and setCustomAt() to changeCharacter() and changeCharacterAt()
   - CHANGE: deprecated show(value, time) for simplicity sake
   - DOC: removed 74HC595 references because it works with other shift registers
   - DOC: added type of constants

@@ -169,7 +169,7 @@ void ShiftDisplay::encodeCharacters(int size, const char input[], byte output[],
 		bitWrite(output[dotIndex], 0, 1);
 }
 
-int ShiftDisplay::formatCharacters(int inSize, const char input[], int outSize, char output[], char alignment, bool leadingZeros = false, int decimalPlaces = -1) {
+int ShiftDisplay::formatCharacters(int inSize, const char input[], int outSize, char output[], Alignment alignment, bool leadingZeros = false, int decimalPlaces = -1) {
 	
 	// index of character virtual borders
 	int left; // lowest index
@@ -244,7 +244,7 @@ int ShiftDisplay::countCharacters(double number) {
 	return countCharacters((long) number);
 }
 
-void ShiftDisplay::setInteger(long number, bool leadingZeros, char alignment, int section) {
+void ShiftDisplay::setInteger(long number, bool leadingZeros, Alignment alignment, int section) {
 	int valueSize = countCharacters(number);
 	char originalCharacters[valueSize];
 	getCharacters(number, valueSize, originalCharacters);
@@ -256,7 +256,7 @@ void ShiftDisplay::setInteger(long number, bool leadingZeros, char alignment, in
 	modifyCache(_sectionBegins[section], sectionSize, encodedCharacters);
 }
 
-void ShiftDisplay::setReal(double number, int decimalPlaces, bool leadingZeros, char alignment, int section) {
+void ShiftDisplay::setReal(double number, int decimalPlaces, bool leadingZeros, Alignment alignment, int section) {
 	long value = round(number * pow(10, decimalPlaces)); // convert to integer (eg 1.236, 2 = 124)
 	int valueSize = countCharacters(number) + decimalPlaces;
 	char originalCharacters[valueSize];
@@ -269,14 +269,14 @@ void ShiftDisplay::setReal(double number, int decimalPlaces, bool leadingZeros, 
 	modifyCache(_sectionBegins[section], sectionSize, encodedCharacters);
 }
 
-void ShiftDisplay::setNumber(long number, int decimalPlaces, bool leadingZeros, char alignment, int section = 0) {
+void ShiftDisplay::setNumber(long number, int decimalPlaces, bool leadingZeros, Alignment alignment, int section = 0) {
 	if (decimalPlaces == 0)
 		setInteger(number, leadingZeros, alignment, section);
 	else
 		setReal(number, decimalPlaces, leadingZeros, alignment, section);
 }
 
-void ShiftDisplay::setNumber(double number, int decimalPlaces, bool leadingZeros, char alignment, int section = 0) {
+void ShiftDisplay::setNumber(double number, int decimalPlaces, bool leadingZeros, Alignment alignment, int section = 0) {
 	if (decimalPlaces == 0) {
 		long roundNumber = round(number);
 		setInteger(roundNumber, leadingZeros, alignment, section);
@@ -284,7 +284,7 @@ void ShiftDisplay::setNumber(double number, int decimalPlaces, bool leadingZeros
 		setReal(number, decimalPlaces, leadingZeros, alignment, section);
 }
 
-void ShiftDisplay::setText(char value, char alignment, int section = 0) {
+void ShiftDisplay::setText(char value, Alignment alignment, int section = 0) {
 	char originalCharacters[] = {value};
 	int sectionSize = _sectionSizes[section];
 	char formattedCharacters[sectionSize];
@@ -294,7 +294,7 @@ void ShiftDisplay::setText(char value, char alignment, int section = 0) {
 	modifyCache(_sectionBegins[section], sectionSize, encodedCharacters);
 }
 
-void ShiftDisplay::setText(const char value[], char alignment, int section = 0) {
+void ShiftDisplay::setText(const char value[], Alignment alignment, int section = 0) {
 	int valueSize = strlen(value);
 	int sectionSize = _sectionSizes[section];
 	char formattedCharacters[sectionSize];
@@ -304,7 +304,7 @@ void ShiftDisplay::setText(const char value[], char alignment, int section = 0) 
 	modifyCache(_sectionBegins[section], sectionSize, encodedCharacters);
 }
 
-void ShiftDisplay::setText(const String &value, char alignment, int section = 0) {
+void ShiftDisplay::setText(const String &value, Alignment alignment, int section = 0) {
 	
 	// convert String to char array manually for better support between Arduino cores
 	int size = 0;
@@ -324,63 +324,63 @@ bool ShiftDisplay::isValidSection(int section) {
 
 // PUBLIC FUNCTIONS ************************************************************
 
-void ShiftDisplay::set(int number, int decimalPlaces, bool leadingZeros, char alignment) {
+void ShiftDisplay::set(int number, int decimalPlaces, bool leadingZeros, Alignment alignment) {
 	setNumber((long)number, decimalPlaces, leadingZeros, alignment);
 }
 
-void ShiftDisplay::set(int number, bool leadingZeros, char alignment) {
+void ShiftDisplay::set(int number, bool leadingZeros, Alignment alignment) {
 	setNumber((long)number, DEFAULT_DECIMAL_PLACES_INTEGER, leadingZeros, alignment);
 }
 
-void ShiftDisplay::set(int number, int decimalPlaces, char alignment) {
+void ShiftDisplay::set(int number, int decimalPlaces, Alignment alignment) {
 	setNumber((long)number, decimalPlaces, DEFAULT_LEADING_ZEROS, alignment);
 }
 
-void ShiftDisplay::set(int number, char alignment) {
+void ShiftDisplay::set(int number, Alignment alignment) {
 	setNumber((long)number, DEFAULT_DECIMAL_PLACES_INTEGER, DEFAULT_LEADING_ZEROS, alignment);
 }
 
-void ShiftDisplay::set(long number, int decimalPlaces, bool leadingZeros, char alignment) {
+void ShiftDisplay::set(long number, int decimalPlaces, bool leadingZeros, Alignment alignment) {
 	setNumber(number, decimalPlaces, leadingZeros, alignment);
 }
 
-void ShiftDisplay::set(long number, bool leadingZeros, char alignment) {
+void ShiftDisplay::set(long number, bool leadingZeros, Alignment alignment) {
 	setNumber(number, DEFAULT_DECIMAL_PLACES_INTEGER, leadingZeros, alignment);
 }
 
-void ShiftDisplay::set(long number, int decimalPlaces, char alignment) {
+void ShiftDisplay::set(long number, int decimalPlaces, Alignment alignment) {
 	setNumber(number, decimalPlaces, DEFAULT_LEADING_ZEROS, alignment);
 }
 
-void ShiftDisplay::set(long number, char alignment) {
+void ShiftDisplay::set(long number, Alignment alignment) {
 	setNumber(number, DEFAULT_DECIMAL_PLACES_INTEGER, DEFAULT_LEADING_ZEROS, alignment);
 }
 
-void ShiftDisplay::set(double number, int decimalPlaces, bool leadingZeros, char alignment) {
+void ShiftDisplay::set(double number, int decimalPlaces, bool leadingZeros, Alignment alignment) {
 	setNumber(number, decimalPlaces, leadingZeros, alignment);
 }
 
-void ShiftDisplay::set(double number, bool leadingZeros, char alignment) {
+void ShiftDisplay::set(double number, bool leadingZeros, Alignment alignment) {
 	setNumber(number, DEFAULT_DECIMAL_PLACES_REAL, leadingZeros, alignment);
 }
 
-void ShiftDisplay::set(double number, int decimalPlaces, char alignment) {
+void ShiftDisplay::set(double number, int decimalPlaces, Alignment alignment) {
 	setNumber(number, decimalPlaces, DEFAULT_LEADING_ZEROS, alignment);
 }
 
-void ShiftDisplay::set(double number, char alignment) {
+void ShiftDisplay::set(double number, Alignment alignment) {
 	setNumber(number, DEFAULT_DECIMAL_PLACES_REAL, DEFAULT_LEADING_ZEROS, alignment);
 }
 
-void ShiftDisplay::set(char value, char alignment) {
+void ShiftDisplay::set(char value, Alignment alignment) {
 	setText(value, alignment);
 }
 
-void ShiftDisplay::set(const char value[], char alignment) {
+void ShiftDisplay::set(const char value[], Alignment alignment) {
 	setText(value, alignment);
 }
 
-void ShiftDisplay::set(const String &value, char alignment) {
+void ShiftDisplay::set(const String &value, Alignment alignment) {
 	setText(value, alignment);
 }
 
@@ -392,77 +392,77 @@ void ShiftDisplay::set(const char characters[], const bool dots[]) {
 	setAt(0, characters, dots);
 }
 
-void ShiftDisplay::setAt(int section, int number, int decimalPlaces, bool leadingZeros, char alignment) {
+void ShiftDisplay::setAt(int section, int number, int decimalPlaces, bool leadingZeros, Alignment alignment) {
 	if (isValidSection(section))
 		setNumber((long)number, decimalPlaces, leadingZeros, alignment);
 }
 
-void ShiftDisplay::setAt(int section, int number, bool leadingZeros, char alignment) {
+void ShiftDisplay::setAt(int section, int number, bool leadingZeros, Alignment alignment) {
 	if (isValidSection(section))
 		setNumber((long)number, DEFAULT_DECIMAL_PLACES_INTEGER, leadingZeros, alignment);
 }
 
-void ShiftDisplay::setAt(int section, int number, int decimalPlaces, char alignment) {
+void ShiftDisplay::setAt(int section, int number, int decimalPlaces, Alignment alignment) {
 	if (isValidSection(section))
 		setNumber((long)number, decimalPlaces, DEFAULT_LEADING_ZEROS, alignment);
 }
 
-void ShiftDisplay::setAt(int section, int number, char alignment) {
+void ShiftDisplay::setAt(int section, int number, Alignment alignment) {
 	if (isValidSection(section))
 		setNumber((long)number, DEFAULT_DECIMAL_PLACES_INTEGER, DEFAULT_LEADING_ZEROS, alignment);
 }
 
-void ShiftDisplay::setAt(int section, long number, int decimalPlaces, bool leadingZeros, char alignment) {
+void ShiftDisplay::setAt(int section, long number, int decimalPlaces, bool leadingZeros, Alignment alignment) {
 	if (isValidSection(section))
 		setNumber(number, decimalPlaces, leadingZeros, alignment);
 }
 
-void ShiftDisplay::setAt(int section, long number, bool leadingZeros, char alignment) {
+void ShiftDisplay::setAt(int section, long number, bool leadingZeros, Alignment alignment) {
 	if (isValidSection(section))
 		setNumber(number, DEFAULT_DECIMAL_PLACES_INTEGER, leadingZeros, alignment);
 }
 
-void ShiftDisplay::setAt(int section, long number, int decimalPlaces, char alignment) {
+void ShiftDisplay::setAt(int section, long number, int decimalPlaces, Alignment alignment) {
 	if (isValidSection(section))
 		setNumber(number, decimalPlaces, DEFAULT_LEADING_ZEROS, alignment);
 }
 
-void ShiftDisplay::setAt(int section, long number, char alignment) {
+void ShiftDisplay::setAt(int section, long number, Alignment alignment) {
 	if (isValidSection(section))
 		setNumber(number, DEFAULT_DECIMAL_PLACES_INTEGER, DEFAULT_LEADING_ZEROS, alignment);
 }
 
-void ShiftDisplay::setAt(int section, double number, int decimalPlaces, bool leadingZeros, char alignment) {
+void ShiftDisplay::setAt(int section, double number, int decimalPlaces, bool leadingZeros, Alignment alignment) {
 	if (isValidSection(section))
 		setNumber(number, decimalPlaces, leadingZeros, alignment);
 }
 
-void ShiftDisplay::setAt(int section, double number, bool leadingZeros, char alignment) {
+void ShiftDisplay::setAt(int section, double number, bool leadingZeros, Alignment alignment) {
 	if (isValidSection(section))
 		setNumber(number, DEFAULT_DECIMAL_PLACES_REAL, leadingZeros, alignment);
 }
 
-void ShiftDisplay::setAt(int section, double number, int decimalPlaces, char alignment) {
+void ShiftDisplay::setAt(int section, double number, int decimalPlaces, Alignment alignment) {
 	if (isValidSection(section))
 		setNumber(number, decimalPlaces, DEFAULT_LEADING_ZEROS, alignment);
 }
 
-void ShiftDisplay::setAt(int section, double number, char alignment) {
+void ShiftDisplay::setAt(int section, double number, Alignment alignment) {
 	if (isValidSection(section))
 		setNumber(number, DEFAULT_DECIMAL_PLACES_REAL, DEFAULT_LEADING_ZEROS, alignment);
 }
 
-void ShiftDisplay::setAt(int section, char value, char alignment) {
+void ShiftDisplay::setAt(int section, char value, Alignment alignment) {
 	if (isValidSection(section))
 		setText(value, alignment, section);
 }
 
-void ShiftDisplay::setAt(int section, const char value[], char alignment) {
+void ShiftDisplay::setAt(int section, const char value[], Alignment alignment) {
 	if (isValidSection(section))
 		setText(value, alignment, section);
 }
 
-void ShiftDisplay::setAt(int section, const String &value, char alignment) {
+void ShiftDisplay::setAt(int section, const String &value, Alignment alignment) {
 	if (isValidSection(section))
 		setText(value, alignment, section);
 }
@@ -544,21 +544,21 @@ void ShiftDisplay::insertPoint(int index) { modifyCacheDot(index, true); }
 void ShiftDisplay::removePoint(int index) { modifyCacheDot(index, false); }
 void ShiftDisplay::insertDot(int index) { modifyCacheDot(index, true); }
 void ShiftDisplay::removeDot(int index) { modifyCacheDot(index, false); }
-void ShiftDisplay::print(long time, int value, char alignment) { show(value, time, alignment); }
-void ShiftDisplay::print(long time, long value, char alignment) { show(value, time, alignment); }
-void ShiftDisplay::print(long time, double value, int decimalPlaces, char alignment) { show(value, time, decimalPlaces, alignment); }
-void ShiftDisplay::print(long time, double value, char alignment) { show(value, time, alignment); }
-void ShiftDisplay::print(long time, char value, char alignment) { show(value, time, alignment); }
-void ShiftDisplay::print(long time, const char value[], char alignment) { show(value, time, alignment); }
-void ShiftDisplay::print(long time, const String &value, char alignment) { show(value, time, alignment); }
+void ShiftDisplay::print(long time, int value, Alignment alignment) { show(value, time, alignment); }
+void ShiftDisplay::print(long time, long value, Alignment alignment) { show(value, time, alignment); }
+void ShiftDisplay::print(long time, double value, int decimalPlaces, Alignment alignment) { show(value, time, decimalPlaces, alignment); }
+void ShiftDisplay::print(long time, double value, Alignment alignment) { show(value, time, alignment); }
+void ShiftDisplay::print(long time, char value, Alignment alignment) { show(value, time, alignment); }
+void ShiftDisplay::print(long time, const char value[], Alignment alignment) { show(value, time, alignment); }
+void ShiftDisplay::print(long time, const String &value, Alignment alignment) { show(value, time, alignment); }
 void ShiftDisplay::show() { updateMultiplexedDisplay(); clearMultiplexedDisplay(); }
-void ShiftDisplay::show(int value, unsigned long time, char alignment) { set(value, alignment); show(time); }
-void ShiftDisplay::show(long value, unsigned long time, char alignment) { set(value, alignment); show(time); }
-void ShiftDisplay::show(double valueReal, unsigned long time, int decimalPlaces, char alignment) { set(valueReal, decimalPlaces, alignment); show(time); }
-void ShiftDisplay::show(double valueReal, unsigned long time, char alignment) { set(valueReal, alignment); show(time); }
-void ShiftDisplay::show(char value, unsigned long time, char alignment) { set(value, alignment); show(time); }
-void ShiftDisplay::show(const char value[], unsigned long time, char alignment) { set(value, alignment); show(time); }
-void ShiftDisplay::show(const String &value, unsigned long time, char alignment) { set(value, alignment); show(time); }
+void ShiftDisplay::show(int value, unsigned long time, Alignment alignment) { set(value, alignment); show(time); }
+void ShiftDisplay::show(long value, unsigned long time, Alignment alignment) { set(value, alignment); show(time); }
+void ShiftDisplay::show(double valueReal, unsigned long time, int decimalPlaces, Alignment alignment) { set(valueReal, decimalPlaces, alignment); show(time); }
+void ShiftDisplay::show(double valueReal, unsigned long time, Alignment alignment) { set(valueReal, alignment); show(time); }
+void ShiftDisplay::show(char value, unsigned long time, Alignment alignment) { set(value, alignment); show(time); }
+void ShiftDisplay::show(const char value[], unsigned long time, Alignment alignment) { set(value, alignment); show(time); }
+void ShiftDisplay::show(const String &value, unsigned long time, Alignment alignment) { set(value, alignment); show(time); }
 void ShiftDisplay::show(const byte customs[], unsigned long time) { set(customs); show(time); }
 void ShiftDisplay::show(const char characters[], const bool dots[], unsigned long time) { set(characters, dots); show(time); }
 ShiftDisplay::ShiftDisplay(DisplayType displayType, int sectionCount, const int sectionSizes[]) { ShiftDisplay(DEFAULT_LATCH_PIN, DEFAULT_CLOCK_PIN, DEFAULT_DATA_PIN, displayType, sectionCount, sectionSizes); }

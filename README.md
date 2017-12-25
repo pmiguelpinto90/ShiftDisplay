@@ -84,14 +84,14 @@ void loop() {
   `latchPin`, `clockPin`, `dataPin` (int): number of the Arduino digital pins connected to the latch, clock and data pins of the shift registers;
   if is not specified, the default pins are 6 for latch, 7 for clock, and 5 for data.
 
-  `displayType` (DisplayType): type of the display, can be common anode or cathode.
+  `displayType` (DisplayType): type of the display, can be common anode or common cathode.
 
   `displaySize` (int): quantity of digits on the display.
 
   `sectionSizes` (int[]): quantity of digits for each section, defined by each value in array;
   end array with a 0 or lower value.
 
-  `displayDrive` (DisplayDrive): drive algorithm of the display, can be multiplexed or static drive;
+  `displayDrive` (DisplayDrive): drive algorithm of the display, can be multiplexed drive or static drive;
   if is not specified, the default is `MULTIPLEXED_DRIVE`.
 
   `swappedShiftRegisters` (bool): when set to true, changes shift registers order to first being digit index controller, and second being segment controller;
@@ -140,8 +140,8 @@ void loop() {
   `leadingZeros` (bool): show or hide zeros on the left of value;
   if is not specified, the default is false.
 
-  `alignment` (char): alignment of the value on the display, can be left, right, or center;
-  if is not specified, the default is ALIGN_RIGHT for numbers and ALIGN_LEFT for text.
+  `alignment` (Alignment): alignment of the value on the display;
+  if is not specified, the default is `ALIGN_RIGHT` for numbers and `ALIGN_LEFT` for text.
 
 * __changeDot()__
 
@@ -211,8 +211,8 @@ void loop() {
   `leadingZeros` (bool): show or hide zeros on the left of value;
   if is not specified, the default is false.
 
-  `alignment` (char): alignment of the value on the section, can be left, right, or center;
-  if is not specified, the default is ALIGN_RIGHT for numbers and ALIGN_LEFT for text.
+  `alignment` (Alignment): alignment of the value on the section;
+  if is not specified, the default is `ALIGN_RIGHT` for numbers and `ALIGN_LEFT` for text.
 
 * __changeDotAt()__
 
@@ -280,7 +280,7 @@ void loop() {
 
 * DisplayDrive: `MULTIPLEXED_DRIVE`, `STATIC_DRIVE`
 
-* char: `ALIGN_LEFT`, `ALIGN_RIGHT`, `ALIGN_CENTER`
+* Alignment: `ALIGN_LEFT`, `ALIGN_RIGHT`, `ALIGN_CENTER`
 
 
 ## Notes
@@ -321,6 +321,7 @@ TODO
   - CHANGE: dot value is now optional in above functions
   - CHANGE: renamed setCustom() and setCustomAt() to changeCharacter() and changeCharacterAt()
   - CHANGE: deprecated show(value, time) for simplicity sake
+  - CHANGE: alignment is now a type
   - DOC: removed 74HC595 references because it works with other shift registers
   - DOC: added argument types
   - DOC: added custom types

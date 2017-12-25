@@ -74,7 +74,7 @@ void loop() {
   * ShiftDisplay display([latchPin, clockPin, dataPin, ]displayType, displaySize, swappedShiftRegisters[, indexes])
   * ShiftDisplay display([latchPin, clockPin, dataPin, ]displayType, sectionSizes, swappedShiftRegisters[, indexes])
 
-  Create a ShiftDisplay object, initialize the library using the interface pins and display properties.
+  Create a ShiftDisplay object, initialize the library using the interface pins, display properties and configurations.
   A display can be set as a whole, or divided by sections. Sections can be a logical separation (for example hours and minutes on a 4 digit clock display), or a physical separation (for example timer and score on a scoreboard with multiple displays).
 
   `display`: newly created ShiftDisplay type object.
@@ -92,11 +92,11 @@ void loop() {
   `displayDrive`: constant `MULTIPLEXED_DRIVE` or `STATIC_DRIVE`, defining the drive algorithm of the display;
   if is not specified, the default is MULTIPLEXED_DRIVE.
 
-  `swappedShiftRegisters`: bla
-  if
+  `swappedShiftRegisters`: when set to true, changes shift registers order to first being digit index controller, and second being segment controller;
+  when is set, displayDrive is forced to MULTIPLEXED_DRIVE.
 
-  `indexes`: customDigitOrder
-  if
+  `indexes`: array of ints, with a custom digit index order, each array position contains the index of where the digit is output from the shift register;
+  if is not specified, the default is `{ 0, 1, 2, 3, 4, 5, 6, 7 }`.
 
 ### Functions
 
@@ -249,7 +249,7 @@ void loop() {
 
   * display.update()
 
-  Show on the display the stored value. For multiplexed drive, this must be in a loop; for static drive, the value is shown until update()/clear()/show() is called.
+  Show on the display the stored value. For multiplexed drive, this must be called in a loop; for static drive, the value is shown until update()/clear()/show() is called.
 
   `display`: object of type ShiftDisplay.
 
@@ -257,7 +257,7 @@ void loop() {
 
   * display.clear()
 
-  Hide display content, without erasing stored value.
+  Hide the display content, without erasing stored value.
   
   `display`: object of type ShiftDisplay.
 

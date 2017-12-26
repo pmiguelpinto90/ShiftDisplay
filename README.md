@@ -327,6 +327,7 @@ TODO
   - DOC: added custom types
   - DOC: differentiate between numbers and text in set()
   - DOC: square brackets for optional args
+  - DOC: example for sectioned display
   - FIX: compiler warnings
 - 3.6.1 (17/9/2017)
   - DOC: improved README
@@ -398,7 +399,7 @@ TODO
 ## TODO
 
 - [ ] Finish README Notes section
-- [ ] Example for sectioned display
+- [x] Example for sectioned display
 - [ ] Example for custom characters
 - [ ] Example for commercial display module
 - [ ] Example for static drive

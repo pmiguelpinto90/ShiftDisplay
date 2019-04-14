@@ -44,7 +44,7 @@ class ShiftDisplay {
 	// MD: for multiplexed drive displays
 	// SD: for static drive displays
 
-	private:
+	protected:
 
 		int _latchPin;
 		int _clockPin;

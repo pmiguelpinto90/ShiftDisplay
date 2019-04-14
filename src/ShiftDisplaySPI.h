@@ -14,25 +14,31 @@ https://miguelpynto.github.io/ShiftDisplay/
 class ShiftDisplaySPI : public ShiftDisplay
 {
 
-  protected:
+protected:
 	int _ssPin;
+	bool _forceClear;
 
-  public:
+public:
 	ShiftDisplaySPI(int ssPin, int latchPin, DisplayType displayType, int displaySize, bool swappedShiftRegisters, DisplayDrive displayDrive, const int indexes[])
-		: ShiftDisplay(displayType, displaySize, swappedShiftRegisters, indexes) {
-			_ssPin = ssPin;
-			_latchPin = latchPin;
-		  };
+			: ShiftDisplay(displayType, displaySize, swappedShiftRegisters, indexes)
+	{
+		_ssPin = ssPin;
+		_latchPin = latchPin;
+	};
 
 	void begin();
+	void setForceClear(bool force);
 
 	void updateMultiplexedDisplay();
 	void updateStaticDisplay();
 	void clearMultiplexedDisplay();
+	void clearStaticDisplay();
 
-	// why I have to override this???
+	// why I have to override these???
 	// shouldn't it be enought to override the updateMultiplixed and updateStaticDisplay methods?
 	void update();
+	void clear();
+	void show(unsigned long time);
 };
 
 #endif

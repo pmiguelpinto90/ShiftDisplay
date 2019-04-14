@@ -13,6 +13,7 @@ Arduino library for driving 7-segment displays using shift registers
 - Maximum of 8 digits (for now)
 - Concatenate multiple displays as one
 - Only 3 pins used on Arduino
+- now with SPI support
 
 ![breadboard](https://raw.githubusercontent.com/MiguelPynto/ShiftDisplay/master/extras/foobar.jpg)
 
@@ -96,6 +97,32 @@ void loop() {
 
   `swappedShiftRegisters` (bool): when set to true, changes shift registers order to first being digit index controller, and second being segment controller;
   if is specified, displayDrive is forced to `MULTIPLEXED_DRIVE`.
+
+  `indexes` (int[]): custom digit index order, each array position contains the index of where the digit is output from the shift register;
+  if is not specified, the default is `{ 0, 1, 2, 3, 4, 5, 6, 7 }`.
+
+* __ShiftDisplaySPI()__
+
+  * ShiftDisplaySPI display(ssPin, latchPin, displayType, displaySize, swappedShiftRegisters, displayDrive, indexes[])
+
+  Create a ShiftDisplay object, initialize the library using the SPI transfer, display properties and configurations.
+  A display can be set as a whole, or divided by sections. Sections can be a logical separation (for example hours and minutes on a 4 digit clock display), or a physical separation (for example timer and score on a scoreboard with multiple displays). Remember to also use `#include "ShiftDisplaySPI.h"` if you want to use this.
+
+  `ssPin` (int): number of the Arduino digital pin connected to the SS of the shift registers;
+  Use this to drive multiple display independently with one SPI bus. If you have only one display use any pin you want OR use the same pin as latchPin (this is active low just like latch)
+
+  `latchPin` (int): number of the Arduino digital pins connected to the latch, clock and data pins of the shift registers;
+  Clock and Data pins will be defined by the SPI hardware. For arduino nano pins 13 and 11 respectively.
+
+  `displayType` (DisplayType): type of the display, can be common anode or common cathode.
+
+  `displaySize` (int): quantity of digits on the display.
+
+  `swappedShiftRegisters` (bool): when set to true, changes shift registers order to first being digit index controller, and second being segment controller;
+  if is specified, displayDrive is forced to `MULTIPLEXED_DRIVE`.
+
+  `displayDrive` (DisplayDrive): drive algorithm of the display, can be multiplexed drive or static drive;
+  if is not specified, the default is `MULTIPLEXED_DRIVE`.
 
   `indexes` (int[]): custom digit index order, each array position contains the index of where the digit is output from the shift register;
   if is not specified, the default is `{ 0, 1, 2, 3, 4, 5, 6, 7 }`.
@@ -260,7 +287,7 @@ void loop() {
   * display.clear()
 
   Hide the display content, without erasing stored value.
-  
+
   `display` (ShiftDisplay): object where function is called.
 
 * __show()__
@@ -268,11 +295,24 @@ void loop() {
   * display.show(time)
 
   Show on the display the stored value, for the given time, then clear. Blocking function.
-  
+
   `display` (ShiftDisplay): object where function is called.
 
   `time` (long): duration in milliseconds to show the value;
   exact time showing will be an under approximation.
+
+* __begin()__ (SPI Only)
+
+  * display.begin()
+
+  Required for SPI. Call in setup to start the SPI.
+
+* __setForceClear(bool) (SPI Only)
+
+  * display.setForceClear(true)
+
+  For some reason the displays I have (RobotDyn 6 digit 74HC595) wont work without flushing the shift registers with zeroes everytime the screen is updated.
+  Setting this on will send zeroes to the display before sending the real data in.
 
 ### Types
 
@@ -313,6 +353,7 @@ TODO
   - NEW: added clear() function
   - NEW: leading zeros in set(number) functions
   - NEW: support for commercial display modules (fix for issue #1)
+  - NEW: SPI support (beta, only tested with one display)
   - CHANGE: every set(number) functions has the same possible args
   - CHANGE: default decimal places is now 1
   - CHANGE: renamed show() to update() and changed its behaviour
@@ -328,6 +369,8 @@ TODO
   - DOC: differentiate between numbers and text in set()
   - DOC: square brackets for optional args
   - DOC: example for sectioned display
+  - DOC: example for SPI with RobotDyn 6 digit 74HC595
+  - DOC: SPI documentation
   - FIX: compiler warnings
 - 3.6.1 (17/9/2017)
   - DOC: improved README
@@ -405,6 +448,8 @@ TODO
 - [ ] Example for static drive
 - [ ] Schematics for static drive
 - [ ] Remove display max size for static drive
+- [ ] Figure out why the robotdyn display requires SPI and "flushing"
+- [ ] Test cases
 
 
 ## Contacts

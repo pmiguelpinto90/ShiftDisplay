@@ -31,6 +31,7 @@ const Alignment DEFAULT_ALIGN_NUMBER = ALIGN_RIGHT;
 const int DEFAULT_DECIMAL_PLACES_REAL = 1;
 const int DEFAULT_DECIMAL_PLACES_INTEGER = 0;
 const bool DEFAULT_LEADING_ZEROS = false;
+const bool DEFAULT_SWAPPED_REGISTERS = false;
 const bool DEFAULT_CHANGE_DOT = true;
 const DisplayDrive DEFAULT_DRIVE = MULTIPLEXED_DRIVE;
 const int DEFAULT_INDEXES[] = { 0, 1, 2, 3, 4, 5, 6, 7 };
@@ -43,7 +44,7 @@ class ShiftDisplay {
 	// MD: for multiplexed drive displays
 	// SD: for static drive displays
 
-	private:
+	protected:
 
 		int _latchPin;
 		int _clockPin;
@@ -74,7 +75,7 @@ class ShiftDisplay {
 		void getCharacters(long input, int size, char output[]); // convert an integer number to an array of chars
 		int countCharacters(long number); // calculate the length of an array of chars for an integer number
 		int countCharacters(double number); // calculate the length of an array of chars for the integer part on a real number
-		
+
 		void setInteger(long value, bool leadingZeros, Alignment alignment, int section);
 		void setReal(double value, int decimalPlaces, bool leadingZeros, Alignment alignment, int section);
 		void setNumber(long number, int decimalPlaces, bool leadingZeros, Alignment alignment, int section);

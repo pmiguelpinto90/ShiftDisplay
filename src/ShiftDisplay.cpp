@@ -18,15 +18,15 @@ ShiftDisplay::ShiftDisplay(DisplayType displayType, int displaySize, DisplayDriv
 
 ShiftDisplay::ShiftDisplay(int latchPin, int clockPin, int dataPin, DisplayType displayType, int displaySize, DisplayDrive displayDrive) {
 	int sectionSizes[] = {displaySize, 0}; // single section with size of display
-	construct(latchPin, clockPin, dataPin, displayType, sectionSizes, displayDrive, false, DEFAULT_INDEXES);
+	construct(latchPin, clockPin, dataPin, displayType, sectionSizes, displayDrive, DEFAULT_SWAPPED_REGISTERS, DEFAULT_INDEXES);
 }
 
 ShiftDisplay::ShiftDisplay(DisplayType displayType, const int sectionSizes[], DisplayDrive displayDrive) {
-	construct(DEFAULT_LATCH_PIN, DEFAULT_CLOCK_PIN, DEFAULT_DATA_PIN, displayType, sectionSizes, displayDrive, false, DEFAULT_INDEXES);
+	construct(DEFAULT_LATCH_PIN, DEFAULT_CLOCK_PIN, DEFAULT_DATA_PIN, displayType, sectionSizes, displayDrive, DEFAULT_SWAPPED_REGISTERS, DEFAULT_INDEXES);
 }
 
 ShiftDisplay::ShiftDisplay(int latchPin, int clockPin, int dataPin, DisplayType displayType, const int sectionSizes[], DisplayDrive displayDrive) {
-	construct(latchPin, clockPin, dataPin, displayType, sectionSizes, displayDrive, false, DEFAULT_INDEXES);
+	construct(latchPin, clockPin, dataPin, displayType, sectionSizes, displayDrive, DEFAULT_SWAPPED_REGISTERS, DEFAULT_INDEXES);
 }
 
 ShiftDisplay::ShiftDisplay(DisplayType displayType, int displaySize, bool swappedShiftRegisters, const int indexes[]) {
@@ -152,7 +152,7 @@ void ShiftDisplay::modifyCacheDot(int index, bool dot) {
 void ShiftDisplay::encodeCharacters(int size, const char input[], byte output[], int dotIndex = -1) {
 	for (int i = 0; i < size; i++) {
 		char c = input[i];
-		
+
 		if (c >= '0' && c <= '9')
 			output[i] = NUMBERS[c - '0'];
 		else if (c >= 'a' && c <= 'z')
@@ -164,13 +164,13 @@ void ShiftDisplay::encodeCharacters(int size, const char input[], byte output[],
 		else // space or invalid
 			output[i] = EMPTY;
 	}
-	
+
 	if (dotIndex != -1)
 		bitWrite(output[dotIndex], 0, 1);
 }
 
 int ShiftDisplay::formatCharacters(int inSize, const char input[], int outSize, char output[], Alignment alignment, bool leadingZeros = false, int decimalPlaces = -1) {
-	
+
 	// index of character virtual borders
 	int left; // lowest index
 	int right; // highest index
@@ -189,7 +189,7 @@ int ShiftDisplay::formatCharacters(int inSize, const char input[], int outSize, 
 		left = (outSize - inSize) / 2;
 		right = left + inSize - 1;
 	}
-	
+
 	// fill output array with empty space or characters
 	for (int i = 0; i < left; i++) // before characters
 		output[i] = leadingZeros ? '0' : ' ';
@@ -305,7 +305,7 @@ void ShiftDisplay::setText(const char value[], Alignment alignment, int section 
 }
 
 void ShiftDisplay::setText(const String &value, Alignment alignment, int section = 0) {
-	
+
 	// convert String to char array manually for better support between Arduino cores
 	int size = 0;
 	while (value[size] != '\0')

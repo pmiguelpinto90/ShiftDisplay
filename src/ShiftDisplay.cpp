@@ -470,7 +470,7 @@ void ShiftDisplay::setAt(int section, const String &value, Alignment alignment) 
 void ShiftDisplay::setAt(int section, const byte customs[]) {
 	if (isValidSection(section)) {
 		int sectionSize = _sectionSizes[section];
-		modifyCache(_sectionBegins[section], sectionSize, customs);
+		modifyCache(_sectionBegins[section], sectionSize, (byte*) customs);
 	}
 }
 

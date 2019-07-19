@@ -64,7 +64,9 @@ class ShiftDisplay {
 		void updateStaticDisplay(); // SD: send stored value to whole display
 		void clearMultiplexedDisplay(); // MD: clear both shift registers
 		void clearStaticDisplay(); // SD: clear all shift registers
-
+		
+		void asyncUpdateMultiplexedDisplay(int i);
+		
 		void modifyCache(int index, byte code); // replace a position in cache
 		void modifyCache(int beginIndex, int size, const byte codes[]); // replace a interval in cache
 		void modifyCacheDot(int index, bool dot); // change dot in a cache position
@@ -141,7 +143,8 @@ class ShiftDisplay {
 
 		// show cached value on display
 		void update(); // MD: for a single iteration; SD: while not update/clear/show called
-
+		void asyncUpdate();	//Call this in a timer interrupt (1kHz to operate as POV delay).
+		
 		// clear display content
 		void clear();
 

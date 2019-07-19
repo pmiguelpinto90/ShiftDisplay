@@ -113,6 +113,22 @@ void ShiftDisplay::updateMultiplexedDisplay() {
 	}
 }
 
+void ShiftDisplay::asyncUpdateMultiplexedDisplay(int i) {
+		digitalWrite(_latchPin, LOW);
+
+		if (!_isSwapped) {
+			shiftOut(_dataPin, _clockPin, LSBFIRST, _indexes[i]); // last shift register
+			shiftOut(_dataPin, _clockPin, LSBFIRST, _cache[i]); // first shift register
+		} else {
+			shiftOut(_dataPin, _clockPin, LSBFIRST, _cache[i]); // last shift register
+			shiftOut(_dataPin, _clockPin, LSBFIRST, _indexes[i]); // first shift register
+		}
+
+		digitalWrite(_latchPin, HIGH);
+
+	
+}
+
 void ShiftDisplay::updateStaticDisplay() {
 	digitalWrite(_latchPin, LOW);
 	for (int i = _displaySize - 1; i >= 0 ; i--)
@@ -517,6 +533,15 @@ void ShiftDisplay::update() {
 		updateMultiplexedDisplay();
 	else
 		updateStaticDisplay();
+}
+
+void ShiftDisplay::asyncUpdate(){	//Call this in a timer interrupt (1kHz to operate as POV delay).
+
+	static int i = 0;
+	asyncUpdateMultiplexedDisplay(i);
+	i++;
+	if(i==_displaySize)	i=0;
+	
 }
 
 void ShiftDisplay::clear() {

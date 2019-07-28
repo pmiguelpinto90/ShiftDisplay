@@ -1,8 +1,9 @@
-https://miguelpynto.github.io/ShiftDisplay/
+https://github.com/HamzaHajeir/ShiftDisplay
 
 # ShiftDisplay
-_by MiguelPynto_
+_by Hamza Hajeir_
 
+This library was developed by MiguelPynto, Enhanced by Hamza Hajeir via a Fork.
 Arduino library for driving 7-segment displays using shift registers
 
 - Show numbers, text, and custom characters
@@ -318,7 +319,7 @@ TODO
 
 - master ()
   - NEW: added non-blocking update function
--3.6.2
+- 3.6.2
   - NEW: added static drive
   - NEW: added clear() function
   - NEW: leading zeros in set(number) functions
@@ -419,6 +420,5 @@ TODO
 
 ## Contacts
 
-- https://github.com/MiguelPynto/ShiftDisplay/
-- https://twitter.com/MiguelPynto
-- miguelpynto@outlook.com
+- https://github.com/HamzaHajeir/ShiftDisplay/
+- hahajeir@gmail.com

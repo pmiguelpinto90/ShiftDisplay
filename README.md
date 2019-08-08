@@ -1,8 +1,9 @@
-https://miguelpynto.github.io/ShiftDisplay/
+https://github.com/HamzaHajeir/ShiftDisplay
 
 # ShiftDisplay
-_by MiguelPynto_
+_by Hamza Hajeir_
 
+This library was developed by MiguelPynto, Enhanced by Hamza Hajeir via a Fork.
 Arduino library for driving 7-segment displays using shift registers
 
 - Show numbers, text, and custom characters
@@ -252,9 +253,17 @@ void loop() {
   * display.update()
 
   Show on the display the stored value. For multiplexed drive, this must be called in a loop; for static drive, the value is shown until update()/clear()/show() is called.
-
+  
   `display` (ShiftDisplay): object where function is called.
 
+* __asyncUpdate()__ 
+  
+  * display.asyncUpdate()
+  
+  Non-blocking update function to show the stored value. this must be called in a timer interrupt of frequency 1khz. 500Hz works well too. This is for multiplexed drive displays only. 
+  
+  `display` (ShiftDisplay): object where function is called.
+  
 * __clear()__
 
   * display.clear()
@@ -309,6 +318,8 @@ TODO
 ## Changelog
 
 - master ()
+  - NEW: added non-blocking update function
+- 3.6.2
   - NEW: added static drive
   - NEW: added clear() function
   - NEW: leading zeros in set(number) functions
@@ -409,6 +420,5 @@ TODO
 
 ## Contacts
 
-- https://github.com/MiguelPynto/ShiftDisplay/
-- https://twitter.com/MiguelPynto
-- miguelpynto@outlook.com
+- https://github.com/HamzaHajeir/ShiftDisplay/
+- hahajeir@gmail.com
